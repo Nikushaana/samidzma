@@ -2,32 +2,159 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+  font-family: forh;
+  src: url(../app/fonts/bpg-arial-webfont.ttf);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@font-face {
+  font-family: forp;
+  src: url(../app/fonts/bpg-arial-webfont.ttf);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: forh;
+  font-weight: 700;
+  /* text-transform: uppercase;
+    font-feature-settings: "case" */
+}
+
+p,
+a,
+li,
+::placeholder,
+button {
+  font-family: forp;
+}
+
+/* swiper */
+.BannerSlider .swiper-pagination-bullet-active {
+  background-color: #80c342 !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin-bottom: -3px !important;
+}
+
+.BannerSlider .swiper-pagination-bullet {
+  height: 6px;
+  width: 6px;
+  opacity: 1;
+  border-radius: 22px;
+  background-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+/* swiper */
+
+.showScrollVert::-webkit-scrollbar {
+  width: 5px;
+}
+.showScrollHor::-webkit-scrollbar {
+  height: 5px;
+}
+.notshowScrollVert::-webkit-scrollbar {
+  width: 0px;
+}
+.notShowScrollHor::-webkit-scrollbar {
+  height: 0px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #80C342;
+  border-radius: 10px;
+}
+
+.horizontal-slider .example-track {
+  height: 5px;
+  border-radius: 8px;
+}
+
+.example-track.example-track-0 {
+  background: #d4e1f6;
+}
+
+.example-track.example-track-1 {
+  background: #3e7c7f;
+}
+
+.example-track.example-track-2 {
+  background: #d4e1f6;
+}
+
+/* text editor edit */
+
+.quill > * {
+  border-radius: 8px;
+}
+.quill > .ql-toolbar {
+  /* border radius of the toolbar */
+  background-color: #80c342;
+  margin-bottom: 10px;
+  color: white;
+}
+.quill > .ql-container {
+  /* border radius of the container and for font size*/
+  background-color: #f0f5f7;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+  color: black !important;
+}
+.ql-snow .ql-picker {
+  color: black !important;
+}
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  /* for placeholder */
+  color: black;
+}
+.ql-snow.ql-toolbar button svg {
+  color: black;
+}
+.ql-snow .ql-stroke {
+  /* for the border of the editor */
+  stroke: black !important;
+}
+.ql-picker-item {
+  /* for dropdown */
+  color: black !important;
+}
+
+.ql-editor ul {
+  list-style-type: disc; /* Ensures bullets are visible for unordered lists */
+  padding-left: 20px; /* Adds indentation */
+}
+
+.ql-editor ol {
+  list-style-type: decimal; /* Ensures numbering is visible for ordered lists */
+  padding-left: 20px;
+}
+
+/* text editor edit */
+
+.loaderwave {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f5f7fc, #e7e7e7, #f5f7fc);
+  background-size: 200% 100%;
+  animation: wave 3s linear infinite;
+  border-radius: 10px;
+}
+
+body.popup-open {
+  overflow:hidden;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  100% {
+    background-position: -200% 0;
   }
 }
