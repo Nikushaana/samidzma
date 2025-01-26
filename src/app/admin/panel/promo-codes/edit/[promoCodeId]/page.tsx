@@ -102,7 +102,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
       }`}
     >
       <h1 className="w-full">პრომო კოდის რედაქტირება</h1>
-      <div className="grid grid-cols-3 gap-[20px] w-full">
+      <div className="grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[20px] w-full">
         <Input1
           title="პრომო კოდი"
           name="code"

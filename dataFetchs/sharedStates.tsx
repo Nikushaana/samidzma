@@ -73,7 +73,8 @@ const SharingStatesContext = ({ children }: any) => {
   const [allCommentsRender, setAllCommentsRender] = useState<any>();
   const [allUserCommentsRender, setAllUserCommentsRender] = useState<any>();
   const [renderProdReview, setRenderProdReview] = useState<any>();
-  const [allOrderAdminUserRender, setAllOrderAdminUserRender] = useState<any>();
+  const [allAdminUserOrderRender, setAllAdminUserOrderRender] = useState<any>();
+  const [allAdminUsersRender, setAllAdminUsersRender] = useState<any>();
 
   // datas
 
@@ -191,8 +192,10 @@ const SharingStatesContext = ({ children }: any) => {
         setAllUserCommentsRender,
         renderProdReview,
         setRenderProdReview,
-        allOrderAdminUserRender,
-        setAllOrderAdminUserRender,
+        allAdminUserOrderRender,
+        setAllAdminUserOrderRender,
+        allAdminUsersRender,
+        setAllAdminUsersRender,
 
         alertShow,
         setAlertShow,

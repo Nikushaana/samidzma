@@ -7,6 +7,7 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import GreenButton from "@/app/components/buttons/greenButton";
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
+import Image from "next/image";
 
 export default function Page() {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
@@ -29,34 +30,18 @@ export default function Page() {
   });
 
   const HandleUpdateUser = (e: any) => {
+    e.preventDefault();
     setupdateUserLoader(true);
     if (updateUserValues.password === updateUserValues.rePassword) {
+      const form = e.target;
+      const formData = new FormData(form);
+
+      formData.delete("phone"),
+        formData.append("phone", updateUserValues.phone.replace(/\s/g, ""));
+
       axiosUser
-        .post("user", {
-          nickname: updateUserValues?.nickname,
-          name: updateUserValues?.name,
-          surname: updateUserValues?.surname,
-          email: updateUserValues?.email,
-          phone:
-            updateUserValues?.phone &&
-            updateUserValues?.phone?.replace(/\s/g, ""),
-          address: updateUserValues?.address,
-          legal_address: updateUserValues?.legal_address,
-          password: updateUserValues?.password,
-        })
+        .post("user", formData)
         .then((res) => {
-          setupdateUserValues({
-            img: "",
-            nickname: "",
-            name: "",
-            surname: "",
-            email: "",
-            phone: "",
-            address: "",
-            legal_address: "",
-            password: "",
-            rePassword: "",
-          });
           setAlertShow(true);
           setAlertStatus(true);
           setAlertText("ინფორმაცია წარმატებით შეიცვალა");
@@ -76,7 +61,26 @@ export default function Page() {
   };
 
   return (
-    <div className="px-[50px] py-[20px] max-lg:p-0 flex flex-col gap-y-[20px] items-end w-full">
+    <form
+      onSubmit={HandleUpdateUser}
+      encType="multipart/form-data"
+      className="flex flex-col gap-y-[20px] items-end w-full"
+    >
+      {user?.img?.length > 0 && (
+        <div className=" grid grid-cols-5 max-2xl:grid-cols-4 max-xl:grid-cols-3 max-sm:grid-cols-2 gap-4">
+          <div className="relative w-full aspect-video bg-white rounded-[8px] overflow-hidden">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_API_URL}/${user?.img}`}
+              alt={""}
+              sizes="500px"
+              fill
+              style={{
+                objectFit: "cover",
+              }}
+            />
+          </div>
+        </div>
+      )}
       <ImgUploader
         name="img"
         multiple={false}
@@ -119,7 +123,8 @@ export default function Page() {
           placeholder="ტელეფონის ნომერი"
           name="phone"
           type="text"
-          firstValue={user?.phone?.replace(/[^0-9]/g, "")
+          firstValue={user?.phone
+            ?.replace(/[^0-9]/g, "")
             .replace(/\s/g, "")
             .replace(/(.{3})/g, "$1 ")
             .trim()
@@ -137,7 +142,7 @@ export default function Page() {
           error={false}
         />
         <Input1
-          placeholder="ლეგალური ადგილი"
+          placeholder="იურიდიული მისამართი"
           name="legal_address"
           type="text"
           firstValue={user?.legal_address}
@@ -164,9 +169,9 @@ export default function Page() {
           name="რედაქტირება"
           loader={updateUserLoader}
           style="h-[50px] text-[18px]"
-          action={HandleUpdateUser}
+          button={true}
         />
       </div>
-    </div>
+    </form>
   );
 }

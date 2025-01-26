@@ -48,10 +48,10 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col gap-y-[10px] items-center">
+    <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">მთავარი ბანერი</h1>
       {allBannerLoader && (
-        <div className="w-[60px] h-[60px] flex items-center justify-center">
+        <div className="w-[60px] h-[60px] flex items-center justify-center absolute top-[150px] left-[50%] translate-x-[-50%] z-[1]">
           <DotsLoader />
         </div>
       )}{" "}
@@ -63,7 +63,7 @@ export default function Page() {
               BannerDeleteLoader === item.id && "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <div className="flex items-center gap-[10px]">
+            <div className="flex max-sm:flex-col items-center gap-[10px]">
               <div>
                 <p className="text-[10px]">დიდი ბანერი</p>
                 <div className="flex items-center gap-[10px]">

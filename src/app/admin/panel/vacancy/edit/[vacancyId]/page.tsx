@@ -159,19 +159,6 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
           error={false}
           handleInputKeyPress={handleInputKeyPress}
         />
-
-        <div className="w-[350px]">
-          <Input1
-            title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
-            digit={true}
-            name="sort"
-            type="text"
-            firstValue={oneVacancyValues.sort}
-            setAllValues={setEditVacancyValues}
-            error={false}
-            handleInputKeyPress={handleInputKeyPress}
-          />
-        </div>
         <div className="w-[200px]">
           <DropDown1value
             title="სტატუსი"
@@ -183,6 +170,18 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
             }
             setAllValues={setEditVacancyValues}
             error={false}
+          />
+        </div>
+        <div className="w-[350px] max-sm:w-full">
+          <Input1
+            title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
+            digit={true}
+            name="sort"
+            type="text"
+            firstValue={oneVacancyValues.sort}
+            setAllValues={setEditVacancyValues}
+            error={false}
+            handleInputKeyPress={handleInputKeyPress}
           />
         </div>
       </div>

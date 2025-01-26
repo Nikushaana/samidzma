@@ -25,6 +25,7 @@ import { TbMessageCircleQuestion } from "react-icons/tb";
 import { BiCategory } from "react-icons/bi";
 import { RiAdvertisementLine, RiCoupon3Line } from "react-icons/ri";
 import { GoCommentDiscussion } from "react-icons/go";
+import { LuUsers } from "react-icons/lu";
 
 export default function SideBar() {
   const { userMenu, setUserMenu } = useContext(ContextForSharingStates);
@@ -189,6 +190,13 @@ export default function SideBar() {
       links: [],
       icon: <MdOutlineAttachMoney />,
     },
+    {
+      id: 13,
+      route: "მომხმარებლები",
+      link: "users",
+      links: [],
+      icon: <LuUsers />,
+    },
   ]);
 
   const [dropedUrl, setDropedUrl] = useState<string>("");
@@ -214,7 +222,7 @@ export default function SideBar() {
       }`}
     >
       <div
-        className={`fixed duration-200 h-[calc(100vh)] pt-[40px] pb-[20px] overflow-x-hidden overflow-y-scroll showScrollVert ${
+        className={`fixed duration-200 h-[calc(100vh)] pt-[40px] pb-[50px] overflow-x-hidden overflow-y-scroll showScrollVert ${
           userMenu ? "w-[270px]" : "w-[60px]"
         }  flex flex-col gap-y-[40px] ${userMenu ? "" : "items-center"}`}
       >

@@ -102,7 +102,7 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
           multiple={false}
           setAllValues={setEditFirstCategValues}
         />
-        <div className="w-[310px]">
+        <div className="w-[310px] max-sm:w-full">
           <Input1
             title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
             digit={true}

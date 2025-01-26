@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { blogcategId: string } }) {
       }`}
     >
       <h1 className="w-full">ბლოგის კატეგორიის რედაქტირება</h1>
-      <div className="grid grid-cols-3 gap-[20px] w-full">
+      <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[20px] w-full">
         <Input1
           title="კატეგორია"
           name="name"
@@ -184,7 +184,7 @@ export default function Page({ params }: { params: { blogcategId: string } }) {
           error={false}
         />
       </div>
-      <div className="w-[200px]">
+      <div className="w-[200px] mt-[50px]">
         <GreenButton
           name="რედაქტირება"
           action={HandleEditBlogCateg}

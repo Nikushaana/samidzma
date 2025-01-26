@@ -27,7 +27,7 @@ const useBlogCategory = () => {
   return {
     allBlogCategData,
     allBlogCategLoader,
-    fetchBlogCategory
+    fetchBlogCategory,
   };
 };
 

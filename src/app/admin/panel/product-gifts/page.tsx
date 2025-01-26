@@ -63,7 +63,7 @@ export default function Page() {
     <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">პროდუქტის საჩუქრები</h1>
       {allProdGiftsLoader && (
-        <div className="w-[60px] h-[60px] flex items-center justify-center absolute left-[50%] translate-x-[-50%] z-[1]">
+        <div className="w-[60px] h-[60px] flex items-center justify-center absolute top-[150px] left-[50%] translate-x-[-50%] z-[1]">
           <DotsLoader />
         </div>
       )}{" "}
@@ -71,7 +71,7 @@ export default function Page() {
         allProdGiftsData.map((item: any, index: number) => (
           <div
             key={item.id}
-            className={`border-[1px] flex items-center justify-between px-[20px] py-[10px] rounded-[10px] duration-100 w-full ${
+            className={`border-[1px] flex max-sm:flex-col items-center justify-between px-[20px] py-[10px] rounded-[10px] duration-100 w-full ${
               ProdGiftsDeleteLoader === item.id && "opacity-[0.5] mx-[20px]"
             }`}
           >

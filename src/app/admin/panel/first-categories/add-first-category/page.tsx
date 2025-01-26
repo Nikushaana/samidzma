@@ -84,7 +84,7 @@ export default function Page() {
         firstCategsServerData?.map((item: any, index: number) => (
           <div
             key={item.IdProdSaxeoba}
-            className={`border-[1px] flex items-center justify-between px-[20px] py-[10px] rounded-[10px] w-full duration-100  ${
+            className={`border-[1px] flex max-sm:flex-col max-sm:gap-y-[10px] items-center justify-between px-[20px] py-[10px] rounded-[10px] w-full duration-100  ${
               loaderAddFirstCategs === item.IdProdSaxeoba &&
               "opacity-[0.5] pointer-events-none"
             } ${

@@ -67,7 +67,7 @@ export default function Page() {
     <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">შემოსული CV-ები</h1>
       {allVacancyCvLoader && (
-        <div className="w-[60px] h-[60px] flex items-center justify-center absolute left-[50%] translate-x-[-50%] z-[1]">
+        <div className="w-[60px] h-[60px] flex items-center justify-center absolute top-[150px] left-[50%] translate-x-[-50%] z-[1]">
           <DotsLoader />
         </div>
       )}{" "}
@@ -79,23 +79,25 @@ export default function Page() {
               VacancyCvDeleteLoader === item.id && "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <p className="select-none">
-              {
-                vacancyData.find((item1: any) => item1.id === item.vacancy_id)
-                  ?.position
-              }
-            </p>
+            <div>
+              <p className="select-none">
+                {
+                  vacancyData.find((item1: any) => item1.id === item.vacancy_id)
+                    ?.position
+                }
+              </p>
 
-            <p className="select-none">{item.name + " " + item.last_name}</p>
+              <p className="select-none text-[14px] text-gray-500">
+                {item.name + " " + item.last_name}
+              </p>
+              <p className="select-none text-[14px] text-gray-400 underline">{seen.find((item1: any) => item1.id === item.status)?.name}</p>
+            </div>
             {VacancyCvDeleteLoader === item.id ? (
               <div className="w-[50px] h-[50px] flex items-center justify-center">
                 <DotsLoader />
               </div>
             ) : (
               <div className="flex items-center gap-[10px]">
-                <p>
-                  {seen.find((item1: any) => item1.id === item.status)?.name}
-                </p>
                 <div
                   onClick={() => {
                     router.push(
@@ -142,7 +144,9 @@ export default function Page() {
           </div>
         ))
       ) : (
-        <p>{allVacancyCvLoader ? "CV-ები იძებნება" : "CV-ები არ არსებობს"}</p>
+        <p>
+          {allVacancyCvLoader ? "CV-ები იძებნება..." : "CV-ები არ არსებობს"}
+        </p>
       )}
     </div>
   );

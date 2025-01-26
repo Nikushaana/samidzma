@@ -147,7 +147,7 @@ export default function Page({ params }: { params: { blogId: string } }) {
         multiple={false}
         setAllValues={setEditBlogValues}
       />
-      <div className="grid grid-cols-3 gap-[20px] w-full">
+      <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-[20px] w-full">
         <DropDown1value
           title="ბლოგის კატეგორია"
           data={allBlogCategData}
@@ -249,17 +249,19 @@ export default function Page({ params }: { params: { blogId: string } }) {
         />
       </div>
       <hr className="h-[1px] w-full" />
-      <div className="grid grid-cols-3 gap-[20px] w-full">
-        <DropDown1value
-          title="სტატუსი"
-          data={status}
-          name="status"
-          firstValue={
-            status.find((item: any) => item.id === oneBlogValues.status)?.name
-          }
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
+      <div className="w-full">
+        <div className="w-[200px] pb-[50px]">
+          <DropDown1value
+            title="სტატუსი"
+            data={status}
+            name="status"
+            firstValue={
+              status.find((item: any) => item.id === oneBlogValues.status)?.name
+            }
+            setAllValues={setEditBlogValues}
+            error={false}
+          />
+        </div>
       </div>
       <div className="w-[200px] ">
         <GreenButton

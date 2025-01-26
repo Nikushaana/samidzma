@@ -52,10 +52,10 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col gap-y-[10px] items-center">
+    <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">პრომო კოდები</h1>
       {allPromoCodesLoader && (
-        <div className="w-[60px] h-[60px] flex items-center justify-center">
+        <div className="w-[60px] h-[60px] flex items-center justify-center absolute top-[150px] left-[50%] translate-x-[-50%] z-[1]">
           <DotsLoader />
         </div>
       )}{" "}

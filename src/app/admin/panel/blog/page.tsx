@@ -50,7 +50,7 @@ export default function Page() {
     <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">ბლოგები</h1>
       {allBlogLoader && (
-        <div className="w-[60px] h-[60px] flex items-center justify-center absolute left-[50%] translate-x-[-50%] z-[1]">
+        <div className="w-[60px] h-[60px] flex items-center justify-center top-[150px] absolute left-[50%] translate-x-[-50%] z-[1]">
           <DotsLoader />
         </div>
       )}{" "}
@@ -62,7 +62,7 @@ export default function Page() {
               BlogDeleteLoader === item.id && "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <p className="select-none">{item.name}</p>
+            <p className="select-none line-clamp-2">{item.name}</p>
             {BlogDeleteLoader === item.id ? (
               <div className="w-[50px] h-[50px] flex items-center justify-center">
                 <DotsLoader />

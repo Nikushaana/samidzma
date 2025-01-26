@@ -36,27 +36,29 @@ export default function ProductReview({
             </p>
           </div>
           <div className="w-[130px]">
-            {prodReviewData?.groupeByRounded_star?.map((item: any, index: number) => (
-              <div
-                key={index}
-                className="flex items-center gap-[10px] w-full"
-              >
-                <div className="flex items-center gap-[5px]">
-                  {[1, 2, 3, 4, 5].map((item1: any, index: any) => (
-                    <BsStarFill
-                      key={item1}
-                      className={`${
-                        index + 1 <= item?.rounded_star
-                          ? "text-myYellow"
-                          : "text-gray-200"
-                      }`}
-                    />
-                  ))}
-                </div>
+            {prodReviewData?.groupeByRounded_star?.map(
+              (item: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-[10px] w-full"
+                >
+                  <div className="flex items-center gap-[5px]">
+                    {[1, 2, 3, 4, 5].map((item1: any, index: any) => (
+                      <BsStarFill
+                        key={item1}
+                        className={`${
+                          index + 1 <= item?.rounded_star
+                            ? "text-myYellow"
+                            : "text-gray-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
 
-                <p className="text-[14px]">{item?.count}</p>
-              </div>
-            ))}
+                  <p className="text-[14px]">{item?.count}</p>
+                </div>
+              )
+            )}
           </div>
         </div>
         <div className="bg-white p-[30px] max-tiny:p-[20px] rounded-[12px] flex max-tiny:flex-col max-tiny:gap-[10px] items-center gap-[40px] justify-between">
@@ -93,29 +95,34 @@ export default function ProductReview({
                   className="rounded-[12px] bg-white p-[20px] flex flex-col gap-y-[17px]"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-[10px]">
-                      <div className="w-[50px] h-[50px] relative rounded-full overflow-hidden">
-                        <Image
-                          src="/images/food.png"
-                          alt={""}
-                          sizes="500px"
-                          fill
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
+                    {item.user_id !== null ? (
+                      <div className="flex items-center gap-[10px]">
+                        <div className="w-[50px] h-[50px] relative rounded-full overflow-hidden">
+                          <Image
+                            src="/images/food.png"
+                            alt={""}
+                            sizes="500px"
+                            fill
+                            style={{
+                              objectFit: "cover",
+                            }}
+                          />
+                        </div>
+                        <p className="text-[18px]">
+                          {item?.user?.name + " " + item?.user?.surname}
+                        </p>
                       </div>
-                      <p className="text-[18px]">
-                        {item?.user?.name + " " + item?.user?.surname}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-center items-center gap-[5px] bg-myYellow h-[36px] rounded-full px-[8px]">
-                      <BiStar className="text-[20px]" />
-                      <h1 className="h-[20px] mb-[2px]">
-                        {item?.rounded_star}
-                      </h1>
-                    </div>
+                    ) : (
+                      <p className="text-[18px]">ადმინის კომენტარი</p>
+                    )}
+                    {item.user_id !== null && (
+                      <div className="flex justify-center items-center gap-[5px] bg-myYellow h-[36px] rounded-full px-[8px]">
+                        <BiStar className="text-[20px]" />
+                        <h1 className="h-[20px] mb-[2px]">
+                          {item?.rounded_star}
+                        </h1>
+                      </div>
+                    )}
                   </div>
                   <p className="text-[14px]">{item?.review}</p>
                 </div>

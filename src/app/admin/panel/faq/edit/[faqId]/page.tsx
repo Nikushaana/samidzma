@@ -173,7 +173,7 @@ export default function Page({ params }: { params: { faqId: string } }) {
             error={false}
           />
         </div>
-        <div className="w-[350px]">
+        <div className="w-[350px] max-sm:w-full">
           <Input1
             title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
             digit={true}

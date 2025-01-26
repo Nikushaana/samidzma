@@ -101,7 +101,7 @@ export default function Page() {
         multiple={false}
         setAllValues={setAddBlogValues}
       />
-      <div className="grid grid-cols-3 gap-[20px] w-full">
+      <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-[20px] w-full">
         <DropDown1value
           title="ბლოგის კატეგორია"
           data={allBlogCategData}
@@ -187,16 +187,18 @@ export default function Page() {
         />
       </div>
       <hr className="h-[1px] w-full" />
-      <div className="grid grid-cols-3 gap-[20px] w-full">
-        <DropDown1value
-          title="სტატუსი"
-          data={status}
-          name="status"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
+      <div className="w-full">
+        <div className="w-[200px] pb-[50px]">
+          <DropDown1value
+            title="სტატუსი"
+            data={status}
+            name="status"
+            setAllValues={setAddBlogValues}
+            error={false}
+          />
+        </div>
       </div>
-      <div className="w-[200px] mt-[100px]">
+      <div className="w-[200px] ">
         <GreenButton
           name="დამატება"
           button={true}

@@ -86,7 +86,7 @@ export default function Page() {
         secondCategsServerData?.map((item: any, index: number) => (
           <div
             key={item.IdProdTypeGroup}
-            className={`border-[1px] flex items-center justify-between px-[20px] py-[10px] rounded-[10px] w-full duration-100  ${
+            className={`border-[1px] flex max-sm:flex-col max-sm:gap-y-[10px] items-center justify-between px-[20px] py-[10px] rounded-[10px] w-full duration-100  ${
               loaderAddsecondCategs == item.IdProdTypeGroup &&
               "opacity-[0.5] pointer-events-none"
             } ${

@@ -59,7 +59,7 @@ export default function Layout({ children }: Children) {
                     : "w-[calc(100%-290px)]"
                 }`
               : "w-[calc(100%-80px)]"
-          } flex items-center justify-between pr-[30px] pl-[30px] fixed top-[10px] 
+          } flex items-center justify-between px-[30px] max-sm:px-[10px] fixed top-[10px] 
         duration-200 z-[2] ${
           scrollY > 10
             ? "shadow w-[calc(100%-20px)] mx-[10px] rounded-[10px] bg-[white] "

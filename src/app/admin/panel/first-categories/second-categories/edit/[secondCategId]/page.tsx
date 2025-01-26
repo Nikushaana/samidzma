@@ -144,7 +144,7 @@ export default function Page({
             multiple={false}
             setAllValues={setEditSecondCategValues}
           />
-          <div className="w-[310px]">
+          <div className="w-[310px] max-sm:w-full">
             <Input1
               title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
               digit={true}
