@@ -3,18 +3,14 @@
   }
 
   interface setFilterType {
-    paginationPages: number[];
-    currentPage: number;
     IdProdSaxeoba: string,
     ProdSaxeobaName: string,
     ProdSaxeobaDescription: string
   }
   
   interface prodFilterType {
-    paginationPages: number[];
-    currentPage: number;
     IdProdSaxeoba: string,
-    IdProdGroup: string,
+    IdProdTypeGroup: string,
     IdProdType: string,
     FeriCode: string,
     StyleCode: string,

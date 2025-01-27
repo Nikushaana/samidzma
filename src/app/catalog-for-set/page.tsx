@@ -9,6 +9,7 @@ import FirstCatPart from "../components/catalogPage/firstCatPart";
 import useBlog from "../../../dataFetchs/blogContext";
 import Image from "next/image";
 import BlogsBackgroundDesigns from "../components/decorationColumns/BlogsBackgroundDesigns";
+import ReactPaginate from "react-paginate";
 
 export default function Page() {
   const router = useRouter();
@@ -25,12 +26,13 @@ export default function Page() {
     useState<boolean>(true);
   const [productsCatalogPagePreLoader, setProductsCatalogPagePreLoader] =
     useState<boolean>(true);
+
+  const [currentPage, setCurrentPage] = useState<any>(0);
+  const [prodwholenum, setProdwholenum] = useState<any>();
+
   // product filter values
 
   const [filterValues, setFilterValues] = useState<setFilterType>({
-    paginationPages: [],
-    currentPage: 1,
-
     IdProdSaxeoba: "",
 
     ProdSaxeobaName: "",
@@ -43,20 +45,18 @@ export default function Page() {
     if (pagemounted.current) return;
     pagemounted.current = true;
     const searchParams = new URLSearchParams(window.location.search);
-    const paginationPagesFromParams = searchParams.get("paginationPages");
     const currentPageFromParams = searchParams.get("currentPage");
 
     const IdProdSaxeobaFromParams = searchParams.get("IdProdSaxeoba");
 
+    const currentPage = currentPageFromParams
+      ? parseInt(currentPageFromParams, 10) - 1
+      : 0;
+
+    setCurrentPage(currentPage);
+
     setFilterValues((prev) => ({
       ...prev,
-      paginationPages: paginationPagesFromParams
-        ? paginationPagesFromParams.split(",").map(Number)
-        : [],
-      currentPage: currentPageFromParams
-        ? parseInt(currentPageFromParams, 10)
-        : 1,
-
       IdProdSaxeoba: IdProdSaxeobaFromParams ? IdProdSaxeobaFromParams : "",
     }));
   }, []);
@@ -67,15 +67,7 @@ export default function Page() {
   useEffect(() => {
     const searchParams = new URLSearchParams();
 
-    if (filterValues.paginationPages) {
-      searchParams.set(
-        "paginationPages",
-        filterValues.paginationPages.toString()
-      );
-    }
-    if (filterValues.currentPage) {
-      searchParams.set("currentPage", filterValues.currentPage.toString());
-    }
+    searchParams.set("currentPage", currentPage + 1);
 
     searchParams.set("IdProdSaxeoba", filterValues.IdProdSaxeoba.toString());
 
@@ -86,14 +78,20 @@ export default function Page() {
         `/catalog-for-set?${searchParams.toString()}`
       );
     }
-  }, [filterValues, pathname, router, productsCatalogPagePreLoader]);
+  }, [
+    filterValues,
+    pathname,
+    router,
+    productsCatalogPagePreLoader,
+    currentPage,
+  ]);
   // set to params
 
   useEffect(() => {
     if (!productsCatalogPagePreLoader) {
       window.scrollTo({ top: 1050, behavior: "smooth" });
     }
-  }, [filterValues.currentPage]);
+  }, [currentPage]);
 
   // product filter
 
@@ -102,7 +100,7 @@ export default function Page() {
 
     axiosUser
       .get(
-        `front/product?pageNumber=${filterValues.currentPage}&itemsOnPage=12&${
+        `front/product?pageNumber=${currentPage + 1}&itemsOnPage=12&${
           filterValues.IdProdSaxeoba
             ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
             : ""
@@ -111,16 +109,7 @@ export default function Page() {
       .then((res) => {
         setProductsCatalogPagePreLoader(false);
         setProductsCatalogPageData(res.data.products);
-
-        if (res.data.products && res.data.products.length === 12) {
-          setFilterValues((prev: any) => ({
-            ...prev,
-            paginationPages: Array.from(
-              { length: prev.currentPage + 1 },
-              (_, i) => i + 1
-            ),
-          }));
-        }
+        setProdwholenum(res.data.total);
       })
       .catch((err) => {
         setProductsCatalogPagePreLoader(true);
@@ -128,7 +117,13 @@ export default function Page() {
       .finally(() => {
         setProductsCatalogPageLoader(false);
       });
-  }, [filterValues.currentPage, filterValues.IdProdSaxeoba]);
+  }, [currentPage, filterValues.IdProdSaxeoba]);
+
+  const pageCount = Math.ceil(prodwholenum / 12);
+
+  const handlePageClick = (event: any) => {
+    setCurrentPage(event.selected);
+  };
 
   // product filter
   return (
@@ -139,6 +134,7 @@ export default function Page() {
             <FirstCatPart
               filterValues={filterValues}
               setFilterValues={setFilterValues}
+              setCurrentPage={setCurrentPage}
             />
           </div>
         </div>
@@ -229,25 +225,30 @@ export default function Page() {
                     </p>
                   )}
             </div>
-            <div className="flex items-center justify-center gap-[10px]">
-              {filterValues?.paginationPages.map((page: any, index: number) => (
-                <div
-                  key={page}
-                  onClick={() => {
-                    setFilterValues((prev: any) => ({
-                      ...prev,
-                      currentPage: page,
-                    }));
-                  }}
-                  className={`w-[44px] h-[44px] rounded-full flex items-center justify-center cursor-pointer duration-200 bg-white ${
-                    filterValues.currentPage === page
-                      ? "text-[#CACACA]"
-                      : " text-[#323434]"
-                  }`}
-                >
-                  <h1 className="text-[22px]">{page}</h1>
-                </div>
-              ))}
+            <div className="pt-[20px] flex justify-center">
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={2}
+                pageCount={pageCount}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+                breakLinkClassName={""}
+                breakClassName={"w-8 h-8 flex items-center justify-center"}
+                //main container
+                containerClassName={`flex items-center gap-1`}
+                //single page number
+                pageLinkClassName={`w-[40px] h-[40px] text-md bg-gray-100 font-forh
+               flex items-center justify-center rounded-full`}
+                //previous page number
+                previousLinkClassName={`hidden`}
+                //next page number
+                nextLinkClassName={`hidden`}
+                //active page
+                activeLinkClassName={"!important text-[#CACACA] font-forh"}
+                forcePage={currentPage}
+              />
             </div>
           </div>
 

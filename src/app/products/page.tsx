@@ -25,6 +25,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ContextForSharingStates } from "../../../dataFetchs/sharedStates";
 import useBlog from "../../../dataFetchs/blogContext";
 import BlogsBackgroundDesigns from "../components/decorationColumns/BlogsBackgroundDesigns";
+import ReactPaginate from "react-paginate";
 
 export default function Page() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -91,11 +92,12 @@ export default function Page() {
     useState<boolean>(true);
   const [productsPageLoader, setProductsPageLoader] = useState<boolean>(true);
 
+  const [currentPage, setCurrentPage] = useState<any>(0);
+  const [prodwholenum, setProdwholenum] = useState<any>();
+
   const [filterValues, setFilterValues] = useState<prodFilterType>({
-    paginationPages: [],
-    currentPage: 1,
     IdProdSaxeoba: "",
-    IdProdGroup: "",
+    IdProdTypeGroup: "",
     IdProdType: "",
     FeriCode: "",
     StyleCode: "",
@@ -112,12 +114,12 @@ export default function Page() {
   useEffect(() => {
     if (pagemounted.current) return;
     pagemounted.current = true;
+
     const searchParams = new URLSearchParams(window.location.search);
-    const paginationPagesFromParams = searchParams.get("paginationPages");
     const currentPageFromParams = searchParams.get("currentPage");
 
     const IdProdSaxeobaFromParams = searchParams.get("IdProdSaxeoba");
-    const IdProdGroupFromParams = searchParams.get("IdProdGroup");
+    const IdProdTypeGroupFromParams = searchParams.get("IdProdTypeGroup");
     const IdProdTypeFromParams = searchParams.get("IdProdType");
 
     const StyleCodeFromParams = searchParams.get("StyleCode");
@@ -125,17 +127,16 @@ export default function Page() {
     const FeriCodeFromParams = searchParams.get("FeriCode");
     const SizeCodeFromParams = searchParams.get("SizeCode");
 
+    const currentPage = currentPageFromParams ? parseInt(currentPageFromParams, 10) - 1 : 0;
+
+    setCurrentPage(currentPage);
+
     setFilterValues((prev) => ({
       ...prev,
-      paginationPages: paginationPagesFromParams
-        ? paginationPagesFromParams.split(",").map(Number)
-        : [],
-      currentPage: currentPageFromParams
-        ? parseInt(currentPageFromParams, 10)
-        : 1,
-
       IdProdSaxeoba: IdProdSaxeobaFromParams ? IdProdSaxeobaFromParams : "",
-      IdProdGroup: IdProdGroupFromParams ? IdProdGroupFromParams : "",
+      IdProdTypeGroup: IdProdTypeGroupFromParams
+        ? IdProdTypeGroupFromParams
+        : "",
       IdProdType: IdProdTypeFromParams ? IdProdTypeFromParams : "",
 
       StyleCode: StyleCodeFromParams ? StyleCodeFromParams : "",
@@ -151,18 +152,13 @@ export default function Page() {
   useEffect(() => {
     const searchParams = new URLSearchParams();
 
-    if (filterValues.paginationPages) {
-      searchParams.set(
-        "paginationPages",
-        filterValues.paginationPages.toString()
-      );
-    }
-    if (filterValues.currentPage) {
-      searchParams.set("currentPage", filterValues.currentPage.toString());
-    }
+    searchParams.set("currentPage", currentPage + 1);
 
     searchParams.set("IdProdSaxeoba", filterValues.IdProdSaxeoba?.toString());
-    searchParams.set("IdProdGroup", filterValues.IdProdGroup.toString());
+    searchParams.set(
+      "IdProdTypeGroup",
+      filterValues.IdProdTypeGroup.toString()
+    );
     searchParams.set("IdProdType", filterValues.IdProdType.toString());
     searchParams.set("StyleCode", filterValues.StyleCode.toString());
     searchParams.set("SqesiCode", filterValues.SqesiCode.toString());
@@ -176,7 +172,7 @@ export default function Page() {
         `/products?${searchParams.toString()}`
       );
     }
-  }, [filterValues, pathname, router, productsPagePreLoader]);
+  }, [filterValues, pathname, router, productsPagePreLoader, currentPage]);
   // set to params
 
   const [dropedFilter, setDropedFilter] = useState<any>("");
@@ -187,7 +183,7 @@ export default function Page() {
     if (!productsPagePreLoader) {
       window.scrollTo({ top: 600, behavior: "smooth" });
     }
-  }, [filterValues.currentPage]);
+  }, [currentPage]);
 
   // product filter
 
@@ -196,7 +192,7 @@ export default function Page() {
 
     axiosUser
       .get(
-        `front/product?pageNumber=${filterValues.currentPage}&itemsOnPage=12&${
+        `front/product?pageNumber=${currentPage + 1}&itemsOnPage=12&${
           filterValues.StyleCode ? `StyleCode=${filterValues.StyleCode}` : ""
         }&${
           filterValues.SqesiCode ? `SqesiCode=${filterValues.SqesiCode}` : ""
@@ -207,8 +203,8 @@ export default function Page() {
             ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
             : ""
         }&${
-          filterValues.IdProdGroup
-            ? `IdProdGroup=${filterValues.IdProdGroup}`
+          filterValues.IdProdTypeGroup
+            ? `IdProdTypeGroup=${filterValues.IdProdTypeGroup}`
             : ""
         }&${
           filterValues.IdProdType ? `IdProdType=${filterValues.IdProdType}` : ""
@@ -217,16 +213,7 @@ export default function Page() {
       .then((res) => {
         setProductsPagePreLoader(false);
         setProductsPageData(res.data.products);
-
-        if (res.data.products && res.data.products.length === 12) {
-          setFilterValues((prev: any) => ({
-            ...prev,
-            paginationPages: Array.from(
-              { length: prev.currentPage + 1 },
-              (_, i) => i + 1
-            ),
-          }));
-        }
+        setProdwholenum(res.data.total);
       })
       .catch((err) => {
         setProductsPagePreLoader(true);
@@ -236,14 +223,20 @@ export default function Page() {
       });
   }, [
     filterValues.IdProdSaxeoba,
-    filterValues.IdProdGroup,
+    filterValues.IdProdTypeGroup,
     filterValues.IdProdType,
     filterValues.StyleCode,
     filterValues.SqesiCode,
     filterValues.FeriCode,
     filterValues.SizeCode,
-    filterValues.currentPage,
+    currentPage,
   ]);
+
+  const pageCount = Math.ceil(prodwholenum / 12);
+
+  const handlePageClick = (event: any) => {
+    setCurrentPage(event.selected);
+  };
 
   // product filter
 
@@ -254,6 +247,7 @@ export default function Page() {
           filterValues={filterValues}
           setFilterValues={setFilterValues}
           isProducts={true}
+          setCurrentPage={setCurrentPage}
         />
 
         <div className="px-[264px] max-2xl:px-[90px] max-tiny:px-[25px] flex flex-col gap-y-[48px] relative">
@@ -356,8 +350,8 @@ export default function Page() {
                               prev.StyleCode === item.StyleCode
                                 ? ""
                                 : item.StyleCode,
-                            currentPage: 1,
                           }));
+                          setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
@@ -410,8 +404,8 @@ export default function Page() {
                               prev.SqesiCode === item.SqesiCode
                                 ? ""
                                 : item.SqesiCode,
-                            currentPage: 1,
                           }));
+                          setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
@@ -464,8 +458,8 @@ export default function Page() {
                               prev.FeriCode === item.FeriCode
                                 ? ""
                                 : item.FeriCode,
-                            currentPage: 1,
                           }));
+                          setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
@@ -518,8 +512,8 @@ export default function Page() {
                               prev.SizeCode === item.SizeCode
                                 ? ""
                                 : item.SizeCode,
-                            currentPage: 1,
                           }));
+                          setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
@@ -597,13 +591,13 @@ export default function Page() {
                               {state.valueNow}
                             </div>
                           )}
-                          onChange={(value: any, index: any) =>
+                          onChange={(value: any, index: any) => {
                             setFilterValues((prev: any) => ({
                               ...prev,
                               salaryValue: value,
-                              currentPage: 1,
-                            }))
-                          }
+                            }));
+                            setCurrentPage(0);
+                          }}
                           pearling
                           minDistance={6}
                         />
@@ -659,33 +653,31 @@ export default function Page() {
               ) : (
                 !productsPagePreLoader && <p>პროდუქტები არ არსებობს</p>
               )}
-              {productsPageData.length < 12 &&
-              filterValues.currentPage === 1 ? (
-                ""
-              ) : (
-                <div className="flex flex-wrap items-center justify-center gap-[10px]">
-                  {filterValues?.paginationPages.map(
-                    (page: any, index: number) => (
-                      <div
-                        key={page}
-                        onClick={() => {
-                          setFilterValues((prev: any) => ({
-                            ...prev,
-                            currentPage: page,
-                          }));
-                        }}
-                        className={`w-[44px] h-[44px] rounded-full flex items-center justify-center cursor-pointer duration-200 bg-white ${
-                          filterValues.currentPage === page
-                            ? "text-[#CACACA]"
-                            : " text-[#323434]"
-                        }`}
-                      >
-                        <h1 className="text-[22px]">{page}</h1>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
+              <div className="pt-[20px] flex justify-center">
+                <ReactPaginate
+                  breakLabel="..."
+                  nextLabel="next >"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={2}
+                  pageCount={pageCount}
+                  previousLabel="< previous"
+                  renderOnZeroPageCount={null}
+                  breakLinkClassName={""}
+                  breakClassName={"w-8 h-8 flex items-center justify-center"}
+                  //main container
+                  containerClassName={`flex items-center gap-1`}
+                  //single page number
+                  pageLinkClassName={`w-[40px] h-[40px] text-md bg-gray-100 font-forh
+               flex items-center justify-center rounded-full`}
+                  //previous page number
+                  previousLinkClassName={`hidden`}
+                  //next page number
+                  nextLinkClassName={`hidden`}
+                  //active page
+                  activeLinkClassName={"!important text-[#CACACA] font-forh"}
+                  forcePage={currentPage}
+                />
+              </div>
             </div>
           </div>
 

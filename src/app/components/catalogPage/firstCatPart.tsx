@@ -18,6 +18,7 @@ export default function FirstCatPart({
   filterValues,
   setFilterValues,
   isProducts,
+  setCurrentPage
 }: any) {
   const { FrontCategoriesData, FrontCategoriesLoader } = useFrontCategories();
 
@@ -91,10 +92,10 @@ export default function FirstCatPart({
                       IdProdSaxeoba: item?.IdProdSaxeoba,
                       ProdSaxeobaName: item?.ProdSaxeobaName,
                       ProdSaxeobaDescription: item?.description,
-                      IdProdGroup: "",
+                      IdProdTypeGroup: "",
                       IdProdType: "",
-                      currentPage: 1,
                     }));
+                    setCurrentPage(0)
                   }}
                   key={item?.IdProdSaxeoba}
                   className={`flex flex-col items-center gap-y-[10px] p-[10px] max-lg:p-[8px] duration-200 cursor-pointer rounded-[12px] ${
@@ -156,16 +157,16 @@ export default function FirstCatPart({
                       onClick={() => {
                         setFilterValues((prev: any) => ({
                           ...prev,
-                          IdProdGroup:
-                            prev.IdProdGroup == item1.IdProdTypeGroup
+                          IdProdTypeGroup:
+                            prev.IdProdTypeGroup == item1.IdProdTypeGroup
                               ? ""
                               : item1.IdProdTypeGroup,
                           IdProdType: "",
-                          currentPage: 1,
                         }));
+                        setCurrentPage(0)
                       }}
                       className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-myYellow duration-150 ${
-                        filterValues.IdProdGroup == item1.IdProdTypeGroup
+                        filterValues.IdProdTypeGroup == item1.IdProdTypeGroup
                           ? "border-[3px]"
                           : ""
                       }`}
@@ -197,7 +198,7 @@ export default function FirstCatPart({
         {isProducts &&
           !FrontCategoriesLoader &&
           actSecCategory?.productTypeGroup?.find(
-            (item2: any) => item2.IdProdTypeGroup == filterValues.IdProdGroup
+            (item2: any) => item2.IdProdTypeGroup == filterValues.IdProdTypeGroup
           )?.productTypes.length > 0 && (
             <div className="bg-myYellow p-[10px] rounded-[12px] max-lg:rounded-none max-h-[150px] overflow-hidden">
               <Swiper
@@ -213,7 +214,7 @@ export default function FirstCatPart({
                 {actSecCategory?.productTypeGroup
                   ?.find(
                     (item3: any) =>
-                      item3.IdProdTypeGroup == filterValues.IdProdGroup
+                      item3.IdProdTypeGroup == filterValues.IdProdTypeGroup
                   )
                   ?.productTypes?.map((item4: any, index: any) => (
                     <SwiperSlide
@@ -225,8 +226,8 @@ export default function FirstCatPart({
                             prev.IdProdType == item4.IdProdType
                               ? ""
                               : item4.IdProdType,
-                          currentPage: 1,
                         }));
+                        setCurrentPage(0)
                       }}
                       className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white duration-150 ${
                         filterValues.IdProdType == item4.IdProdType
