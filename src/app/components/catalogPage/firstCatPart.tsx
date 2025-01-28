@@ -117,7 +117,7 @@ export default function FirstCatPart({
                       src={`${
                         item?.image
                           ? `${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`
-                          : "/images/siteLogo.png"
+                          : "/images/mainLogo.png"
                       }`}
                       alt={""}
                       sizes="500px"
@@ -180,7 +180,7 @@ export default function FirstCatPart({
                         src={`${
                           item1?.image
                             ? `${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`
-                            : "/images/siteLogo.png"
+                            : "/images/mainLogo.png"
                         }`}
                         alt=""
                         sizes="500px"
@@ -245,7 +245,7 @@ export default function FirstCatPart({
                         src={`${
                           item4?.image
                             ? `${process.env.NEXT_PUBLIC_API_URL}/${item4?.image}`
-                            : "/images/siteLogo.png"
+                            : "/images/mainLogo.png"
                         }`}
                         alt=""
                         sizes="500px"

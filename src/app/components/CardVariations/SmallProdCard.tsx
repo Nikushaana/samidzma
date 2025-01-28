@@ -40,7 +40,7 @@ export default function SmallProdCard({ item }: any) {
       axiosUser
         .get(`front/productPicture?ProdCode=${item.ProdCode}`)
         .then((res) => {
-          setProdImages(res.data);
+          setProdImages(res.data[0]);
         })
         .catch((err) => {
           setProdImages({});

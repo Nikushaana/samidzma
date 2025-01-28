@@ -69,7 +69,7 @@ export default function CategoriesCard({ item }: any) {
                       src={`${
                         item3?.image
                           ? `${process.env.NEXT_PUBLIC_API_URL}/${item3?.image}`
-                          : "/images/siteLogo.png"
+                          : "/images/mainLogo.png"
                       }`}
                       alt={""}
                       sizes="500px"
