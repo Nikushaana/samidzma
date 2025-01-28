@@ -10,7 +10,7 @@ const useProducts = () => {
   const fetchProducts = () => {
     setProductsLoader(true);
     axiosUser
-      .get("front/product")
+      .get("front/products")
       .then((res) => {
         setProductsData(res.data.products);
       })

@@ -12,11 +12,12 @@
     IdProdSaxeoba: string,
     IdProdTypeGroup: string,
     IdProdType: string,
-    FeriCode: string,
-    StyleCode: string,
-    SqesiCode: string,
-    SizeCode: string,
-    salaryValue: number[],
+    FeriCode: number[],
+    StyleCode: number[],
+    SqesiCode: number[],
+    SizeCode: number[],
+    minPrice: number,
+    maxPrice: number,
     ProdSaxeobaName: string,
     ProdSaxeobaDescription: string
   }

@@ -100,7 +100,7 @@ export default function Page() {
 
     axiosUser
       .get(
-        `front/product?pageNumber=${currentPage + 1}&itemsOnPage=12&${
+        `front/products?pageNumber=${currentPage + 1}&itemsOnPage=12&${
           filterValues.IdProdSaxeoba
             ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
             : ""

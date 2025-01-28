@@ -47,7 +47,7 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
 
   const HandleEditThirdCateg = (e: any) => {
     e.preventDefault();
-    if (editThirdCategValues.image.length > 0) {
+    if (true) {
       const form = e.target;
       const formData = new FormData(form);
 
@@ -55,7 +55,9 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
       axiosAdmin
         .post(`admin/category/productType/${params.thirdCategId}`, formData)
         .then((res) => {
-          router.push("/admin/panel/first-categories/second-categories");
+          router.push(
+            `/admin/panel/first-categories/second-categories/edit/${oneThirdCategValues.IdProdTypeGroup}`
+          );
           setAlertShow(true);
           setAlertStatus(true);
           setAlertText("წარმატებით რედაქტირდა");

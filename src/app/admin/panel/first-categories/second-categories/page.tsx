@@ -9,9 +9,11 @@ import { useRouter } from "next/navigation";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import useSecondCategories from "../../../../../../dataFetchs/secondCategoriesContext";
+import Image from "next/image";
 
 export default function Page() {
-  const { fetchSecondCategories, allSecondCategsData, allSecondCategsLoader } = useSecondCategories();
+  const { fetchSecondCategories, allSecondCategsData, allSecondCategsLoader } =
+    useSecondCategories();
 
   const router = useRouter();
 
@@ -50,7 +52,23 @@ export default function Page() {
               "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <p className="select-none">{item.ProdTypeGroupName}</p>
+            <div className="flex items-center gap-[20px]">
+              <p># {item.sort}</p>
+              {item?.image?.length > 0 && (
+                <div className="relative h-[40px] w-[60px] bg-white rounded-[8px] overflow-hidden">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
+                    alt={""}
+                    sizes="500px"
+                    fill
+                    style={{
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              )}
+              <p className="select-none">{item.ProdTypeGroupName}</p>
+            </div>
             {SecondCategsDeleteLoader === item.IdProdTypeGroup ? (
               <div className="w-[50px] h-[50px] flex items-center justify-center">
                 <DotsLoader />

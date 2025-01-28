@@ -88,17 +88,6 @@ export default function Input1({
           onKeyPress={handleInputKeyPress}
           value={inputText}
           type={isPassword ? (show ? "text" : "password") : type}
-          // type={
-          //   isPassword
-          //     ? show
-          //       ? "text"
-          //       : "password"
-          //     : time
-          //     ? "time"
-          //     : color
-          //     ? "color"
-          //     : "text"
-          // }
           name={name}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

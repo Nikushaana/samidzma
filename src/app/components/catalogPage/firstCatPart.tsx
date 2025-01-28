@@ -18,7 +18,7 @@ export default function FirstCatPart({
   filterValues,
   setFilterValues,
   isProducts,
-  setCurrentPage
+  setCurrentPage,
 }: any) {
   const { FrontCategoriesData, FrontCategoriesLoader } = useFrontCategories();
 
@@ -36,6 +36,8 @@ export default function FirstCatPart({
             (item2: any) => item2.IdProdSaxeoba == filterValues.IdProdSaxeoba
           )
         );
+      } else {
+        setActSecCategory({});
       }
     }
   }, [FrontCategoriesData, filterValues?.IdProdSaxeoba]);
@@ -89,13 +91,16 @@ export default function FirstCatPart({
                   onClick={() => {
                     setFilterValues((prev: any) => ({
                       ...prev,
-                      IdProdSaxeoba: item?.IdProdSaxeoba,
+                      IdProdSaxeoba:
+                        prev.IdProdSaxeoba == item?.IdProdSaxeoba
+                          ? ""
+                          : item?.IdProdSaxeoba,
                       ProdSaxeobaName: item?.ProdSaxeobaName,
                       ProdSaxeobaDescription: item?.description,
                       IdProdTypeGroup: "",
                       IdProdType: "",
                     }));
-                    setCurrentPage(0)
+                    setCurrentPage(0);
                   }}
                   key={item?.IdProdSaxeoba}
                   className={`flex flex-col items-center gap-y-[10px] p-[10px] max-lg:p-[8px] duration-200 cursor-pointer rounded-[12px] ${
@@ -112,7 +117,7 @@ export default function FirstCatPart({
                       src={`${
                         item?.image
                           ? `${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`
-                          : "/images/food.png"
+                          : "/images/siteLogo.png"
                       }`}
                       alt={""}
                       sizes="500px"
@@ -123,7 +128,7 @@ export default function FirstCatPart({
                     />
                   </div>
                   <h1
-                    className={`text-center text-[18px] max-tiny:text-[15px] line-clamp-3 ${
+                    className={`break-all text-center text-[18px] max-tiny:text-[15px] line-clamp-3 ${
                       filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                         ? "text-white"
                         : ""
@@ -148,7 +153,7 @@ export default function FirstCatPart({
                 spaceBetween={7}
                 loop={true}
                 pagination={false}
-                className="w-[calc(100%+100px)] items-stretch self-stretch flex BannerSlider"
+                className="w-[calc(100%+150px)] items-stretch self-stretch flex BannerSlider"
               >
                 {actSecCategory?.productTypeGroup?.map(
                   (item1: any, index: any) => (
@@ -163,7 +168,7 @@ export default function FirstCatPart({
                               : item1.IdProdTypeGroup,
                           IdProdType: "",
                         }));
-                        setCurrentPage(0)
+                        setCurrentPage(0);
                       }}
                       className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-myYellow duration-150 ${
                         filterValues.IdProdTypeGroup == item1.IdProdTypeGroup
@@ -175,7 +180,7 @@ export default function FirstCatPart({
                         src={`${
                           item1?.image
                             ? `${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`
-                            : "/images/food.png"
+                            : "/images/siteLogo.png"
                         }`}
                         alt=""
                         sizes="500px"
@@ -185,7 +190,7 @@ export default function FirstCatPart({
                         }}
                       />
                       <div className="absolute p-[10px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="text-white text-[12px]">
+                        <p className="break-all text-white text-[12px] w-full">
                           {item1.ProdTypeGroupName}
                         </p>
                       </div>
@@ -198,7 +203,8 @@ export default function FirstCatPart({
         {isProducts &&
           !FrontCategoriesLoader &&
           actSecCategory?.productTypeGroup?.find(
-            (item2: any) => item2.IdProdTypeGroup == filterValues.IdProdTypeGroup
+            (item2: any) =>
+              item2.IdProdTypeGroup == filterValues.IdProdTypeGroup
           )?.productTypes.length > 0 && (
             <div className="bg-myYellow p-[10px] rounded-[12px] max-lg:rounded-none max-h-[150px] overflow-hidden">
               <Swiper
@@ -209,7 +215,7 @@ export default function FirstCatPart({
                 spaceBetween={7}
                 loop={true}
                 pagination={false}
-                className="w-[calc(100%+100px)]  items-stretch self-stretch flex BannerSlider"
+                className="w-[calc(100%+150px)]  items-stretch self-stretch flex BannerSlider"
               >
                 {actSecCategory?.productTypeGroup
                   ?.find(
@@ -227,7 +233,7 @@ export default function FirstCatPart({
                               ? ""
                               : item4.IdProdType,
                         }));
-                        setCurrentPage(0)
+                        setCurrentPage(0);
                       }}
                       className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white duration-150 ${
                         filterValues.IdProdType == item4.IdProdType
@@ -239,7 +245,7 @@ export default function FirstCatPart({
                         src={`${
                           item4?.image
                             ? `${process.env.NEXT_PUBLIC_API_URL}/${item4?.image}`
-                            : "/images/food.png"
+                            : "/images/siteLogo.png"
                         }`}
                         alt=""
                         sizes="500px"
@@ -249,7 +255,7 @@ export default function FirstCatPart({
                         }}
                       />
                       <div className="absolute p-[10px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="text-white text-[12px]">
+                        <p className="break-all text-white text-[12px]">
                           {item4.ProdTypeName}
                         </p>
                       </div>

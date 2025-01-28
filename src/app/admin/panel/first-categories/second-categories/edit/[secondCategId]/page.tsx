@@ -67,7 +67,7 @@ export default function Page({
         allFirstCategsData.find(
           (item: any) =>
             item.ProdSaxeobaName === editSecondCategValues.IdProdSaxeoba
-        )?.IdProdSaxeoba
+        )?.IdProdSaxeoba || ""
       );
 
       axiosAdmin
@@ -155,21 +155,23 @@ export default function Page({
               error={false}
             />
           </div>
+          <div className="w-[310px] max-sm:w-full">
+            <DropDown1value
+              title="პირველი რიგის კატეგორიები"
+              data={allFirstCategsData}
+              firstValue={
+                allFirstCategsData.find(
+                  (item: any) =>
+                    item.IdProdSaxeoba === oneSecondCategValues?.IdProdSaxeoba
+                )?.ProdSaxeobaName
+              }
+              searchable={true}
+              name="IdProdSaxeoba"
+              setAllValues={setEditSecondCategValues}
+              error={false}
+            />
+          </div>
         </div>
-        <DropDown1value
-          title="პირველი რიგის კატეგორიები"
-          data={allFirstCategsData}
-          firstValue={
-            allFirstCategsData.find(
-              (item: any) =>
-                item.IdProdSaxeoba === oneSecondCategValues?.IdProdSaxeoba
-            )?.ProdSaxeobaName
-          }
-          searchable={true}
-          name="IdProdSaxeoba"
-          setAllValues={setEditSecondCategValues}
-          error={false}
-        />
         <div className="w-[200px]">
           <GreenButton
             name="რედაქტირება"
@@ -186,66 +188,84 @@ export default function Page({
 
       <div className="flex flex-col gap-y-[10px] items-center">
         {oneSecondCategValues?.productTypes?.length > 0 ? (
-          oneSecondCategValues?.productTypes?.map((item: any, index: number) => (
-            <div
-              key={item.IdProdType}
-              className={`border-[1px] flex items-center justify-between px-[20px] py-[10px] rounded-[10px] duration-100 w-full ${
-                ThirdCategsDeleteLoader === item.IdProdType &&
-                "opacity-[0.5] mx-[20px]"
-              }`}
-            >
-              <p className="select-none">{item.ProdTypeName}</p>
-              {ThirdCategsDeleteLoader === item.IdProdType ? (
-                <div className="w-[50px] h-[50px] flex items-center justify-center">
-                  <DotsLoader />
+          oneSecondCategValues?.productTypes?.map(
+            (item: any, index: number) => (
+              <div
+                key={item.IdProdType}
+                className={`border-[1px] flex items-center justify-between px-[20px] py-[10px] rounded-[10px] duration-100 w-full ${
+                  ThirdCategsDeleteLoader === item.IdProdType &&
+                  "opacity-[0.5] mx-[20px]"
+                }`}
+              >
+                <div className="flex items-center gap-[20px]">
+                  <p># {item.sort}</p>
+                  {item?.image?.length > 0 && (
+                    <div className="relative h-[40px] w-[60px] bg-white rounded-[8px] overflow-hidden">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
+                        alt={""}
+                        sizes="500px"
+                        fill
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  )}
+                  <p className="select-none">{item.ProdTypeName}</p>
                 </div>
-              ) : (
-                <div className="flex items-center gap-[10px]">
-                  <div
-                    onClick={() => {
-                      router.push(
-                        `/admin/panel/first-categories/second-categories/third-category/edit/${item.IdProdType}`
-                      );
-                    }}
-                    className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-gray-600 text-[18px] group hover:bg-white hover:shadow-md duration-300 cursor-pointer"
-                  >
-                    <GoPencil />
+                {ThirdCategsDeleteLoader === item.IdProdType ? (
+                  <div className="w-[50px] h-[50px] flex items-center justify-center">
+                    <DotsLoader />
                   </div>
-
-                  <div className="relative">
+                ) : (
+                  <div className="flex items-center gap-[10px]">
                     <div
                       onClick={() => {
-                        setThirdCategsDeletePopUp(item.IdProdType);
+                        router.push(
+                          `/admin/panel/first-categories/second-categories/third-category/edit/${item.IdProdType}`
+                        );
                       }}
-                      className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[red] text-[18px] hover:bg-red-200 hover:shadow-md duration-300 cursor-pointer"
+                      className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-gray-600 text-[18px] group hover:bg-white hover:shadow-md duration-300 cursor-pointer"
                     >
-                      <FaTrashCan />
+                      <GoPencil />
                     </div>
-                    {ThirdCategsDeletePopUp === item.IdProdType && (
-                      <div className="absolute top-[-5px] right-[0px] flex items-center gap-[10px] p-[10px] h-[50px] bg-[#f4f6f9] shadow-md rounded-[8px]">
-                        <div
-                          onClick={() => {
-                            HandleDeleteThirdCategs(item.IdProdType);
-                          }}
-                          className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[red] text-[18px] hover:bg-red-200 hover:shadow-md duration-300 cursor-pointer"
-                        >
-                          <FaTrashCan />
-                        </div>
-                        <div
-                          onClick={() => {
-                            setThirdCategsDeletePopUp("");
-                          }}
-                          className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[18px] hover:shadow-md duration-300 cursor-pointer"
-                        >
-                          <BsXLg />
-                        </div>
+
+                    <div className="relative">
+                      <div
+                        onClick={() => {
+                          setThirdCategsDeletePopUp(item.IdProdType);
+                        }}
+                        className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[red] text-[18px] hover:bg-red-200 hover:shadow-md duration-300 cursor-pointer"
+                      >
+                        <FaTrashCan />
                       </div>
-                    )}
+                      {ThirdCategsDeletePopUp === item.IdProdType && (
+                        <div className="absolute top-[-5px] right-[0px] flex items-center gap-[10px] p-[10px] h-[50px] bg-[#f4f6f9] shadow-md rounded-[8px]">
+                          <div
+                            onClick={() => {
+                              HandleDeleteThirdCategs(item.IdProdType);
+                            }}
+                            className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[red] text-[18px] hover:bg-red-200 hover:shadow-md duration-300 cursor-pointer"
+                          >
+                            <FaTrashCan />
+                          </div>
+                          <div
+                            onClick={() => {
+                              setThirdCategsDeletePopUp("");
+                            }}
+                            className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[18px] hover:shadow-md duration-300 cursor-pointer"
+                          >
+                            <BsXLg />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-          ))
+                )}
+              </div>
+            )
+          )
         ) : (
           <p>მესამე რიგის კატეგორიები არ არსებობს</p>
         )}

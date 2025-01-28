@@ -94,20 +94,35 @@ export default function Page() {
 
   const [currentPage, setCurrentPage] = useState<any>(0);
   const [prodwholenum, setProdwholenum] = useState<any>();
+  const [pageCount, setPageCount] = useState(0);
 
   const [filterValues, setFilterValues] = useState<prodFilterType>({
     IdProdSaxeoba: "",
     IdProdTypeGroup: "",
     IdProdType: "",
-    FeriCode: "",
-    StyleCode: "",
-    SqesiCode: "",
-    SizeCode: "",
-    salaryValue: [0, 199999],
+
+    FeriCode: [],
+    StyleCode: [],
+    SqesiCode: [],
+    SizeCode: [],
+
+    minPrice: 10,
+    maxPrice: 200000,
 
     ProdSaxeobaName: "",
     ProdSaxeobaDescription: "",
   });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFilterValues((prev) => ({
+      ...prev,
+      [name]:
+        name === "minPrice" || name === "maxPrice"
+          ? value.replace(/[^0-9.]/g, "")
+          : value,
+    }));
+  };
 
   // get from params
 
@@ -127,7 +142,12 @@ export default function Page() {
     const FeriCodeFromParams = searchParams.get("FeriCode");
     const SizeCodeFromParams = searchParams.get("SizeCode");
 
-    const currentPage = currentPageFromParams ? parseInt(currentPageFromParams, 10) - 1 : 0;
+    const minPriceFromParams = searchParams.get("minPrice");
+    const maxPriceFromParams = searchParams.get("maxPrice");
+
+    const currentPage = currentPageFromParams
+      ? parseInt(currentPageFromParams, 10) - 1
+      : 0;
 
     setCurrentPage(currentPage);
 
@@ -139,10 +159,33 @@ export default function Page() {
         : "",
       IdProdType: IdProdTypeFromParams ? IdProdTypeFromParams : "",
 
-      StyleCode: StyleCodeFromParams ? StyleCodeFromParams : "",
-      SqesiCode: SqesiCodeFromParams ? SqesiCodeFromParams : "",
-      FeriCode: FeriCodeFromParams ? FeriCodeFromParams : "",
-      SizeCode: SizeCodeFromParams ? SizeCodeFromParams : "",
+      StyleCode: StyleCodeFromParams
+        ? StyleCodeFromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      SqesiCode: SqesiCodeFromParams
+        ? SqesiCodeFromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      FeriCode: FeriCodeFromParams
+        ? FeriCodeFromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      SizeCode: SizeCodeFromParams
+        ? SizeCodeFromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+
+      minPrice: minPriceFromParams
+        ? parseInt(minPriceFromParams)
+        : parseInt("0"),
+      maxPrice: maxPriceFromParams
+        ? parseInt(maxPriceFromParams)
+        : parseInt("200000"),
     }));
   }, []);
 
@@ -164,6 +207,9 @@ export default function Page() {
     searchParams.set("SqesiCode", filterValues.SqesiCode.toString());
     searchParams.set("FeriCode", filterValues.FeriCode.toString());
     searchParams.set("SizeCode", filterValues.SizeCode.toString());
+
+    searchParams.set("minPrice", filterValues.minPrice.toString());
+    searchParams.set("maxPrice", filterValues.maxPrice.toString());
 
     if (pathname === "/products") {
       window.history.replaceState(
@@ -188,16 +234,29 @@ export default function Page() {
   // product filter
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
     setProductsPageLoader(true);
 
     axiosUser
       .get(
-        `front/product?pageNumber=${currentPage + 1}&itemsOnPage=12&${
-          filterValues.StyleCode ? `StyleCode=${filterValues.StyleCode}` : ""
+        `front/products?pageNumber=${currentPage + 1}&itemsOnPage=12&${
+          filterValues.StyleCode.length > 0
+            ? `StyleCode=${filterValues.StyleCode}`
+            : ""
         }&${
-          filterValues.SqesiCode ? `SqesiCode=${filterValues.SqesiCode}` : ""
-        }&${filterValues.FeriCode ? `FeriCode=${filterValues.FeriCode}` : ""}&${
-          filterValues.SizeCode ? `SizeCode=${filterValues.SizeCode}` : ""
+          filterValues.SqesiCode.length > 0
+            ? `SqesiCode=${filterValues.SqesiCode}`
+            : ""
+        }&${
+          filterValues.FeriCode.length > 0
+            ? `FeriCode=${filterValues.FeriCode}`
+            : ""
+        }&${
+          filterValues.SizeCode.length > 0
+            ? `SizeCode=${filterValues.SizeCode}`
+            : ""
         }&${
           filterValues.IdProdSaxeoba
             ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
@@ -208,7 +267,10 @@ export default function Page() {
             : ""
         }&${
           filterValues.IdProdType ? `IdProdType=${filterValues.IdProdType}` : ""
-        }`
+        }&${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&${
+          filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
+        }`,
+        { signal }
       )
       .then((res) => {
         setProductsPagePreLoader(false);
@@ -221,6 +283,7 @@ export default function Page() {
       .finally(() => {
         setProductsPageLoader(false);
       });
+    return () => controller.abort();
   }, [
     filterValues.IdProdSaxeoba,
     filterValues.IdProdTypeGroup,
@@ -229,10 +292,14 @@ export default function Page() {
     filterValues.SqesiCode,
     filterValues.FeriCode,
     filterValues.SizeCode,
+    filterValues.minPrice,
+    filterValues.maxPrice,
     currentPage,
   ]);
 
-  const pageCount = Math.ceil(prodwholenum / 12);
+  useEffect(() => {
+    setPageCount(Math.ceil(prodwholenum / 12));
+  }, [prodwholenum]);
 
   const handlePageClick = (event: any) => {
     setCurrentPage(event.selected);
@@ -346,17 +413,22 @@ export default function Page() {
                         onClick={() => {
                           setFilterValues((prev: any) => ({
                             ...prev,
-                            StyleCode:
-                              prev.StyleCode === item.StyleCode
-                                ? ""
-                                : item.StyleCode,
+                            StyleCode: prev.StyleCode.find(
+                              (Style: any) => Style == item.StyleCode
+                            )
+                              ? prev.StyleCode.filter(
+                                  (Style: any) => Style != item.StyleCode
+                                )
+                              : [...prev.StyleCode, parseInt(item.StyleCode)],
                           }));
                           setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
                         <CheckBox
-                          active={filterValues.StyleCode === item.StyleCode}
+                          active={filterValues.StyleCode?.find(
+                            (Style: any) => Style == item.StyleCode
+                          )}
                         />
                         <p className="text-[14px]">{item.StyleName}</p>
                       </div>
@@ -400,17 +472,22 @@ export default function Page() {
                         onClick={() => {
                           setFilterValues((prev: any) => ({
                             ...prev,
-                            SqesiCode:
-                              prev.SqesiCode === item.SqesiCode
-                                ? ""
-                                : item.SqesiCode,
+                            SqesiCode: prev.SqesiCode.find(
+                              (Sqesi: any) => Sqesi == item.SqesiCode
+                            )
+                              ? prev.SqesiCode.filter(
+                                  (Sqesi: any) => Sqesi != item.SqesiCode
+                                )
+                              : [...prev.SqesiCode, parseInt(item.SqesiCode)],
                           }));
                           setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
                         <CheckBox
-                          active={filterValues.SqesiCode === item.SqesiCode}
+                          active={filterValues.SqesiCode?.find(
+                            (Sqesi: any) => Sqesi == item.SqesiCode
+                          )}
                         />
                         <p className="text-[14px]">{item.SqesiName}</p>
                       </div>
@@ -454,17 +531,22 @@ export default function Page() {
                         onClick={() => {
                           setFilterValues((prev: any) => ({
                             ...prev,
-                            FeriCode:
-                              prev.FeriCode === item.FeriCode
-                                ? ""
-                                : item.FeriCode,
+                            FeriCode: prev.FeriCode.find(
+                              (Feri: any) => Feri == item.FeriCode
+                            )
+                              ? prev.FeriCode.filter(
+                                  (Feri: any) => Feri != item.FeriCode
+                                )
+                              : [...prev.FeriCode, parseInt(item.FeriCode)],
                           }));
                           setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
                         <CheckBox
-                          active={filterValues.FeriCode === item.FeriCode}
+                          active={filterValues.FeriCode?.find(
+                            (Feri: any) => Feri == item.FeriCode
+                          )}
                         />
                         <p className="text-[14px]">{item.FeriName}</p>
                       </div>
@@ -508,17 +590,22 @@ export default function Page() {
                         onClick={() => {
                           setFilterValues((prev: any) => ({
                             ...prev,
-                            SizeCode:
-                              prev.SizeCode === item.SizeCode
-                                ? ""
-                                : item.SizeCode,
+                            SizeCode: prev.SizeCode.find(
+                              (Size: any) => Size == item.SizeCode
+                            )
+                              ? prev.SizeCode.filter(
+                                  (Size: any) => Size != item.SizeCode
+                                )
+                              : [...prev.SizeCode, parseInt(item.SizeCode)],
                           }));
                           setCurrentPage(0);
                         }}
                         className="flex items-center gap-[5px] cursor-pointer"
                       >
                         <CheckBox
-                          active={filterValues.SizeCode === item.SizeCode}
+                          active={filterValues.SizeCode?.find(
+                            (Size: any) => Size == item.SizeCode
+                          )}
                         />
                         <p className="text-[14px]">{item.SizeName}</p>
                       </div>
@@ -558,20 +645,32 @@ export default function Page() {
                   >
                     <div className="flex flex-col gap-[10px]">
                       <div className="flex items-center justify-between gap-[5px]">
-                        <div className="w-[50%] ">
-                          <Input1
-                            placeholder="დან"
-                            firstValue={filterValues.salaryValue[0]}
+                        <div
+                          className={`rounded-full w-[50%] h-[52px] max-tiny:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                        >
+                          <input
+                            onChange={handleInputChange}
+                            value={filterValues.minPrice}
                             type="text"
+                            name="minPrice"
+                            placeholder="დან"
+                            className={`select-none outline-none rounded-[4px] px-[5px] text-[14px] h-full w-full bg-transparent`}
                           />
+                          ₾
                         </div>
                         <p>-</p>
-                        <div className="w-[50%] ">
-                          <Input1
-                            placeholder="მდე"
-                            firstValue={filterValues.salaryValue[1]}
+                        <div
+                          className={`rounded-full w-[50%] h-[52px] max-tiny:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                        >
+                          <input
+                            onChange={handleInputChange}
+                            value={filterValues.maxPrice}
                             type="text"
+                            name="maxPrice"
+                            placeholder="მდე"
+                            className={`select-none outline-none rounded-[4px] px-[5px] text-[14px] h-full w-full bg-transparent`}
                           />
+                          ₾
                         </div>
                       </div>
                       <div className="w-full flex flex-col items-center">
@@ -579,8 +678,8 @@ export default function Page() {
                           className="horizontal-slider w-full h-[22px] flex items-center  "
                           thumbClassName="w-[22px] h-[22px] bg-myGreen rounded-full outline-none text-[0px] text-myGreen flex items-center justify-center cursor-pointer"
                           trackClassName="example-track bg-myGreen"
-                          value={filterValues.salaryValue}
-                          max={199999}
+                          value={[filterValues.minPrice, filterValues.maxPrice]}
+                          max={200000}
                           min={0}
                           ariaLabel={["Lower thumb", "Upper thumb"]}
                           ariaValuetext={(state: any) =>
@@ -591,15 +690,16 @@ export default function Page() {
                               {state.valueNow}
                             </div>
                           )}
-                          onChange={(value: any, index: any) => {
+                          onChange={(value: [number, number]) => {
                             setFilterValues((prev: any) => ({
                               ...prev,
-                              salaryValue: value,
+                              minPrice: value[0],
+                              maxPrice: value[1],
                             }));
                             setCurrentPage(0);
                           }}
                           pearling
-                          minDistance={6}
+                          minDistance={2}
                         />
                       </div>
                     </div>

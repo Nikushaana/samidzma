@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import GreenButton from "@/app/components/buttons/greenButton";
 import { ContextForSharingStates } from "../../../../../dataFetchs/sharedStates";
 import useFirstCategories from "../../../../../dataFetchs/firstCategoriesContext";
+import { FaSort } from "react-icons/fa";
+import Image from "next/image";
 
 export default function Page() {
   const { allFirstCategsData, allFirstCategsLoader, fetchFirstCategories } =
@@ -52,9 +54,25 @@ export default function Page() {
               "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <p className="select-none">{item.ProdSaxeobaName}</p>
+            <div className="flex items-center gap-[20px] h-full">
+              <p># {item.sort}</p>
+              {item?.image?.length > 0 && (
+                <div className="relative h-[40px] w-[60px] bg-white rounded-[8px] overflow-hidden">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
+                    alt={""}
+                    sizes="500px"
+                    fill
+                    style={{
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
+              )}
+              <p className="select-none">{item.ProdSaxeobaName}</p>
+            </div>
             {FirstCategsDeleteLoader === item.IdProdSaxeoba ? (
-              <div className="w-[50px] h-[50px] flex items-center justify-center">
+              <div className="w-[40px] h-[40px] flex items-center justify-center">
                 <DotsLoader />
               </div>
             ) : (
