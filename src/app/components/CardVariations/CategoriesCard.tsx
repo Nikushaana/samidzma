@@ -82,7 +82,7 @@ export default function CategoriesCard({ item }: any) {
                       className="absolute w-full h-full flex items-end z-[1] p-[10px]
               bg-gradient-to-t from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
                     >
-                      <p className="text-white text-[12px]">
+                      <p className="break-words hyphens-manual text-white text-[12px]">
                         {item3.ProdTypeGroupName}
                       </p>
                     </div>
