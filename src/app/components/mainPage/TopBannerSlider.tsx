@@ -56,6 +56,8 @@ export default function TopBannerSlider({ BannersData }: any) {
     setGroupedItems(screenWidth < 470 ? groupedArray : BannersData);
   }, [BannersData, screenWidth]);
 
+  console.log(groupedItems);
+
   return (
     <div className="w-full max-lg:mb-[50px] relative">
       <Swiper
@@ -84,7 +86,8 @@ export default function TopBannerSlider({ BannersData }: any) {
         {groupedItems.map((item: any, index: any) => (
           <SwiperSlide key={index} className="h-full">
             <div className="flex gap-[10px] max-lg:gap-[20px] h-[343px] max-lg:h-[355px] max-lg:pb-[57px]">
-              <div className={`max-tiny:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%]`}
+              <div
+                className={`max-tiny:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%]`}
               >
                 <Image
                   src={`${process.env.NEXT_PUBLIC_API_URL}/${
@@ -103,29 +106,30 @@ export default function TopBannerSlider({ BannersData }: any) {
                     objectFit: "cover",
                   }}
                 />
-                {item?.large_title ||
+                {(item?.large_title ||
                   item?.medium_title ||
                   item?.medium_title ||
                   item?.small1_title ||
                   item?.small1_title ||
-                  (item?.small2_title && (
-                    <div
-                      className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]
+                  item?.small2_title) && (
+                  <div
+                    className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]
             bg-gradient-to-r from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
-                    >
-                      <p className="text-white text-[40px] max-lg:text-[34px] w-[60%] line-clamp-4 max-lg:w-full">
-                        {item?.large_title
-                          ? item?.large_title
-                          : item?.medium_title
-                          ? item?.medium_title
-                          : item?.small1_title
-                          ? item?.small1_title
-                          : item?.small2_title}
-                      </p>
-                    </div>
-                  ))}
+                  >
+                    <p className="text-white text-[40px] max-lg:text-[34px] w-[60%] line-clamp-4 max-lg:w-full">
+                      {item?.large_title
+                        ? item?.large_title
+                        : item?.medium_title
+                        ? item?.medium_title
+                        : item?.small1_title
+                        ? item?.small1_title
+                        : item?.small2_title}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className={`flex flex-col gap-[10px] max-lg:gap-[20px] h-full max-tiny:hidden w-[35%] max-lg:w-[50%]`}
+              <div
+                className={`flex flex-col gap-[10px] max-lg:gap-[20px] h-full max-tiny:hidden w-[35%] max-lg:w-[50%]`}
               >
                 <div
                   className={`w-full rounded-[8px] relative overflow-hidden h-[50%]`}
