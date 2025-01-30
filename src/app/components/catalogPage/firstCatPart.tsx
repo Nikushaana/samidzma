@@ -59,13 +59,13 @@ export default function FirstCatPart({
       </div>
 
       <div className="w-full flex flex-col gap-y-[10px]">
-        <div className="aspect-[10/2] max-lg:aspect-[3/1] max-tiny:aspect-[6/4] max-lg:mx-[90px] max-tiny:mx-[25px]">
+        <div className="aspect-[10/2] max-lg:aspect-[3/1] max-tiny:aspect-[6/4] max-lg:mx-[90px] max-tiny:mx-[25px] overflow-hidden">
           {FrontCategoriesLoader ? (
             <div
               style={{
                 gridTemplateColumns: `repeat(${sldsPerView}, minmax(0, 1fr))`,
               }}
-              className={`grid  gap-[20px] max-lg:gap-[12px] w-full h-full`}
+              className={`grid  gap-[20px] max-lg:gap-[12px] w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)]  h-full`}
             >
               {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
                 (item: any, index: number) => (
@@ -83,7 +83,7 @@ export default function FirstCatPart({
               spaceBetween={screenWidth <= 1025 ? 12 : 20}
               loop={true}
               pagination={false}
-              className="h-full"
+              className="h-full w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)] "
               speed={1200}
             >
               {FrontCategoriesData.map((item: any, index: any) => (
@@ -153,7 +153,7 @@ export default function FirstCatPart({
                 spaceBetween={7}
                 loop={true}
                 pagination={false}
-                className="w-[calc(100%+150px)] items-stretch self-stretch flex BannerSlider"
+                className="w-[calc(100%+5vw)] max-sm:w-[calc(100%+10vw)] items-stretch self-stretch flex BannerSlider"
               >
                 {actSecCategory?.productTypeGroup?.map(
                   (item1: any, index: any) => (
@@ -215,7 +215,7 @@ export default function FirstCatPart({
                 spaceBetween={7}
                 loop={true}
                 pagination={false}
-                className="w-[calc(100%+150px)]  items-stretch self-stretch flex BannerSlider"
+                className="w-[calc(100%+5vw)] max-sm:w-[calc(100%+10vw)] items-stretch self-stretch flex BannerSlider"
               >
                 {actSecCategory?.productTypeGroup
                   ?.find(
