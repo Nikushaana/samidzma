@@ -56,8 +56,6 @@ export default function TopBannerSlider({ BannersData }: any) {
     setGroupedItems(screenWidth < 470 ? groupedArray : BannersData);
   }, [BannersData, screenWidth]);
 
-  console.log(groupedItems);
-
   return (
     <div className="w-full max-lg:mb-[50px] relative">
       <Swiper
@@ -114,9 +112,9 @@ export default function TopBannerSlider({ BannersData }: any) {
                   item?.small2_title) && (
                   <div
                     className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]
-            bg-gradient-to-r from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
+            "
                   >
-                    <p className="text-white text-[40px] max-lg:text-[34px] w-[60%] line-clamp-4 max-lg:w-full">
+                    <p className="text-white text-[40px] max-lg:text-[32px] line-clamp-4 w-full break-all">
                       {item?.large_title
                         ? item?.large_title
                         : item?.medium_title
@@ -144,11 +142,8 @@ export default function TopBannerSlider({ BannersData }: any) {
                     }}
                   />
                   {item?.medium_title && (
-                    <div
-                      className="absolute w-full h-full flex items-center z-[1] p-[30px]
-            bg-gradient-to-r from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
-                    >
-                      <p className="text-white text-[22px] w-[70%] line-clamp-3">
+                    <div className="absolute w-full h-full flex items-center z-[1] p-[30px]">
+                      <p className="text-white text-[22px] w-[70%] line-clamp-3 break-all">
                         {item?.medium_title}
                       </p>
                     </div>
@@ -170,11 +165,8 @@ export default function TopBannerSlider({ BannersData }: any) {
                       }}
                     />
                     {item?.small1_title && (
-                      <div
-                        className="absolute w-full h-full flex items-center z-[1] p-[20px]
-            bg-gradient-to-r from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
-                      >
-                        <p className="text-white text-[18px] line-clamp-3">
+                      <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
+                        <p className="text-white text-[18px] line-clamp-3 break-all">
                           {item?.small1_title}
                         </p>
                       </div>
@@ -193,11 +185,8 @@ export default function TopBannerSlider({ BannersData }: any) {
                       }}
                     />
                     {item?.small2_title && (
-                      <div
-                        className="absolute w-full h-full flex items-center z-[1] p-[20px]
-            bg-gradient-to-r from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
-                      >
-                        <p className="text-white text-[18px] line-clamp-3">
+                      <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
+                        <p className="text-white text-[18px] line-clamp-3 break-all">
                           {item?.small2_title}
                         </p>
                       </div>

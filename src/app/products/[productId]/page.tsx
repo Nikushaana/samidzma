@@ -231,7 +231,7 @@ export default function Page({ params }: { params: { productId: string } }) {
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
         <div className="flex flex-col gap-y-[20px]">
           <WhatUSearch />
-          <div className="flex gap-[26px] max-lg:p-[5px] max-tiny:flex-col max-lg:gap-[16px] h-full max-h-[885px] max-lg:bg-white max-lg:rounded-[12px] ">
+          <div className="flex gap-[26px] max-lg:p-[5px] max-tiny:flex-col max-lg:gap-[16px] h-full  max-lg:bg-white max-lg:rounded-[12px] ">
             <div className="hidden max-tiny:flex items-center justify-center gap-[5px]">
               <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
                 <p className="text-[14px] max-tiny:text-[12px]">Sale -5%</p>
@@ -265,7 +265,7 @@ export default function Page({ params }: { params: { productId: string } }) {
               {oneProductLoader ? (
                 <div className="w-full h-full rounded-[12px] loaderwave"></div>
               ) : (
-                <div className="flex flex-col gap-y-[25px] p-[18px] max-tiny:p-0 rounded-[12px] bg-white w-full h-full">
+                <div className="flex flex-col gap-y-[25px] p-[18px] rounded-[12px] bg-white w-full h-full">
                   <div className="flex items-center gap-[5px] max-tiny:hidden">
                     <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
                       <p className="text-[14px] max-tiny:text-[12px]">

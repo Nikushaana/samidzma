@@ -31,11 +31,11 @@ export default function EachProductSlider({
   const screenWidth = useScreenWidth();
 
   return (
-    <div className="w-full h-full max-tiny:h-[400px] ">
+    <div className={`w-full max-tiny:h-[400px] ${mainLoader ? "h-[500px]" : "h-full "}`}>
       <div className="flex flex-col w-full h-full  gap-[10px] group">
         <div className="w-full flex items-center justify-center h-[calc(100%-97px)] ">
           {mainLoader ? (
-            <div className="h-[40vh] w-full">
+            <div className="h-full w-full">
               <div className="w-full h-full rounded-[12px] loaderwave"></div>
             </div>
           ) : prodMainImages.length > 0 ? (
