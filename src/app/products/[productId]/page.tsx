@@ -226,6 +226,24 @@ export default function Page({ params }: { params: { productId: string } }) {
   }, [params.productId, renderProdReview, variation]);
   // product reviews
 
+  // yt video key
+  const [ytVideoKey, setYtVideoKey] = useState<string>("");
+
+  useEffect(() => {
+    setYtVideoKey(
+      variation
+        ? oneProduct?.product_variations
+            ?.find((item: any) => item.ProdCode === variation)
+            ?.Description4.split("v=")[1]
+        : oneProduct?.product?.Description4.split("v=")[1]
+    );
+  }, [
+    oneProduct?.product?.Description4,
+    oneProduct?.product_variations,
+    variation,
+  ]);
+  // yt video key
+
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
@@ -442,9 +460,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                       </p>
                     </div>
                   </div>
-                  <DropDownFilials
-                    productId={variation ? variation : params.productId}
-                  />
+                  <DropDownFilials stock={oneProduct?.stock} />
                 </div>
               )}
             </div>
@@ -484,30 +500,49 @@ export default function Page({ params }: { params: { productId: string } }) {
             </div>
             <div className="flex flex-col gap-y-[70px]">
               {productDetiles === 1 && (
-                <div className="flex max-lg:flex-col gap-[50px] px-[50px] max-lg:px-0 w-full ">
+                <div className="px-[50px] max-lg:px-0 w-full flex flex-col gap-[50px]">
+                  <div className="flex max-lg:flex-col gap-[50px] w-full ">
+                    {oneProductLoader ? (
+                      <div className="h-[20px] w-[60%] max-lg:w-full">
+                        <div className="loaderwave"></div>
+                      </div>
+                    ) : (
+                      <p className="w-[60%] max-lg:w-full text-[14px]">
+                        {variation
+                          ? oneProduct?.product_variations?.find(
+                              (item: any) => item.ProdCode === variation
+                            )?.DescriptionName
+                          : oneProduct?.product?.DescriptionName}
+                      </p>
+                    )}
+                    <ul className="grid grid-cols-2 max-tiny:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                      <li>Aromatic ground cinnamon</li>
+                    </ul>
+                  </div>
                   {oneProductLoader ? (
-                    <div className="h-[20px] w-[60%] max-lg:w-full">
+                    <div className="aspect-video w-full">
                       <div className="loaderwave"></div>
                     </div>
                   ) : (
-                    <p className="w-[60%] max-lg:w-full text-[14px]">
-                      {variation
-                        ? oneProduct?.product_variations?.find(
-                            (item: any) => item.ProdCode === variation
-                          )?.DescriptionName
-                        : oneProduct?.product?.DescriptionName}
-                    </p>
+                    ytVideoKey && (
+                      <div className="aspect-video w-full rounded-[12px] overflow-hidden">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${ytVideoKey}`}
+                          title="YouTube video player"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          className="w-full h-full"
+                        />
+                      </div>
+                    )
                   )}
-                  <ul className="grid grid-cols-2 max-tiny:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                    <li>Aromatic ground cinnamon</li>
-                  </ul>
                 </div>
               )}
               {productDetiles === 3 && (

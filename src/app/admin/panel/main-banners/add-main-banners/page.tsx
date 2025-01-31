@@ -23,6 +23,7 @@ export default function Page() {
   } = useContext(ContextForSharingStates);
 
   const [loaderAddBanner, setLoaderAddBanner] = useState<boolean>(false);
+  const [addBannerError, setAddBannerError] = useState<boolean>(false);
 
   const [addBannerValues, setAddBannerValues] = useState({
     large_url: "",
@@ -50,7 +51,8 @@ export default function Page() {
   const HandleAddBanner = (e: any) => {
     e.preventDefault();
     setLoaderAddBanner(true);
-    if (true) {
+    setAddBannerError(false);
+    if (addBannerValues.sort && addBannerValues.status) {
       const form = e.target;
       const formData = new FormData(form);
 
@@ -77,6 +79,10 @@ export default function Page() {
         .finally(() => {});
     } else {
       setLoaderAddBanner(false);
+      setAlertShow(true);
+      setAlertStatus(false);
+      setAlertText("სტატუსი და სორტირება აუცილებელი ველებია!");
+      setAddBannerError(true);
     }
   };
 
@@ -203,7 +209,7 @@ export default function Page() {
           data={status}
           name="status"
           setAllValues={setAddBannerValues}
-          error={false}
+          error={addBannerError}
         />
         <Input1
           title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
@@ -211,7 +217,7 @@ export default function Page() {
           name="sort"
           type="text"
           setAllValues={setAddBannerValues}
-          error={false}
+          error={addBannerError}
         />
       </div>
       <div className="w-[200px]">

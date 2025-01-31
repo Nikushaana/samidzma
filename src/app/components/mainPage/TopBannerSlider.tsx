@@ -12,10 +12,12 @@ import { BiChevronRight } from "react-icons/bi";
 import Image from "next/image";
 import useScreenWidth from "../ScreenWidth";
 import { axiosUser } from "../../../../dataFetchs/AxiosToken";
+import { useRouter } from "next/navigation";
 
 export default function TopBannerSlider({ BannersData }: any) {
   let swiperRef = useRef<SwiperClass>(null!);
   const screenWidth = useScreenWidth();
+  const router = useRouter();
 
   const [groupedItems, setGroupedItems] = useState<any>([]);
 
@@ -26,28 +28,24 @@ export default function TopBannerSlider({ BannersData }: any) {
       BannersData.forEach((banner: any) => {
         groupedArray.push(
           {
-            large_url: banner.large_url,
-            large_mobile_url: banner.large_mobile_url,
-            large_title: banner.large_title,
-            large_redirect_link: banner.large_redirect_link,
+            mobile_url: banner.large_mobile_url,
+            mobile_title: banner.large_title,
+            mobile_redirect_link: banner.large_redirect_link,
           },
           {
-            medium_url: banner.medium_url,
-            medium_mobile_url: banner.medium_mobile_url,
-            medium_title: banner.medium_title,
-            medium_redirect_link: banner.medium_redirect_link,
+            mobile_url: banner.medium_mobile_url,
+            mobile_title: banner.medium_title,
+            mobile_redirect_link: banner.medium_redirect_link,
           },
           {
-            small1_url: banner.small1_url,
-            small1_mobile_url: banner.small1_mobile_url,
-            small1_title: banner.small1_title,
-            small1_redirect_link: banner.small1_redirect_link,
+            mobile_url: banner.small1_mobile_url,
+            mobile_title: banner.small1_title,
+            mobile_redirect_link: banner.small1_redirect_link,
           },
           {
-            small2_url: banner.small2_url,
-            small2_mobile_url: banner.small2_mobile_url,
-            small2_title: banner.small2_title,
-            small2_redirect_link: banner.small2_redirect_link,
+            mobile_url: banner.small2_mobile_url,
+            mobile_title: banner.small2_title,
+            mobile_redirect_link: banner.small2_redirect_link,
           }
         );
       });
@@ -85,17 +83,30 @@ export default function TopBannerSlider({ BannersData }: any) {
           <SwiperSlide key={index} className="h-full">
             <div className="flex gap-[10px] max-lg:gap-[20px] h-[343px] max-lg:h-[355px] max-lg:pb-[57px]">
               <div
-                className={`max-tiny:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%]`}
+                onClick={() => {
+                  if (screenWidth < 470) {
+                    if (item?.mobile_redirect_link) {
+                      router.push(`/${item?.mobile_redirect_link}`);
+                    }
+                  } else {
+                    if (item?.large_redirect_link) {
+                      router.push(`/${item?.large_redirect_link}`);
+                    }
+                  }
+                }}
+                className={`max-tiny:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%] cursor-pointer ${
+                  screenWidth < 470
+                    ? item?.mobile_redirect_link
+                      ? "cursor-pointer"
+                      : "pointer-events-none"
+                    : item?.large_redirect_link
+                    ? "cursor-pointer"
+                    : "pointer-events-none"
+                }`}
               >
                 <Image
                   src={`${process.env.NEXT_PUBLIC_API_URL}/${
-                    item?.large_url
-                      ? item?.large_url
-                      : item?.medium_url
-                      ? item?.medium_url
-                      : item?.small1_url
-                      ? item?.small1_url
-                      : item?.small2_url
+                    screenWidth < 470 ? item?.mobile_url : item?.large_url
                   }`}
                   alt={""}
                   sizes="500px"
@@ -104,36 +115,43 @@ export default function TopBannerSlider({ BannersData }: any) {
                     objectFit: "cover",
                   }}
                 />
-                {(item?.large_title ||
-                  item?.medium_title ||
-                  item?.medium_title ||
-                  item?.small1_title ||
-                  item?.small1_title ||
-                  item?.small2_title) && (
-                  <div
-                    className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]
-            "
-                  >
-                    <p className="text-white text-[40px] max-lg:text-[32px] line-clamp-4 w-full break-all">
-                      {item?.large_title
-                        ? item?.large_title
-                        : item?.medium_title
-                        ? item?.medium_title
-                        : item?.small1_title
-                        ? item?.small1_title
-                        : item?.small2_title}
-                    </p>
-                  </div>
-                )}
+                {screenWidth < 470
+                  ? item?.mobile_title && (
+                      <div className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]">
+                        <p className="text-white w-[60%] max-xl:w-[80%] max-lg:w-full text-[36px] max-lg:text-[32px] line-clamp-4 ">
+                          {item?.mobile_title}
+                        </p>
+                      </div>
+                    )
+                  : item?.large_title && (
+                      <div className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]">
+                        <p className="text-white w-[60%] max-xl:w-[80%] max-lg:w-full text-[36px] max-lg:text-[32px] line-clamp-4 ">
+                          {item?.large_title}
+                        </p>
+                      </div>
+                    )}
               </div>
               <div
                 className={`flex flex-col gap-[10px] max-lg:gap-[20px] h-full max-tiny:hidden w-[35%] max-lg:w-[50%]`}
               >
                 <div
-                  className={`w-full rounded-[8px] relative overflow-hidden h-[50%]`}
+                  onClick={() => {
+                    if (item?.medium_redirect_link) {
+                      router.push(`/${item?.medium_redirect_link}`);
+                    }
+                  }}
+                  className={`w-full rounded-[8px] relative overflow-hidden h-[50%] ${
+                    item?.medium_redirect_link
+                      ? "cursor-pointer"
+                      : "pointer-events-none"
+                  }`}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.medium_url}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${
+                      screenWidth < 470
+                        ? item?.medium_mobile_url
+                        : item?.medium_url
+                    }`}
                     alt={""}
                     sizes="500px"
                     fill
@@ -143,7 +161,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                   />
                   {item?.medium_title && (
                     <div className="absolute w-full h-full flex items-center z-[1] p-[30px]">
-                      <p className="text-white text-[22px] w-[70%] line-clamp-3 break-all">
+                      <p className="text-white text-[22px] w-[50%] max-xl:w-[80%] max-md:w-full line-clamp-3 ">
                         {item?.medium_title}
                       </p>
                     </div>
@@ -153,10 +171,23 @@ export default function TopBannerSlider({ BannersData }: any) {
                   className={`w-full flex items-center gap-[10px] max-lg:gap-[20px] h-[50%]`}
                 >
                   <div
-                    className={`h-full rounded-[8px] relative overflow-hidden w-[50%]`}
+                    onClick={() => {
+                      if (item?.small1_redirect_link) {
+                        router.push(`/${item?.small1_redirect_link}`);
+                      }
+                    }}
+                    className={`h-full rounded-[8px] relative overflow-hidden w-[50%] ${
+                      item?.small1_redirect_link
+                        ? "cursor-pointer"
+                        : "pointer-events-none"
+                    }`}
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.small1_url}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${
+                        screenWidth < 470
+                          ? item?.small1_mobile_url
+                          : item?.small1_url
+                      }`}
                       alt={""}
                       sizes="500px"
                       fill
@@ -166,17 +197,30 @@ export default function TopBannerSlider({ BannersData }: any) {
                     />
                     {item?.small1_title && (
                       <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
-                        <p className="text-white text-[18px] line-clamp-3 break-all">
+                        <p className="text-white text-[18px] line-clamp-3">
                           {item?.small1_title}
                         </p>
                       </div>
                     )}
                   </div>
                   <div
-                    className={`h-full rounded-[8px] relative overflow-hidden w-[50%]`}
+                    onClick={() => {
+                      if (item?.small2_redirect_link) {
+                        router.push(`/${item?.small2_redirect_link}`);
+                      }
+                    }}
+                    className={`h-full rounded-[8px] relative overflow-hidden w-[50%] ${
+                      item?.small2_redirect_link
+                        ? "cursor-pointer"
+                        : "pointer-events-none"
+                    }`}
                   >
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.small2_url}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/${
+                        screenWidth < 470
+                          ? item?.small2_mobile_url
+                          : item?.small2_url
+                      }`}
                       alt={""}
                       sizes="500px"
                       fill
@@ -186,7 +230,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                     />
                     {item?.small2_title && (
                       <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
-                        <p className="text-white text-[18px] line-clamp-3 break-all">
+                        <p className="text-white text-[18px] line-clamp-3 ">
                           {item?.small2_title}
                         </p>
                       </div>

@@ -8,7 +8,6 @@ import CartCard from "../components/CardVariations/CartCard";
 export default function Page() {
   const { CartData, CartLoader } = useContext(CartAxiosContext);
 
-  
   return (
     <div
       className={`w-full flex flex-col gap-y-[20px] relative ${

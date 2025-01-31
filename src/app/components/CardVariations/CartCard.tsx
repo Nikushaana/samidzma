@@ -71,7 +71,7 @@ export default function CartCard({
       axiosUser
         .get(`front/productPicture?ProdCode=${productItemData.ProdCode}`)
         .then((res) => {
-          setProdImages(res.data);
+          setProdImages(res.data[0]);
         })
         .catch((err) => {
           setProdImages({});
