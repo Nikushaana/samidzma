@@ -11,6 +11,7 @@ export default function TextEditor({
   name,
   setAllValues,
   title,
+  error
 }: any) {
   const [inputText, setInputText] = useState<string>("");
 
@@ -51,7 +52,7 @@ export default function TextEditor({
   return (
     <div className="flex flex-col gap-y-[5px] w-full">
       {title && <p className="text-[12px] mx-[20px]">{title}</p>}
-      <div>
+      <div className={`${error && "border-[1px] border-myPink rounded-[8px]"}`}>
         <ReactQuill
           value={inputText}
           onChange={setInputText}

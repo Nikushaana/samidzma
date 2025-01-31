@@ -47,33 +47,29 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
 
   const HandleEditThirdCateg = (e: any) => {
     e.preventDefault();
-    if (true) {
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-      setLoaderEditThirdCateg(true);
-      axiosAdmin
-        .post(`admin/category/productType/${params.thirdCategId}`, formData)
-        .then((res) => {
-          router.push(
-            `/admin/panel/first-categories/second-categories/edit/${oneThirdCategValues.IdProdTypeGroup}`
-          );
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          fetchFirstCategories();
-          fetchSecondCategories();
-        })
-        .catch((err) => {
-          setLoaderEditThirdCateg(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditThirdCateg(false);
-    }
+    setLoaderEditThirdCateg(true);
+    axiosAdmin
+      .post(`admin/category/productType/${params.thirdCategId}`, formData)
+      .then((res) => {
+        router.push(
+          `/admin/panel/first-categories/second-categories/edit/${oneThirdCategValues.IdProdTypeGroup}`
+        );
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        fetchFirstCategories();
+        fetchSecondCategories();
+      })
+      .catch((err) => {
+        setLoaderEditThirdCateg(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -24,57 +25,80 @@ export default function Page() {
   const [loaderAddFAQ, setLoaderAddFAQ] = useState<boolean>(false);
 
   const [addFAQValues, setAddFAQValues] = useState({
-    title: "",
+    title: "", //is mandatory
     title_eng: "",
     title_rus: "",
-    answer: "",
+    answer: "", //is mandatory
     answer_eng: "",
     answer_rus: "",
     sort: 0,
     status: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    title: Yup.string().required("კითხვა სავალდებულოა"),
+    answer: Yup.string().required("პასუხი სავალდებულოა"),
+  });
+
+  const handleAddFaqValidation = () => {
+    validationSchema
+      .validate(addFAQValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddFAQ();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.title || newErrors.answer);
+      });
+  };
+
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleAddFAQ();
+      handleAddFaqValidation();
     }
   };
 
   const HandleAddFAQ = () => {
     setLoaderAddFAQ(true);
-    if (addFAQValues.title && addFAQValues.title_eng) {
-      axiosAdmin
-        .post("admin/faq", {
-          title: addFAQValues.title,
-          title_eng: addFAQValues.title_eng,
-          title_rus: addFAQValues.title_rus,
-          answer: addFAQValues.answer,
-          answer_eng: addFAQValues.answer_eng,
-          answer_rus: addFAQValues.answer_rus,
-          sort: addFAQValues.sort,
-          status: status.find((item: any) => item.name === addFAQValues.status)
-            ?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/faq");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით აიტვირთა");
-          setAllFAQRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddFAQ(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ აიტვირთა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddFAQ(false);
-    }
+    axiosAdmin
+      .post("admin/faq", {
+        title: addFAQValues.title,
+        title_eng: addFAQValues.title_eng,
+        title_rus: addFAQValues.title_rus,
+        answer: addFAQValues.answer,
+        answer_eng: addFAQValues.answer_eng,
+        answer_rus: addFAQValues.answer_rus,
+        sort: addFAQValues.sort,
+        status: status.find((item: any) => item.name === addFAQValues.status)
+          ?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/faq");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით აიტვირთა");
+        setAllFAQRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddFAQ(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ აიტვირთა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -90,14 +114,14 @@ export default function Page() {
           name="title"
           type="text"
           setAllValues={setAddFAQValues}
-          error={false}
+          error={errors.title}
           handleInputKeyPress={handleInputKeyPress}
         />
         <TextEditor
           title="პასუხი"
           name="answer"
           setAllValues={setAddFAQValues}
-          error={false}
+          error={errors.answer}
           handleInputKeyPress={handleInputKeyPress}
         />
         <hr />
@@ -137,6 +161,7 @@ export default function Page() {
           <DropDown1value
             title="სტატუსი"
             data={status}
+            firstValue="აქტიური"
             name="status"
             setAllValues={setAddFAQValues}
             error={false}
@@ -157,7 +182,7 @@ export default function Page() {
       <div className="w-[200px]">
         <GreenButton
           name="დამატება"
-          action={HandleAddFAQ}
+          action={handleAddFaqValidation}
           loader={loaderAddFAQ}
           style="h-[50px] text-[18px]"
         />

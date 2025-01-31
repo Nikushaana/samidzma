@@ -3,14 +3,18 @@
 import React, { useContext, useState } from "react";
 import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import Input1 from "../Inputs/Input1";
-import CheckBox from "../Inputs/CheckBox";
-import GreenButton from "../buttons/greenButton";
 import Image from "next/image";
+import * as Yup from "yup";
+import Input1 from "@/app/components/Inputs/Input1";
+import CheckBox from "@/app/components/Inputs/CheckBox";
+import GreenButton from "@/app/components/buttons/greenButton";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const { setActiveAuthorization, setAlertShow, setAlertStatus, setAlertText } =
-    useContext(ContextForSharingStates);
+  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+    ContextForSharingStates
+  );
+  const router = useRouter();
   const [userSignUpLoader, setUserSignUpLoader] = useState<boolean>(false);
   const [userSignUpValues, setUserSignUpValues] = useState({
     name: "",
@@ -23,60 +27,92 @@ export default function SignUp() {
     confirmLaws: false,
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("სახელი სავალდებულოა"),
+    surname: Yup.string().required("გვარი სავალდებულოა"),
+    email: Yup.string().required("მეილი სავალდებულოა"),
+    phone: Yup.string().required("ტელეფონის ნომერი სავალდებულოა"),
+    password: Yup.string()
+      .required("პაროლი სავალდებულოა")
+      .oneOf([Yup.ref("rePassword")], "პაროლები უნდა ემთხვეოდეს"),
+    rePassword: Yup.string()
+      .required("პაროლის განმეორება სავალდებულოა")
+      .oneOf([Yup.ref("password")], "პაროლები უნდა ემთხვეოდეს"),
+  });
+
+  const handleUserSignUpValidation = () => {
+    validationSchema
+      .validate(userSignUpValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleUserSignUp();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(
+          newErrors.name ||
+            newErrors.surname ||
+            newErrors.email ||
+            newErrors.phone ||
+            newErrors.password ||
+            newErrors.rePassword
+        );
+      });
+  };
+
   const handleInputKeyPressSignUp = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleUserSignUp();
+      handleUserSignUpValidation();
     }
   };
 
   const HandleUserSignUp = () => {
     setUserSignUpLoader(true);
-    if (
-      userSignUpValues.name &&
-      userSignUpValues.surname &&
-      userSignUpValues.email &&
-      userSignUpValues.phone &&
-      userSignUpValues.password &&
-      userSignUpValues.rePassword &&
-      userSignUpValues.password === userSignUpValues.rePassword
-    ) {
-      axiosUser
-        .post("userAuth/singUp", {
-          name: userSignUpValues.name,
-          surname: userSignUpValues.surname,
-          email: userSignUpValues.email,
-          phone: userSignUpValues.phone && userSignUpValues.phone?.replace(/\s/g, ""),
-          password: userSignUpValues.password,
-        })
-        .then((res) => {
-          setUserSignUpValues({
-            name: "",
-            surname: "",
-            email: "",
-            phone: "",
-            password: "",
-            rePassword: "",
-            confirmLaws: false,
-          });
-          setActiveAuthorization("signin");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("რეგისტრაცია წარმატებით შესრულდა");
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("რეგისტრაცია ვერ შესრულდა");
-        })
-        .finally(() => {
-          setUserSignUpLoader(false);
+
+    axiosUser
+      .post("userAuth/singUp", {
+        name: userSignUpValues.name,
+        surname: userSignUpValues.surname,
+        email: userSignUpValues.email,
+        phone:
+          userSignUpValues.phone && userSignUpValues.phone?.replace(/\s/g, ""),
+        password: userSignUpValues.password,
+      })
+      .then((res) => {
+        setUserSignUpValues({
+          name: "",
+          surname: "",
+          email: "",
+          phone: "",
+          password: "",
+          rePassword: "",
+          confirmLaws: false,
         });
-    } else {
-      setUserSignUpLoader(false);
-    }
+        router.push("/auth/signin");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("რეგისტრაცია წარმატებით შესრულდა");
+      })
+      .catch((err) => {
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("რეგისტრაცია ვერ შესრულდა");
+      })
+      .finally(() => {
+        setUserSignUpLoader(false);
+      });
   };
   return (
     <div
@@ -94,7 +130,7 @@ export default function SignUp() {
           name="name"
           type="text"
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.name}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
         <Input1
@@ -102,7 +138,7 @@ export default function SignUp() {
           name="surname"
           type="text"
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.surname}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
         <Input1
@@ -110,7 +146,7 @@ export default function SignUp() {
           name="email"
           type="text"
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.email}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
         <Input1
@@ -119,7 +155,7 @@ export default function SignUp() {
           type="text"
           isNumber={true}
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.phone}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
         <Input1
@@ -127,7 +163,7 @@ export default function SignUp() {
           isPassword={true}
           name="password"
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.password}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
         <Input1
@@ -135,7 +171,7 @@ export default function SignUp() {
           isPassword={true}
           name="rePassword"
           setAllValues={setUserSignUpValues}
-          error={false}
+          error={errors.rePassword}
           handleInputKeyPress={handleInputKeyPressSignUp}
         />
       </div>
@@ -155,7 +191,7 @@ export default function SignUp() {
 
       <GreenButton
         name="რეგისტრაცია"
-        action={HandleUserSignUp}
+        action={handleUserSignUpValidation}
         loader={userSignUpLoader}
         style="h-[56px] text-[18px]"
       />

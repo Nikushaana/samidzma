@@ -52,30 +52,27 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
 
   const HandleEditFirstCateg = (e: any) => {
     e.preventDefault();
-    if (true) {
-      const form = e.target;
-      const formData = new FormData(form);
 
-      setLoaderEditFirstCateg(true);
-      axiosAdmin
-        .post(`admin/category/saxeobebi/${params.firstCategId}`, formData)
-        .then((res) => {
-          router.push("/admin/panel/first-categories");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          fetchFirstCategories();
-        })
-        .catch((err) => {
-          setLoaderEditFirstCateg(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditFirstCateg(false);
-    }
+    const form = e.target;
+    const formData = new FormData(form);
+
+    setLoaderEditFirstCateg(true);
+    axiosAdmin
+      .post(`admin/category/saxeobebi/${params.firstCategId}`, formData)
+      .then((res) => {
+        router.push("/admin/panel/first-categories");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        fetchFirstCategories();
+      })
+      .catch((err) => {
+        setLoaderEditFirstCateg(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   const [SecCategsDeletePopUp, setSecCategsDeletePopUp] = useState<string>("");

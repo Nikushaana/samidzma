@@ -3,11 +3,12 @@
 import GreenButton from "@/app/components/buttons/greenButton";
 import Input1 from "@/app/components/Inputs/Input1";
 import TextArea1 from "@/app/components/Inputs/TextArea1";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import { useRouter } from "next/navigation";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -23,58 +24,81 @@ export default function Page() {
   const [loaderAddVacancy, setLoaderAddVacancy] = useState<boolean>(false);
 
   const [addVacancyValues, setAddVacancyValues] = useState({
-    position: "",
+    position: "", //is mandatory
     position_eng: "",
     position_rus: "",
-    description: "",
+    description: "", //is mandatory
     description_eng: "",
     description_rus: "",
     sort: 0,
     status: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    position: Yup.string().required("პოზიცია სავალდებულოა"),
+    description: Yup.string().required("აღწერა სავალდებულოა"),
+  });
+
+  const handleAddVacancyValidation = () => {
+    validationSchema
+      .validate(addVacancyValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddVacancy();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.position || newErrors.description);
+      });
+  };
+
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleAddVacancy();
+      handleAddVacancyValidation();
     }
   };
 
   const HandleAddVacancy = () => {
     setLoaderAddVacancy(true);
-    if (addVacancyValues.position && addVacancyValues.position_eng) {
-      axiosAdmin
-        .post("admin/vacancy", {
-          position: addVacancyValues.position,
-          position_eng: addVacancyValues.position_eng,
-          position_rus: addVacancyValues.position_rus,
-          description: addVacancyValues.description,
-          description_eng: addVacancyValues.description_eng,
-          description_rus: addVacancyValues.description_rus,
-          sort: addVacancyValues.sort,
-          status: status.find(
-            (item: any) => item.name === addVacancyValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/vacancy");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით აიტვირთა");
-          setAllVacancyRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddVacancy(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ აიტვირთა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddVacancy(false);
-    }
+    axiosAdmin
+      .post("admin/vacancy", {
+        position: addVacancyValues.position,
+        position_eng: addVacancyValues.position_eng,
+        position_rus: addVacancyValues.position_rus,
+        description: addVacancyValues.description,
+        description_eng: addVacancyValues.description_eng,
+        description_rus: addVacancyValues.description_rus,
+        sort: addVacancyValues.sort,
+        status: status.find(
+          (item: any) => item.name === addVacancyValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/vacancy");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით აიტვირთა");
+        setAllVacancyRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddVacancy(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ აიტვირთა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -90,7 +114,7 @@ export default function Page() {
           name="position"
           type="text"
           setAllValues={setAddVacancyValues}
-          error={false}
+          error={errors.position}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -114,7 +138,7 @@ export default function Page() {
           title="აღწერა"
           name="description"
           setAllValues={setAddVacancyValues}
-          error={false}
+          error={errors.description}
           handleInputKeyPress={handleInputKeyPress}
         />
         <TextArea1
@@ -135,6 +159,7 @@ export default function Page() {
           <DropDown1value
             title="სტატუსი"
             data={status}
+            firstValue="აქტიური"
             name="status"
             setAllValues={setAddVacancyValues}
             error={false}
@@ -155,7 +180,7 @@ export default function Page() {
       <div className="w-[200px]">
         <GreenButton
           name="დამატება"
-          action={HandleAddVacancy}
+          action={handleAddVacancyValidation}
           loader={loaderAddVacancy}
           style="h-[50px] text-[18px]"
         />

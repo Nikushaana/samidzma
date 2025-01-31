@@ -57,8 +57,6 @@ const SharingStatesContext = ({ children }: any) => {
     }
   }, [screenWidth]);
 
-  const [activeAuthorization, setActiveAuthorization] = useState("signin");
-
   const [allVacancyRender, setAllVacancyRender] = useState<any>();
   const [allVacancyCvRender, setAllVacancyCvRender] = useState<any>();
   const [allFAQRender, setAllFAQRender] = useState<any>();
@@ -167,8 +165,6 @@ const SharingStatesContext = ({ children }: any) => {
         setUserMenu,
         burgerMenu,
         setBurgerMenu,
-        activeAuthorization,
-        setActiveAuthorization,
 
         allVacancyRender,
         setAllVacancyRender,

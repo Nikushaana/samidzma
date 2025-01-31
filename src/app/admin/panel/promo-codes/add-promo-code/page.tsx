@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -25,52 +26,82 @@ export default function Page() {
     useState<boolean>(false);
 
   const [addPromoCodesValues, setAddPromoCodesValues] = useState({
-    code: "",
-    discount_percent: "",
-    quantity: "",
-    expires_at: "",
+    code: "", //is mandatory
+    discount_percent: "", //is mandatory
+    quantity: "", //is mandatory
+    expires_at: "", //is mandatory
     status: "",
   });
+
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    code: Yup.string().required("პრომო კოდი სავალდებულოა"),
+    discount_percent: Yup.string().required("ფასდაკლება (%) სავალდებულოა"),
+    quantity: Yup.string().required("რაოდენობა სავალდებულოა"),
+    expires_at: Yup.string().required("ვადის ბოლო თარიღი სავალდებულოა"),
+  });
+
+  const handleAddPromoCodesValidation = () => {
+    validationSchema
+      .validate(addPromoCodesValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddPromoCodes();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(
+          newErrors.code ||
+            newErrors.discount_percent ||
+            newErrors.quantity ||
+            newErrors.expires_at
+        );
+      });
+  };
 
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleAddPromoCodes();
+      handleAddPromoCodesValidation();
     }
   };
 
   const HandleAddPromoCodes = () => {
     setLoaderAddPromoCodes(true);
-    if (addPromoCodesValues.code && addPromoCodesValues.discount_percent) {
-      axiosAdmin
-        .post("admin/promoCode", {
-          code: addPromoCodesValues.code,
-          discount_percent: addPromoCodesValues.discount_percent,
-          quantity: addPromoCodesValues.quantity,
-          expires_at: addPromoCodesValues.expires_at,
-          status: status.find(
-            (item: any) => item.name === addPromoCodesValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/promo-codes");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით დაემატა");
-          setAllPromoCodesRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddPromoCodes(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ დაემატა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddPromoCodes(false);
-    }
+    axiosAdmin
+      .post("admin/promoCode", {
+        code: addPromoCodesValues.code,
+        discount_percent: addPromoCodesValues.discount_percent,
+        quantity: addPromoCodesValues.quantity,
+        expires_at: addPromoCodesValues.expires_at,
+        status: status.find(
+          (item: any) => item.name === addPromoCodesValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/promo-codes");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით დაემატა");
+        setAllPromoCodesRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddPromoCodes(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ დაემატა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -86,7 +117,7 @@ export default function Page() {
           name="code"
           type="text"
           setAllValues={setAddPromoCodesValues}
-          error={false}
+          error={errors.code}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -95,7 +126,7 @@ export default function Page() {
           digit={true}
           type="text"
           setAllValues={setAddPromoCodesValues}
-          error={false}
+          error={errors.discount_percent}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -104,7 +135,7 @@ export default function Page() {
           digit={true}
           type="text"
           setAllValues={setAddPromoCodesValues}
-          error={false}
+          error={errors.quantity}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -112,7 +143,7 @@ export default function Page() {
           name="expires_at"
           type="date"
           setAllValues={setAddPromoCodesValues}
-          error={false}
+          error={errors.expires_at}
           handleInputKeyPress={handleInputKeyPress}
         />
         <DropDown1value
@@ -126,7 +157,7 @@ export default function Page() {
       <div className="w-[200px]">
         <GreenButton
           name="დამატება"
-          action={HandleAddPromoCodes}
+          action={handleAddPromoCodesValidation}
           loader={loaderAddPromoCodes}
           style="h-[50px] text-[18px]"
         />

@@ -9,6 +9,7 @@ import { ContextForSharingStates } from "../../../../../../../dataFetchs/sharedS
 import { axiosAdmin } from "../../../../../../../dataFetchs/AxiosToken";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { promoCodeId: string } }) {
   const router = useRouter();
@@ -41,6 +42,42 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
     status: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    code: Yup.string().required("პრომო კოდი სავალდებულოა"),
+    discount_percent: Yup.string().required("ფასდაკლება (%) სავალდებულოა"),
+    quantity: Yup.string().required("რაოდენობა სავალდებულოა"),
+    expires_at: Yup.string().required("ვადის ბოლო თარიღი სავალდებულოა"),
+    current_quantity: Yup.string().required("ახლანდელი რაოდენობა სავალდებულოა"),
+  });
+
+  const handleEditPromoCodesValidation = () => {
+    validationSchema
+      .validate(editPromoCodesValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditPromoCodes();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(
+          newErrors.code ||
+            newErrors.discount_percent ||
+            newErrors.quantity ||
+            newErrors.expires_at ||
+            newErrors.current_quantity
+        );
+      });
+  };
+
   useEffect(() => {
     setLoaderEditPromoCodes(true);
     axiosAdmin
@@ -58,41 +95,38 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleEditPromoCodes();
+      handleEditPromoCodesValidation();
     }
   };
 
   const HandleEditPromoCodes = () => {
     setLoaderEditPromoCodes(true);
-    if (editPromoCodesValues.code && editPromoCodesValues.discount_percent) {
-      axiosAdmin
-        .post(`admin/promoCode/${params.promoCodeId}`, {
-          code: editPromoCodesValues.code,
-          discount_percent: editPromoCodesValues.discount_percent,
-          quantity: editPromoCodesValues.quantity,
-          current_quantity: editPromoCodesValues.current_quantity,
-          expires_at: editPromoCodesValues.expires_at,
-          status: status.find(
-            (item: any) => item.name === editPromoCodesValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/promo-codes");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllPromoCodesRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditPromoCodes(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditPromoCodes(false);
-    }
+
+    axiosAdmin
+      .post(`admin/promoCode/${params.promoCodeId}`, {
+        code: editPromoCodesValues.code,
+        discount_percent: editPromoCodesValues.discount_percent,
+        quantity: editPromoCodesValues.quantity,
+        current_quantity: editPromoCodesValues.current_quantity,
+        expires_at: editPromoCodesValues.expires_at,
+        status: status.find(
+          (item: any) => item.name === editPromoCodesValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/promo-codes");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllPromoCodesRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditPromoCodes(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -109,7 +143,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
           firstValue={onePromoCodesValues?.code}
           type="text"
           setAllValues={setEditPromoCodesValues}
-          error={false}
+          error={errors.code}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -119,7 +153,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
           digit={true}
           type="text"
           setAllValues={setEditPromoCodesValues}
-          error={false}
+          error={errors.discount_percent}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -129,7 +163,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
           digit={true}
           type="text"
           setAllValues={setEditPromoCodesValues}
-          error={false}
+          error={errors.quantity}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -139,7 +173,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
           digit={true}
           type="text"
           setAllValues={setEditPromoCodesValues}
-          error={false}
+          error={errors.current_quantity}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -148,7 +182,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
           firstValue={onePromoCodesValues?.expires_at.split("T")[0]}
           type="date"
           setAllValues={setEditPromoCodesValues}
-          error={false}
+          error={errors.expires_at}
           handleInputKeyPress={handleInputKeyPress}
         />
         <DropDown1value
@@ -166,7 +200,7 @@ export default function Page({ params }: { params: { promoCodeId: string } }) {
       <div className="w-[200px]">
         <GreenButton
           name="რედაქტირება"
-          action={HandleEditPromoCodes}
+          action={handleEditPromoCodesValidation}
           loader={loaderEditPromoCodes}
           style="h-[50px] text-[18px]"
         />

@@ -10,17 +10,13 @@ import { axiosAdmin } from "../../../../../../../dataFetchs/AxiosToken";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
 import { BsStarFill } from "react-icons/bs";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { commentId: string } }) {
   const router = useRouter();
 
-  const {
-    setAlertShow,
-    setAlertStatus,
-    setAlertText,
-    status,
-    setAllCommentsRender,
-  } = useContext(ContextForSharingStates);
+  const { setAlertShow, setAlertStatus, setAlertText, setAllCommentsRender } =
+    useContext(ContextForSharingStates);
 
   const [loaderEditComments, setLoaderEditComments] = useState<boolean>(true);
 
@@ -34,12 +30,42 @@ export default function Page({ params }: { params: { commentId: string } }) {
     star: 0,
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    review: Yup.string().required("შეფასება სავალდებულოა"),
+  });
+
+  const handleEditCommentsValidation = () => {
+    validationSchema
+      .validate(editCommentsValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditComments();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.review);
+      });
+  };
+
   useEffect(() => {
     setLoaderEditComments(true);
     axiosAdmin
       .get(`admin/reviews/${params.commentId}`)
       .then((res) => {
         setOneCommentsValues(res.data);
+        setEditCommentsValues((prev: any) => ({
+          ...prev,
+          star: res.data.star,
+        }));
         setLoaderEditComments(false);
       })
       .catch((err) => {})
@@ -48,29 +74,26 @@ export default function Page({ params }: { params: { commentId: string } }) {
 
   const HandleEditComments = () => {
     setLoaderEditComments(true);
-    if (editCommentsValues.review) {
-      axiosAdmin
-        .post(`admin/reviews/${params.commentId}`, {
-          star: editCommentsValues.star,
-          review: editCommentsValues.review,
-        })
-        .then((res) => {
-          router.push("/admin/panel/comments");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllCommentsRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditComments(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditComments(false);
-    }
+
+    axiosAdmin
+      .post(`admin/reviews/${params.commentId}`, {
+        star: editCommentsValues.star,
+        review: editCommentsValues.review,
+      })
+      .then((res) => {
+        router.push("/admin/panel/comments");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllCommentsRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditComments(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   //
@@ -81,33 +104,55 @@ export default function Page({ params }: { params: { commentId: string } }) {
     review: "",
   });
 
+  const [errorsAnswerComment, setErrorsAnswerComment] = useState<any>({});
+
+  const validationSchemaAnswerComment = Yup.object({
+    review: Yup.string().required("პასუხი სავალდებულოა"),
+  });
+
+  const handleAddReviewValidation = () => {
+    validationSchemaAnswerComment
+      .validate(addReviewValues, { abortEarly: false })
+      .then(() => {
+        setErrorsAnswerComment({});
+        HandleAddReview();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrorsAnswerComment(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.review);
+      });
+  };
+
   const HandleAddReview = () => {
     setLoaderAddReview(true);
-    if (addReviewValues.review && oneCommentsValues?.product_id) {
-      axiosAdmin
-        .post("admin/reviews", {
-          product_id: oneCommentsValues.product_id,
-          star: 5,
-          review: addReviewValues.review,
-        })
-        .then((res) => {
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("პასუხი დაიწერა");
-          setAllCommentsRender(res);
-          router.push("/admin/panel/comments");
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("პასუხი ვერ დაიწერა!");
-        })
-        .finally(() => {
-          setLoaderAddReview(false);
-        });
-    } else {
-      setLoaderAddReview(false);
-    }
+    axiosAdmin
+      .post("admin/reviews", {
+        product_id: oneCommentsValues.product_id,
+        star: 5,
+        review: addReviewValues.review,
+      })
+      .then((res) => {
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("პასუხი დაიწერა");
+        setAllCommentsRender(res);
+        router.push("/admin/panel/comments");
+      })
+      .catch((err) => {
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("პასუხი ვერ დაიწერა!");
+      })
+      .finally(() => {
+        setLoaderAddReview(false);
+      });
   };
 
   return (
@@ -142,12 +187,12 @@ export default function Page({ params }: { params: { commentId: string } }) {
           firstValue={oneCommentsValues?.review}
           type="text"
           setAllValues={setEditCommentsValues}
-          error={false}
+          error={errors.review}
         />
         <div className="w-[200px]">
           <GreenButton
             name="რედაქტირება"
-            action={HandleEditComments}
+            action={handleEditCommentsValidation}
             loader={loaderEditComments}
             style="h-[50px] text-[18px]"
           />
@@ -167,12 +212,12 @@ export default function Page({ params }: { params: { commentId: string } }) {
           name="review"
           type="text"
           setAllValues={setAddReviewValues}
-          error={false}
+          error={errorsAnswerComment.review}
         />
         <div className="w-[200px]">
           <GreenButton
             name="დაწერა"
-            action={HandleAddReview}
+            action={handleAddReviewValidation}
             loader={loaderAddReview}
             style="h-[50px] text-[18px]"
           />

@@ -21,17 +21,15 @@ export default function CartCalculator() {
     makeOrderLoader,
     setMakeOrderLoader,
     setRenderCart,
+    validationSchema,
+    setErrors,
   } = useContext(CartAxiosContext);
 
   const { user } = useContext(UserContext);
 
-  const {
-    activeAuthorization,
-    setActiveAuthorization,
-    setAlertShow,
-    setAlertStatus,
-    setAlertText,
-  } = useContext(ContextForSharingStates);
+  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+    ContextForSharingStates
+  );
 
   // used states
   const [checkPromoCodeLoader, setCheckPromoCodeLoader] =
@@ -100,78 +98,108 @@ export default function CartCalculator() {
   // gifts
 
   // make order
+  const handleMakeOrderValidation = () => {
+    validationSchema
+      .validate(orderPlacementValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        if (orderPlacementValues.is_delivery) {
+          if (
+            orderPlacementValues.latlng.lng &&
+            orderPlacementValues.latlng.lat
+          ) {
+            HandleMakeOrder();
+          } else {
+            setAlertShow(true);
+            setAlertStatus(false);
+            setAlertText("რუკაზე პინი სავალდებულოა!");
+          }
+        } else {
+          HandleMakeOrder();
+        }
+      })
+      .catch((err: any) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.order_details || newErrors.pay_method);
+      });
+  };
+
   const HandleMakeOrder = () => {
     setMakeOrderLoader(true);
-    if (orderPlacementValues.order_details?.length > 0) {
-      axiosUser
-        .post(`front/order`, {
-          order_details: orderPlacementValues.order_details,
-          phone: orderPlacementValues.phone && orderPlacementValues?.phone?.replace(/\s/g, ""),
-          name: orderPlacementValues.name,
-          email: orderPlacementValues.email,
-          is_delivery: orderPlacementValues.is_delivery,
+    axiosUser
+      .post(`front/order`, {
+        order_details: orderPlacementValues.order_details,
+        phone:
+          orderPlacementValues.phone &&
+          orderPlacementValues?.phone?.replace(/\s/g, ""),
+        name: orderPlacementValues.name,
+        email: orderPlacementValues.email,
+        is_delivery: orderPlacementValues.is_delivery,
 
-          delivery_day: orderPlacementValues.is_delivery
-            ? orderPlacementValues.delivery_day
-            : "",
-          delivery_time_from: orderPlacementValues.is_delivery
-            ? orderPlacementValues.delivery_time_from
-            : "",
+        delivery_day: orderPlacementValues.is_delivery
+          ? orderPlacementValues.delivery_day
+          : "",
+        delivery_time_from: orderPlacementValues.is_delivery
+          ? orderPlacementValues.delivery_time_from
+          : "",
 
-          delivery_street: orderPlacementValues.is_delivery
-            ? orderPlacementValues.delivery_street
-            : "",
-          delivery_building_number: orderPlacementValues.is_delivery
-            ? orderPlacementValues.delivery_building_number
-            : "",
-          delivery_house_door_number: orderPlacementValues.is_delivery
-            ? orderPlacementValues.delivery_house_door_number
-            : "",
-          description: orderPlacementValues.is_delivery
-            ? orderPlacementValues.description
-            : "",
-          delivery_address_lng: orderPlacementValues.is_delivery
+        delivery_street: orderPlacementValues.is_delivery
+          ? orderPlacementValues.delivery_street
+          : "",
+        delivery_building_number: orderPlacementValues.is_delivery
+          ? orderPlacementValues.delivery_building_number
+          : "",
+        delivery_house_door_number: orderPlacementValues.is_delivery
+          ? orderPlacementValues.delivery_house_door_number
+          : "",
+        description: orderPlacementValues.is_delivery
+          ? orderPlacementValues.description
+          : "",
+        delivery_address_lng:
+          orderPlacementValues.is_delivery && orderPlacementValues.latlng.lng
             ? orderPlacementValues.latlng.lng
             : "",
-          delivery_address_lat: orderPlacementValues.is_delivery
+        delivery_address_lat:
+          orderPlacementValues.is_delivery && orderPlacementValues.latlng.lat
             ? orderPlacementValues.latlng.lat
             : "",
 
-          pay_method: orderPlacementValues.pay_method,
-          ...(promoCodeSale.newPrice && { promo_code: promoCodeValue }),
-          ...(orderPlacementValues.product_gift_id && {
-            product_gift_id: orderPlacementValues.product_gift_id,
-          }),
-        })
-        .then((res) => {
-          setRenderCart(res);
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("შეკვეთა წარმატებით შესრულდა");
+        pay_method: orderPlacementValues.pay_method,
+        ...(promoCodeSale.newPrice && { promo_code: promoCodeValue }),
+        ...(orderPlacementValues.product_gift_id && {
+          product_gift_id: orderPlacementValues.product_gift_id,
+        }),
+      })
+      .then((res) => {
+        setRenderCart(res);
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("შეკვეთა წარმატებით შესრულდა");
 
-          if (res.data.comment === "payment_method-CASH,") {
-            router.push("/");
-          } else {
-            window.location.replace(res.data);
-          }
+        if (res.data.comment === "payment_method-CASH,") {
+          router.push("/");
+        } else {
+          window.location.replace(res.data);
+        }
 
-          localStorage.setItem("SamiDzma-cart", "[]");
-          localStorage.setItem("SamiDzma-favorites", "[]");
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("შეკვეთა ვერ შესრულდა!");
-        })
-        .finally(() => {
-          setMakeOrderLoader(false);
-        });
-    } else {
-      setAlertShow(true);
-      setAlertStatus(false);
-      setAlertText("დაამატე პროდუქტი და შეავსე ყველა საჭირო ველი!");
-      setMakeOrderLoader(false);
-    }
+        localStorage.setItem("SamiDzma-cart", "[]");
+        localStorage.setItem("SamiDzma-favorites", "[]");
+      })
+      .catch((err) => {
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("შეკვეთა ვერ შესრულდა!");
+      })
+      .finally(() => {
+        setMakeOrderLoader(false);
+      });
   };
   // make order
 
@@ -222,7 +250,7 @@ export default function CartCalculator() {
           }
           action={() => {
             pathname.split("/")[2] === "order-placement"
-              ? HandleMakeOrder()
+              ? handleMakeOrderValidation()
               : router.push("/cart/order-placement");
           }}
           loader={
@@ -277,38 +305,52 @@ export default function CartCalculator() {
               <div className="grid grid-cols-2 bg-myBlack h-[60px]">
                 <h1
                   onClick={() => {
-                    setActiveAuthorization("signin");
-                    router.push("/signup");
+                    router.push("/auth/signin");
                   }}
-                  className={`border-b-[5px] text-[18px] h-full flex items-center justify-center cursor-pointer duration-100 ${
-                    activeAuthorization === "signin"
-                      ? "border-b-myGreen text-myGreen "
-                      : "border-b-transparent text-white"
-                  }`}
+                  className={`border-b-[4px] text-[18px] h-full flex items-center justify-center cursor-pointer duration-100 border-b-myGreen text-myGreen`}
                 >
                   ავტორიზაცია
                 </h1>
                 <h1
                   onClick={() => {
-                    setActiveAuthorization("signup");
-                    router.push("/signup");
+                    router.push("/auth/signup");
                   }}
-                  className={`border-b-[5px] text-[18px] h-full flex items-center justify-center cursor-pointer duration-100 ${
-                    activeAuthorization === "signup"
-                      ? "border-b-myGreen text-myGreen "
-                      : "border-b-transparent text-white"
-                  }`}
+                  className={`border-b-[4px] text-[18px] h-full flex items-center justify-center cursor-pointer duration-100 border-b-transparent text-white`}
                 >
                   რეგისტრაცია
                 </h1>
               </div>
 
-              <h1 className="w-full h-[1px] bg-white"></h1>
-              <div className="bg-myBlack py-[20px] flex items-center justify-center">
+              <hr className="w-full h-[1px] bg-white" />
+              <div className="bg-myBlack py-[20px] flex items-center justify-center relative overflow-hidden">
+                <div className="left-[-20px] bottom-[-30px] w-[100px] max-tiny:w-[70px] h-[70px] absolute">
+                  <Image
+                    src="/images/coin.png"
+                    alt={""}
+                    sizes="500px"
+                    fill
+                    style={{
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+
                 <p className="text-[14px] text-white text-center">
                   დარეგისტრირების შემთხვევაში <br /> მიიღებ {CartPoints || 0}{" "}
                   ქულას
                 </p>
+
+                <div className="right-[30px] max-tiny:right-[10px] top-[50%] translate-y-[-50%] max-tiny:translate-y-[-20%] w-[50px] h-[50px] absolute">
+                  <Image
+                    src="/images/coin.png"
+                    alt={""}
+                    sizes="500px"
+                    fill
+                    style={{
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

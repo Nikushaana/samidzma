@@ -12,6 +12,7 @@ import { FaInfo } from "react-icons/fa";
 import Input1 from "@/app/components/Inputs/Input1";
 import Map from "@/app/components/map/map";
 import GreenButton from "@/app/components/buttons/greenButton";
+import * as Yup from "yup";
 
 export default function Page() {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
@@ -35,6 +36,33 @@ export default function Page() {
     system_id: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    delivery_km_price: Yup.string().required("კმ-ის ფასი სავალდებულოა"),
+    system_id: Yup.string().required("სისტემის ID სავალდებულოა"),
+  });
+
+  const handleEditMainWarehouseValidation = () => {
+    validationSchema
+      .validate(editWarehouseValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditMainWarehouse();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.delivery_km_price || newErrors.system_id);
+      });
+  };
+
   useEffect(() => {
     setMainWarehouseLoader(true);
     axiosAdmin
@@ -49,35 +77,31 @@ export default function Page() {
 
   const HandleEditMainWarehouse = () => {
     setMainWarehouseLoader(true);
-    if (editWarehouseValues.delivery_km_price) {
-      axiosAdmin
-        .post(`admin/deliveryInfo`, {
-          delivery_km_price: editWarehouseValues.delivery_km_price,
-          description: editWarehouseValues.description,
-          description_eng: editWarehouseValues.description_eng,
-          description_rus: editWarehouseValues.description_rus,
-          latitude: editWarehouseValues.latlng.lat,
-          longitude: editWarehouseValues.latlng.lng,
-          meta_description: editWarehouseValues.meta_description,
-          meta_name: editWarehouseValues.meta_name,
-          system_id: editWarehouseValues.system_id,
-        })
-        .then((res) => {
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {
-          setMainWarehouseLoader(false);
-        });
-    } else {
-      setMainWarehouseLoader(false);
-    }
+    axiosAdmin
+      .post(`admin/deliveryInfo`, {
+        delivery_km_price: editWarehouseValues.delivery_km_price,
+        description: editWarehouseValues.description,
+        description_eng: editWarehouseValues.description_eng,
+        description_rus: editWarehouseValues.description_rus,
+        latitude: editWarehouseValues.latlng.lat,
+        longitude: editWarehouseValues.latlng.lng,
+        meta_description: editWarehouseValues.meta_description,
+        meta_name: editWarehouseValues.meta_name,
+        system_id: editWarehouseValues.system_id,
+      })
+      .then((res) => {
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+      })
+      .catch((err) => {
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {
+        setMainWarehouseLoader(false);
+      });
   };
 
   return (
@@ -96,7 +120,7 @@ export default function Page() {
             type="text"
             firstValue={mainWarehouseData.delivery_km_price}
             setAllValues={setEditWarehouseValues}
-            error={false}
+            error={errors.delivery_km_price}
           />
           <Input1
             title="აღწერა"
@@ -128,7 +152,7 @@ export default function Page() {
             type="text"
             firstValue={mainWarehouseData.system_id}
             setAllValues={setEditWarehouseValues}
-            error={false}
+            error={errors.system_id}
           />
           <Input1
             title="მეტა აღწერა"
@@ -164,7 +188,7 @@ export default function Page() {
           <div className="w-[200px]">
             <GreenButton
               name="რედაქტირება"
-              action={HandleEditMainWarehouse}
+              action={handleEditMainWarehouseValidation}
               loader={mainWarehouseLoader}
               style="h-[50px] text-[18px]"
             />

@@ -10,6 +10,7 @@ import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStat
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -23,7 +24,6 @@ export default function Page() {
   } = useContext(ContextForSharingStates);
 
   const [loaderAddBanner, setLoaderAddBanner] = useState<boolean>(false);
-  const [addBannerError, setAddBannerError] = useState<boolean>(false);
 
   const [addBannerValues, setAddBannerValues] = useState({
     large_url: "",
@@ -48,47 +48,65 @@ export default function Page() {
     page: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    sort: Yup.string().required("სორტირება სავალდებულოა"),
+  });
+
+  const handleAddBannerValidation = (e: any) => {
+    e.preventDefault();
+    validationSchema
+      .validate(addBannerValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddBanner(e);
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.sort);
+      });
+  };
+
   const HandleAddBanner = (e: any) => {
     e.preventDefault();
     setLoaderAddBanner(true);
-    setAddBannerError(false);
-    if (addBannerValues.sort && addBannerValues.status) {
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-      formData.append(
-        "status",
-        status.find((item: any) => item.name === addBannerValues.status)?.id
-      );
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === addBannerValues.status)?.id
+    );
 
-      axiosAdmin
-        .post("admin/mainBanner", formData)
-        .then((res) => {
-          router.push("/admin/panel/main-banners");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით აიტვირთა");
-          setAllBannerRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddBanner(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ აიტვირთა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddBanner(false);
-      setAlertShow(true);
-      setAlertStatus(false);
-      setAlertText("სტატუსი და სორტირება აუცილებელი ველებია!");
-      setAddBannerError(true);
-    }
+    axiosAdmin
+      .post("admin/mainBanner", formData)
+      .then((res) => {
+        router.push("/admin/panel/main-banners");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით აიტვირთა");
+        setAllBannerRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddBanner(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ აიტვირთა!");
+      })
+      .finally(() => {});
   };
 
   return (
     <form
-      onSubmit={HandleAddBanner}
+      onSubmit={handleAddBannerValidation}
       encType="multipart/form-data"
       className={`flex flex-col gap-y-[20px] items-end duration-100 ${
         loaderAddBanner && "pointer-events-none opacity-[0.5]"
@@ -208,8 +226,9 @@ export default function Page() {
           title="სტატუსი"
           data={status}
           name="status"
+          firstValue="აქტიური"
           setAllValues={setAddBannerValues}
-          error={addBannerError}
+          error={false}
         />
         <Input1
           title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
@@ -217,7 +236,7 @@ export default function Page() {
           name="sort"
           type="text"
           setAllValues={setAddBannerValues}
-          error={addBannerError}
+          error={errors.sort}
         />
       </div>
       <div className="w-[200px]">

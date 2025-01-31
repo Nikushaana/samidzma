@@ -58,7 +58,6 @@ export default function Page({
     e.preventDefault();
     setLoaderEditSecondCateg(true);
 
-    if (true) {
       const form = e.target;
       const formData = new FormData(form);
 
@@ -89,10 +88,9 @@ export default function Page({
           setAlertText("ვერ რედაქტირდა!");
         })
         .finally(() => {});
-    } else {
-      setLoaderEditSecondCateg(false);
-    }
   };
+
+  // third categs
 
   const [ThirdCategsDeletePopUp, setThirdCategsDeletePopUp] =
     useState<string>("");
@@ -123,7 +121,7 @@ export default function Page({
         }`}
       >
         <div className="grid grid-cols-1 gap-[20px] w-full">
-          <h1>{oneSecondCategValues?.ProdSaxeobaName}</h1>
+          <h1>{oneSecondCategValues?.ProdTypeGroupName}</h1>
           {oneSecondCategValues?.image?.length > 0 && (
             <div className=" grid grid-cols-5 max-2xl:grid-cols-4 max-xl:grid-cols-3 max-sm:grid-cols-2 gap-4">
               <div className="relative w-full aspect-video bg-white rounded-[8px] overflow-hidden">

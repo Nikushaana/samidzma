@@ -12,8 +12,8 @@ import Input1 from "../components/Inputs/Input1";
 import TextArea1 from "../components/Inputs/TextArea1";
 import WhatUSearch from "../components/Inputs/WhatUSearch";
 import { ContextForSharingStates } from "../../../dataFetchs/sharedStates";
-import { axiosUser } from "../../../dataFetchs/AxiosToken";
 import GreenButton from "../components/buttons/greenButton";
+import { axiosUser } from "../../../dataFetchs/AxiosToken";
 
 export default function Page() {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(

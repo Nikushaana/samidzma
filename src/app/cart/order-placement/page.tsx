@@ -26,6 +26,7 @@ export default function Page() {
     CartLoader,
     orderPlacementValues,
     setOrderPlacementValues,
+    errors,
   } = useContext(CartAxiosContext);
 
   const { payMethodData } = usePaymethods();
@@ -261,7 +262,9 @@ export default function Page() {
                       pay_method: item.pay_method,
                     }));
                   }}
-                  className={`border-[1px] border-[#E2E2E2] cursor-pointer rounded-full h-[42px] px-[15px] flex items-center gap-[10px] duration-100 ${
+                  className={`border-[1px] cursor-pointer rounded-full h-[42px] px-[15px] flex items-center gap-[10px] duration-100 ${
+                    errors.pay_method ? "border-[red]" : "border-[#E2E2E2] "
+                  } ${
                     orderPlacementValues.pay_method === item.pay_method &&
                     "bg-[#f7f7f7]"
                   }`}

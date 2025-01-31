@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ContextForSharingStates } from "../../../../../../../dataFetchs/sharedStates";
 import { axiosAdmin } from "../../../../../../../dataFetchs/AxiosToken";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { vacancyId: string } }) {
   const router = useRouter();
@@ -43,6 +44,36 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
     status: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    position: Yup.string().required("პოზიცია სავალდებულოა"),
+    description: Yup.string().required("აღწერა სავალდებულოა"),
+    sort: Yup.string().required("სორტირება სავალდებულოა"),
+  });
+
+  const handleEditVacancyValidation = () => {
+    validationSchema
+      .validate(editVacancyValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditVacancy();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(
+          newErrors.position || newErrors.description || newErrors.sort
+        );
+      });
+  };
+
   useEffect(() => {
     setLoaderEditVacancy(true);
     axiosAdmin
@@ -60,43 +91,39 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleEditVacancy();
+      handleEditVacancyValidation();
     }
   };
 
   const HandleEditVacancy = () => {
     setLoaderEditVacancy(true);
-    if (editVacancyValues.position && editVacancyValues.position_eng) {
-      axiosAdmin
-        .post(`admin/vacancy/${params.vacancyId}`, {
-          position: editVacancyValues.position,
-          position_eng: editVacancyValues.position_eng,
-          position_rus: editVacancyValues.position_rus,
-          description: editVacancyValues.description,
-          description_eng: editVacancyValues.description_eng,
-          description_rus: editVacancyValues.description_rus,
-          sort: editVacancyValues.sort,
-          status: status.find(
-            (item: any) => item.name === editVacancyValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/vacancy");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllVacancyRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditVacancy(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditVacancy(false);
-    }
+    axiosAdmin
+      .post(`admin/vacancy/${params.vacancyId}`, {
+        position: editVacancyValues.position,
+        position_eng: editVacancyValues.position_eng,
+        position_rus: editVacancyValues.position_rus,
+        description: editVacancyValues.description,
+        description_eng: editVacancyValues.description_eng,
+        description_rus: editVacancyValues.description_rus,
+        sort: editVacancyValues.sort,
+        status: status.find(
+          (item: any) => item.name === editVacancyValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/vacancy");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllVacancyRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditVacancy(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -113,7 +140,7 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
           type="text"
           firstValue={oneVacancyValues.position}
           setAllValues={setEditVacancyValues}
-          error={false}
+          error={errors.position}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -140,7 +167,7 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
           name="description"
           firstValue={oneVacancyValues.description}
           setAllValues={setEditVacancyValues}
-          error={false}
+          error={errors.description}
           handleInputKeyPress={handleInputKeyPress}
         />
         <TextArea1
@@ -180,7 +207,7 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
             type="text"
             firstValue={oneVacancyValues.sort}
             setAllValues={setEditVacancyValues}
-            error={false}
+            error={errors.sort}
             handleInputKeyPress={handleInputKeyPress}
           />
         </div>
@@ -188,7 +215,7 @@ export default function Page({ params }: { params: { vacancyId: string } }) {
       <div className="w-[200px]">
         <GreenButton
           name="რედაქტირება"
-          action={HandleEditVacancy}
+          action={handleEditVacancyValidation}
           loader={loaderEditVacancy}
           style="h-[50px] text-[18px]"
         />

@@ -13,6 +13,7 @@ import useBlogCategory from "../../../../../../../dataFetchs/blogCategoryGetFetc
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import Image from "next/image";
 import { BiTrash } from "react-icons/bi";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { blogId: string } }) {
   const router = useRouter();
@@ -68,6 +69,33 @@ export default function Page({ params }: { params: { blogId: string } }) {
     sort: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("სათაური სავალდებულოა"),
+  });
+
+  const handleAddBlogValidation = (e: any) => {
+    e.preventDefault();
+    validationSchema
+      .validate(editBlogValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditBlog(e);
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.name);
+      });
+  };
+
   useEffect(() => {
     setLoaderEditBlog(true);
     axiosAdmin
@@ -84,45 +112,41 @@ export default function Page({ params }: { params: { blogId: string } }) {
     e.preventDefault();
 
     setLoaderEditBlog(true);
-    if (editBlogValues.blogs_category_id && editBlogValues.name) {
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-      formData.append(
-        "blogs_category_id",
-        allBlogCategData?.find(
-          (item: any) => item.name == editBlogValues.blogs_category_id
-        )?.id
-      );
-      formData.append(
-        "status",
-        status.find((item: any) => item.name === editBlogValues.status)?.id
-      );
+    formData.append(
+      "blogs_category_id",
+      allBlogCategData?.find(
+        (item: any) => item.name == editBlogValues.blogs_category_id
+      )?.id
+    );
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === editBlogValues.status)?.id
+    );
 
-      axiosAdmin
-        .post(`admin/Blog/${params.blogId}`, formData)
-        .then((res) => {
-          router.push("/admin/panel/blog");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllBlogRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditBlog(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditBlog(false);
-    }
+    axiosAdmin
+      .post(`admin/Blog/${params.blogId}`, formData)
+      .then((res) => {
+        router.push("/admin/panel/blog");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllBlogRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditBlog(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (
     <form
-      onSubmit={HandleEditBlog}
+      onSubmit={handleAddBlogValidation}
       encType="multipart/form-data"
       className={`flex flex-col gap-y-[20px] items-end duration-100 ${
         loaderEditBlog && "pointer-events-none opacity-[0.5]"
@@ -185,7 +209,7 @@ export default function Page({ params }: { params: { blogId: string } }) {
           type="text"
           firstValue={oneBlogValues.name}
           setAllValues={setEditBlogValues}
-          error={false}
+          error={errors.name}
         />
         <TextArea1
           title="მოკლე აღწერა"

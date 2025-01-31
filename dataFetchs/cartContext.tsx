@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { axiosUser } from "./AxiosToken";
 import { UserContext } from "./UserAxios";
+import * as Yup from "yup";
 
 export const CartAxiosContext = createContext<any>(null);
 
@@ -20,12 +21,14 @@ const CartContext = ({ children }: any) => {
   // order values
 
   const [orderPlacementValues, setOrderPlacementValues] = useState<any>({
-    order_details: {
-      product_id: "",
-      product_name: "",
-      quantity: "",
-      isComplete: "",
-    },
+    order_details: [
+      {
+        product_id: "",
+        product_name: "",
+        quantity: "",
+        isComplete: "",
+      },
+    ],
 
     phone: "",
     name: "",
@@ -48,6 +51,13 @@ const CartContext = ({ children }: any) => {
     pay_method: "",
 
     product_gift_id: "",
+  });
+
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    order_details: Yup.array().min(1, "პროდუქტები აუცილებელია"),
+    pay_method: Yup.string().required("გადახდის მეთოდი სავალდებულოა"),
   });
 
   const [makeOrderLoader, setMakeOrderLoader] = useState<boolean>(false);
@@ -189,6 +199,9 @@ const CartContext = ({ children }: any) => {
         setOrderPlacementValues,
         makeOrderLoader,
         setMakeOrderLoader,
+        validationSchema,
+        errors,
+        setErrors,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import useBlogCategory from "../../../../../../dataFetchs/blogCategoryGetFetch";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function Page() {
 
   const [addBlogValues, setAddBlogValues] = useState({
     blogs_category_id: "",
-    name: "",
+    name: "", // is mandatory
     name_eng: "",
     name_rus: "",
     description: "",
@@ -47,49 +48,75 @@ export default function Page() {
     sort: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("სათაური სავალდებულოა"),
+  });
+
+  const handleAddBlogValidation = (e: any) => {
+    e.preventDefault();
+    validationSchema
+      .validate(addBlogValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddBlog(e);
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.name);
+      });
+  };
+
   const HandleAddBlog = (e: any) => {
     e.preventDefault();
 
     setLoaderAddBlog(true);
-    if (addBlogValues.blogs_category_id && addBlogValues.name) {
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
+    allBlogCategData?.find(
+      (item: any) => item.name == addBlogValues.blogs_category_id
+    )?.id &&
       formData.append(
         "blogs_category_id",
         allBlogCategData?.find(
           (item: any) => item.name == addBlogValues.blogs_category_id
         )?.id
       );
-      formData.append(
-        "status",
-        status.find((item: any) => item.name === addBlogValues.status)?.id
-      );
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === addBlogValues.status)?.id
+    );
 
-      axiosAdmin
-        .post("admin/blog", formData)
-        .then((res) => {
-          router.push("/admin/panel/blog");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით აიტვირთა");
-          setAllBlogRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddBlog(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ აიტვირთა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddBlog(false);
-    }
+    axiosAdmin
+      .post("admin/blog", formData)
+      .then((res) => {
+        router.push("/admin/panel/blog");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით აიტვირთა");
+        setAllBlogRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddBlog(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ აიტვირთა!");
+      })
+      .finally(() => {});
   };
 
   return (
     <form
-      onSubmit={HandleAddBlog}
+      onSubmit={handleAddBlogValidation}
       encType="multipart/form-data"
       className={`flex flex-col gap-y-[20px] items-end duration-100 ${
         loaderAddBlog && "pointer-events-none opacity-[0.5]"
@@ -131,7 +158,7 @@ export default function Page() {
           name="name"
           type="text"
           setAllValues={setAddBlogValues}
-          error={false}
+          error={errors.name}
         />
         <TextArea1
           title="მოკლე აღწერა"
@@ -193,6 +220,7 @@ export default function Page() {
             title="სტატუსი"
             data={status}
             name="status"
+            firstValue="აქტიური"
             setAllValues={setAddBlogValues}
             error={false}
           />

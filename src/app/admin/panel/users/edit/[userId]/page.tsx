@@ -19,7 +19,6 @@ export default function Page({ params }: { params: { userId: string } }) {
     setAlertShow,
     setAlertStatus,
     setAlertText,
-    status,
     setAllAdminUsersRender,
   } = useContext(ContextForSharingStates);
   const [loaderEditAdminUser, setLoaderEditAdminUser] = useState<boolean>(true);

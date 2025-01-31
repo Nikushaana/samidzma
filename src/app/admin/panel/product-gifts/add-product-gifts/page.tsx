@@ -10,6 +10,7 @@ import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStat
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
 import { BsXLg } from "react-icons/bs";
+import * as Yup from "yup";
 
 export default function Page() {
   const router = useRouter();
@@ -25,52 +26,73 @@ export default function Page() {
   const [loaderAddProdGifts, setLoaderAddProdGifts] = useState<boolean>(false);
 
   const [addProdGiftsValues, setAddProdGiftsValues] = useState({
-    ProdCode: "",
+    ProdCode: "", // is mandatory
     giftCode: "",
-    giftCodes: [],
+    giftCodes: [], // length must be minimum 1
     status: "",
   });
+
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    ProdCode: Yup.string().required("მთავარი პროდუქტის კოდი სავალდებულოა"),
+    giftCodes: Yup.array().min(1, "საჩუქრების დამატება სავალდებულოა"),
+  });
+
+  const handleAddPromoCodesValidation = () => {
+    validationSchema
+      .validate(addProdGiftsValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddProdGifts();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.ProdCode || newErrors.giftCodes);
+      });
+  };
 
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleAddProdGifts();
+      handleAddPromoCodesValidation();
     }
   };
 
   const HandleAddProdGifts = () => {
     setLoaderAddProdGifts(true);
-    if (
-      addProdGiftsValues.ProdCode &&
-      addProdGiftsValues.giftCodes.length > 0
-    ) {
-      axiosAdmin
-        .post("admin/productGift", {
-          ProdCode: addProdGiftsValues.ProdCode,
-          giftCodes: addProdGiftsValues.giftCodes,
-          status: status.find(
-            (item: any) => item.name === addProdGiftsValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/product-gifts");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით დაემატა");
-          setAllProdGiftsRender(res);
-        })
-        .catch((err) => {
-          setLoaderAddProdGifts(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ დაემატა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddProdGifts(false);
-    }
+
+    axiosAdmin
+      .post("admin/productGift", {
+        ProdCode: addProdGiftsValues.ProdCode,
+        giftCodes: addProdGiftsValues.giftCodes,
+        status: status.find(
+          (item: any) => item.name === addProdGiftsValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/product-gifts");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით დაემატა");
+        setAllProdGiftsRender(res);
+      })
+      .catch((err) => {
+        setLoaderAddProdGifts(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ დაემატა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -83,11 +105,11 @@ export default function Page() {
       <div className="flex flex-col gap-[20px] w-full">
         <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-[20px]">
           <Input1
-            title="მთავარი პროდუქტი"
+            title="მთავარი პროდუქტის კოდი"
             name="ProdCode"
             type="text"
             setAllValues={setAddProdGiftsValues}
-            error={false}
+            error={errors.ProdCode}
             handleInputKeyPress={handleInputKeyPress}
           />
           <DropDown1value
@@ -105,7 +127,7 @@ export default function Page() {
             name="giftCode"
             type="text"
             setAllValues={setAddProdGiftsValues}
-            error={false}
+            error={addProdGiftsValues.giftCodes.length < 1 && errors.giftCodes}
             render={addProdGiftsValues.giftCodes}
             handleInputKeyPress={handleInputKeyPress}
           />
@@ -155,7 +177,7 @@ export default function Page() {
       <div className="w-[200px]">
         <GreenButton
           name="დამატება"
-          action={HandleAddProdGifts}
+          action={handleAddPromoCodesValidation}
           loader={loaderAddProdGifts}
           style="h-[50px] text-[18px]"
         />

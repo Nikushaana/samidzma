@@ -3,12 +3,13 @@
 import React, { useContext, useState } from "react";
 import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import Input1 from "../Inputs/Input1";
-import CheckBox from "../Inputs/CheckBox";
-import GreenButton from "../buttons/greenButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
+import * as Yup from "yup";
+import Input1 from "@/app/components/Inputs/Input1";
+import CheckBox from "@/app/components/Inputs/CheckBox";
+import GreenButton from "@/app/components/buttons/greenButton";
 
 export default function SignIn() {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
@@ -25,48 +26,71 @@ export default function SignIn() {
     confirmLaws: false,
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    email: Yup.string().required("მეილი სავალდებულოა"),
+    password: Yup.string().required("პაროლი სავალდებულოა"),
+  });
+
+  const handleUserSignInValidation = () => {
+    validationSchema
+      .validate(userSignInValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleUserSignIn();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.email || newErrors.password);
+      });
+  };
+
   const handleInputKeyPressSignIn = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleUserSignIn();
+      handleUserSignInValidation();
     }
   };
 
   const HandleUserSignIn = () => {
     setUserSignInLoader(true);
-    if (userSignInValues.email && userSignInValues.password) {
-      axiosUser
-        .post("userAuth/login", {
-          email: userSignInValues.email,
-          password: userSignInValues.password,
-        })
-        .then((res) => {
-          setUserTokenInLocal(res.data.token);
-          setUser(res.data.user);
+    axiosUser
+      .post("userAuth/login", {
+        email: userSignInValues.email,
+        password: userSignInValues.password,
+      })
+      .then((res) => {
+        setUserTokenInLocal(res.data.token);
+        setUser(res.data.user);
 
-          router.push("/");
-          setUserSignInValues({
-            email: "",
-            password: "",
-            confirmLaws: false,
-          });
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("შესვლა წარმატებით შესრულდა");
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("შესვლა ვერ შესრულდა");
-        })
-        .finally(() => {
-          setUserSignInLoader(false);
+        router.push("/");
+        setUserSignInValues({
+          email: "",
+          password: "",
+          confirmLaws: false,
         });
-    } else {
-      setUserSignInLoader(false);
-    }
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("შესვლა წარმატებით შესრულდა");
+      })
+      .catch((err) => {
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("შესვლა ვერ შესრულდა");
+      })
+      .finally(() => {
+        setUserSignInLoader(false);
+      });
   };
   return (
     <div
@@ -84,7 +108,7 @@ export default function SignIn() {
           name="email"
           type="text"
           setAllValues={setUserSignInValues}
-          error={false}
+          error={errors.email}
           handleInputKeyPress={handleInputKeyPressSignIn}
         />
         <Input1
@@ -92,7 +116,7 @@ export default function SignIn() {
           isPassword={true}
           name="password"
           setAllValues={setUserSignInValues}
-          error={false}
+          error={errors.password}
           handleInputKeyPress={handleInputKeyPressSignIn}
         />
       </div>
@@ -112,7 +136,7 @@ export default function SignIn() {
 
       <GreenButton
         name={"ავტორიზაცია"}
-        action={HandleUserSignIn}
+        action={handleUserSignInValidation}
         loader={userSignInLoader}
         style="h-[56px] text-[18px]"
       />

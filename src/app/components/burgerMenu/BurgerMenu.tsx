@@ -13,8 +13,9 @@ import { GoPerson } from "react-icons/go";
 import { ImInsertTemplate } from "react-icons/im";
 
 export default function BurgerMenu() {
-  const { setActiveAuthorization, burgerMenu, setBurgerMenu, menuRoutes } =
-    useContext(ContextForSharingStates);
+  const { burgerMenu, setBurgerMenu, menuRoutes } = useContext(
+    ContextForSharingStates
+  );
   const { user } = useContext(UserContext);
 
   const router = useRouter();
@@ -71,8 +72,7 @@ export default function BurgerMenu() {
                 <div className="flex max-tiny:hidden items-center gap-[20px] text-[18px] px-[40px] bg-myBlack text-white rounded-full h-[56px]">
                   <p
                     onClick={() => {
-                      router.push("/signup");
-                      setActiveAuthorization("signin");
+                      router.push("/auth/signin");
                     }}
                     className="cursor-pointer"
                   >
@@ -81,8 +81,7 @@ export default function BurgerMenu() {
                   <div className="h-[15px] w-[1px] bg-white"></div>
                   <p
                     onClick={() => {
-                      router.push("/signup");
-                      setActiveAuthorization("signup");
+                      router.push("/auth/signup");
                     }}
                     className="cursor-pointer"
                   >
@@ -107,8 +106,7 @@ export default function BurgerMenu() {
             <div className="flex items-center gap-[20px] text-[18px] max-tiny:text-[16px] w-full justify-center bg-myBlack text-white rounded-full h-[56px]">
               <p
                 onClick={() => {
-                  router.push("/signup");
-                  setActiveAuthorization("signin");
+                  router.push("/auth/signin");
                 }}
                 className="cursor-pointer"
               >
@@ -117,8 +115,7 @@ export default function BurgerMenu() {
               <div className="h-[15px] w-[1px] bg-white"></div>
               <p
                 onClick={() => {
-                  router.push("/signup");
-                  setActiveAuthorization("signup");
+                  router.push("/auth/signup");
                 }}
                 className="cursor-pointer"
               >

@@ -11,6 +11,7 @@ import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import Image from "next/image";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { bannersId: string } }) {
   const router = useRouter();
@@ -70,6 +71,33 @@ export default function Page({ params }: { params: { bannersId: string } }) {
     page: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    sort: Yup.string().required("სორტირება სავალდებულოა"),
+  });
+
+  const handleEditBannerValidation = (e: any) => {
+    e.preventDefault();
+    validationSchema
+      .validate(editBannerValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditBanner(e);
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.sort);
+      });
+  };
+
   useEffect(() => {
     setLoaderEditBanner(true);
     axiosAdmin
@@ -85,39 +113,36 @@ export default function Page({ params }: { params: { bannersId: string } }) {
   const HandleEditBanner = (e: any) => {
     e.preventDefault();
     setLoaderEditBanner(true);
-    if (true) {
-      const form = e.target;
-      const formData = new FormData(form);
 
-      formData.append(
-        "status",
-        status.find((item: any) => item.name === editBannerValues.status)?.id
-      );
+    const form = e.target;
+    const formData = new FormData(form);
 
-      axiosAdmin
-        .post(`admin/mainBanner/${params.bannersId}`, formData)
-        .then((res) => {
-          router.push("/admin/panel/main-banners");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllBannerRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditBanner(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditBanner(false);
-    }
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === editBannerValues.status)?.id
+    );
+
+    axiosAdmin
+      .post(`admin/mainBanner/${params.bannersId}`, formData)
+      .then((res) => {
+        router.push("/admin/panel/main-banners");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllBannerRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditBanner(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (
     <form
-      onSubmit={HandleEditBanner}
+      onSubmit={handleEditBannerValidation}
       encType="multipart/form-data"
       className={`flex flex-col gap-y-[20px] items-end duration-100 ${
         loaderEditBanner && "pointer-events-none opacity-[0.5]"
@@ -380,7 +405,7 @@ export default function Page({ params }: { params: { bannersId: string } }) {
             firstValue={oneBannerValues?.sort}
             type="text"
             setAllValues={setEditBannerValues}
-            error={false}
+            error={errors.sort}
           />
         </div>
       </div>

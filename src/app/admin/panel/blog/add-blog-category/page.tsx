@@ -9,6 +9,7 @@ import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import useBlogCategory from "../../../../../../dataFetchs/blogCategoryGetFetch";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
+import * as Yup from "yup";
 
 export default function Page() {
   const { fetchBlogCategory } = useBlogCategory();
@@ -21,7 +22,7 @@ export default function Page() {
   const [loaderAddBlogCateg, setLoaderAddBlogCateg] = useState<boolean>(false);
 
   const [addBlogCategValues, setAddBlogCategValues] = useState({
-    name: "",
+    name: "", // is mandatory
     name_eng: "",
     name_rus: "",
     meta_name: "",
@@ -31,48 +32,70 @@ export default function Page() {
     status: "",
   });
 
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("კატეგორია სავალდებულოა"),
+  });
+
+  const handleAddBlogCategValidation = () => {
+    validationSchema
+      .validate(addBlogCategValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleAddBlogCateg();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.name);
+      });
+  };
+
   const handleInputKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleAddBlogCateg();
+      handleAddBlogCategValidation();
     }
   };
 
   const HandleAddBlogCateg = () => {
     setLoaderAddBlogCateg(true);
-    if (addBlogCategValues.name && addBlogCategValues.name_eng) {
-      axiosAdmin
-        .post("admin/blogCategory", {
-          name: addBlogCategValues.name,
-          name_eng: addBlogCategValues.name_eng,
-          name_rus: addBlogCategValues.name_rus,
-          meta_name: addBlogCategValues.meta_name,
-          meta_description: addBlogCategValues.meta_description,
-          color: addBlogCategValues.color,
-          sort: addBlogCategValues.sort,
-          status: status.find(
-            (item: any) => item.name === addBlogCategValues.status
-          )?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/blog/blog-category");
-          fetchBlogCategory();
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით აიტვირთა");
-        })
-        .catch((err) => {
-          setLoaderAddBlogCateg(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ აიტვირთა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderAddBlogCateg(false);
-    }
+    axiosAdmin
+      .post("admin/blogCategory", {
+        name: addBlogCategValues.name,
+        name_eng: addBlogCategValues.name_eng,
+        name_rus: addBlogCategValues.name_rus,
+        meta_name: addBlogCategValues.meta_name,
+        meta_description: addBlogCategValues.meta_description,
+        color: addBlogCategValues.color,
+        sort: addBlogCategValues.sort,
+        status: status.find(
+          (item: any) => item.name === addBlogCategValues.status
+        )?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/blog/blog-category");
+        fetchBlogCategory();
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით აიტვირთა");
+      })
+      .catch((err) => {
+        setLoaderAddBlogCateg(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ აიტვირთა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -88,7 +111,7 @@ export default function Page() {
           name="name"
           type="text"
           setAllValues={setAddBlogCategValues}
-          error={false}
+          error={errors.name}
           handleInputKeyPress={handleInputKeyPress}
         />
         <Input1
@@ -153,7 +176,7 @@ export default function Page() {
       <div className="w-[200px] mt-[50px]">
         <GreenButton
           name="დამატება"
-          action={HandleAddBlogCateg}
+          action={handleAddBlogCategValidation}
           loader={loaderAddBlogCateg}
           style="h-[50px] text-[18px]"
         />

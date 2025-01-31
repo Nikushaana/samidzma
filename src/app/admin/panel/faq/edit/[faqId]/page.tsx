@@ -9,6 +9,7 @@ import { ContextForSharingStates } from "../../../../../../../dataFetchs/sharedS
 import { axiosAdmin } from "../../../../../../../dataFetchs/AxiosToken";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import TextEditor from "@/app/components/Inputs/TextEditor";
+import * as Yup from "yup";
 
 export default function Page({ params }: { params: { faqId: string } }) {
   const router = useRouter();
@@ -44,6 +45,35 @@ export default function Page({ params }: { params: { faqId: string } }) {
     status: "",
   });
 
+
+  const [errors, setErrors] = useState<any>({});
+
+  const validationSchema = Yup.object({
+    title: Yup.string().required("კითხვა სავალდებულოა"),
+    answer: Yup.string().required("პასუხი სავალდებულოა"),
+    sort: Yup.string().required("სორტირება სავალდებულოა"),
+  });
+
+  const handleEditFaqValidation = () => {
+    validationSchema
+      .validate(editFAQValues, { abortEarly: false })
+      .then(() => {
+        setErrors({});
+        HandleEditFAQ();
+      })
+      .catch((err) => {
+        const newErrors: any = {};
+        err.inner.forEach((error: any) => {
+          newErrors[error.path] = error.message;
+        });
+        setErrors(newErrors);
+
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText(newErrors.title || newErrors.answer || newErrors.sort);
+      });
+  };
+
   useEffect(() => {
     setLoaderEditFAQ(true);
     axiosAdmin
@@ -61,42 +91,38 @@ export default function Page({ params }: { params: { faqId: string } }) {
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      HandleEditFAQ();
+      handleEditFaqValidation();
     }
   };
 
   const HandleEditFAQ = () => {
     setLoaderEditFAQ(true);
-    if (editFAQValues.title && editFAQValues.title_eng) {
-      axiosAdmin
-        .post(`admin/faq/${params.faqId}`, {
-          title: editFAQValues.title,
-          title_eng: editFAQValues.title_eng,
-          title_rus: editFAQValues.title_rus,
-          answer: editFAQValues.answer,
-          answer_eng: editFAQValues.answer_eng,
-          answer_rus: editFAQValues.answer_rus,
-          sort: editFAQValues.sort,
-          status: status.find((item: any) => item.name === editFAQValues.status)
-            ?.id,
-        })
-        .then((res) => {
-          router.push("/admin/panel/faq");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          setAllFAQRender(res);
-        })
-        .catch((err) => {
-          setLoaderEditFAQ(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
-    } else {
-      setLoaderEditFAQ(false);
-    }
+    axiosAdmin
+      .post(`admin/faq/${params.faqId}`, {
+        title: editFAQValues.title,
+        title_eng: editFAQValues.title_eng,
+        title_rus: editFAQValues.title_rus,
+        answer: editFAQValues.answer,
+        answer_eng: editFAQValues.answer_eng,
+        answer_rus: editFAQValues.answer_rus,
+        sort: editFAQValues.sort,
+        status: status.find((item: any) => item.name === editFAQValues.status)
+          ?.id,
+      })
+      .then((res) => {
+        router.push("/admin/panel/faq");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        setAllFAQRender(res);
+      })
+      .catch((err) => {
+        setLoaderEditFAQ(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   return (
@@ -113,7 +139,7 @@ export default function Page({ params }: { params: { faqId: string } }) {
           type="text"
           firstValue={oneFAQValues.title}
           setAllValues={setEditFAQValues}
-          error={false}
+          error={errors.title}
           handleInputKeyPress={handleInputKeyPress}
         />
         <TextEditor
@@ -121,7 +147,7 @@ export default function Page({ params }: { params: { faqId: string } }) {
           name="answer"
           firstValue={oneFAQValues.answer}
           setAllValues={setEditFAQValues}
-          error={false}
+          error={errors.answer}
           handleInputKeyPress={handleInputKeyPress}
         />
         <hr />
@@ -181,7 +207,7 @@ export default function Page({ params }: { params: { faqId: string } }) {
             type="text"
             firstValue={oneFAQValues.sort}
             setAllValues={setEditFAQValues}
-            error={false}
+            error={errors.sort}
             handleInputKeyPress={handleInputKeyPress}
           />
         </div>
@@ -189,7 +215,7 @@ export default function Page({ params }: { params: { faqId: string } }) {
       <div className="w-[200px]">
         <GreenButton
           name="რედაქტირება"
-          action={HandleEditFAQ}
+          action={handleEditFaqValidation}
           loader={loaderEditFAQ}
           style="h-[50px] text-[18px]"
         />
