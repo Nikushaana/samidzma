@@ -85,7 +85,7 @@ export default function ProductReview({
         <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[20px] max-lg:gap-[10px]">
           {loaderProdReview
             ? [1, 2, 3, 4].map((index: any) => (
-                <div key={index} className="w-full h-[150px] rounded-[12px] ">
+                <div key={index} className="w-full h-[150px] rounded-[12px] overflow-hidden">
                   <div className="loaderwave"></div>
                 </div>
               ))

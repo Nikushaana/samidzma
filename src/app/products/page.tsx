@@ -26,6 +26,7 @@ import { ContextForSharingStates } from "../../../dataFetchs/sharedStates";
 import useBlog from "../../../dataFetchs/blogContext";
 import BlogsBackgroundDesigns from "../components/decorationColumns/BlogsBackgroundDesigns";
 import ReactPaginate from "react-paginate";
+import useFilter from "../../../dataFetchs/filtersContext";
 
 export default function Page() {
   const targetRef = useRef<HTMLDivElement>(null);
@@ -33,13 +34,7 @@ export default function Page() {
   const pathname = usePathname();
   const pagemounted = useRef(false);
   const { blogData, blogLoader } = useBlog();
-  const { sizes, gender, style, color, fetchAllData } = useContext(
-    ContextForSharingStates
-  );
-
-  useEffect(() => {
-    fetchAllData();
-  }, []);
+  const { sizes, gender, style, color, filterLoader } = useFilter();
 
   const screenWidth = useScreenWidth();
 
@@ -307,6 +302,8 @@ export default function Page() {
 
   // product filter
 
+  
+
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full pb-[100px] flex flex-col gap-y-[48px] relative">
@@ -330,7 +327,7 @@ export default function Page() {
             <div className="flex flex-col max-tiny:flex-col-reverse gap-y-[20px] w-[40%]  max-lg:w-[50%] max-tiny:w-full items-end">
               <div className="flex max-lg:flex-col-reverse max-tiny:flex-row max-lg:items-end items-center gap-[20px] w-full">
                 <div className=" w-[calc(100%-146px)] max-lg:w-full max-tiny:w-[calc(100%-146px)]">
-                  <DropDown1value placeholder="დალაგება ფასით" />
+                  <DropDown1value placeholder="დალაგება ფასით" notInputStyle={true}/>
                 </div>
 
                 <div className="flex items-center rounded-[12px] bg-white overflow-hidden ">
@@ -372,8 +369,7 @@ export default function Page() {
               >
                 <RiFilter2Fill />
               </div>
-              <div
-                className={`w-[330px] max-2xl:w-[300px] max-tiny:w-full max-lg:absolute max-lg:top-[45px] ${
+              <div className={`w-[330px] max-2xl:w-[300px] max-tiny:w-full max-lg:absolute max-lg:top-[45px] ${
                   filterStatus ? "ml-0" : "ml-[-450px]"
                 } duration-200 max-lg:z-[2] max-lg:shadow rounded-[12px] self-start bg-white p-[20px] flex flex-col gap-y-[10px] sticky top-[20px]`}
               >
@@ -715,7 +711,7 @@ export default function Page() {
                     (item: any, index: number) => (
                       <div
                         key={item}
-                        className={`w-full rounded-[12px] ${
+                        className={`w-full rounded-[12px] overflow-hidden ${
                           activeVar === 1 ? "h-[618px]" : "h-[227px] "
                         }`}
                       >
@@ -767,7 +763,7 @@ export default function Page() {
                   //main container
                   containerClassName={`flex items-center gap-1`}
                   //single page number
-                  pageLinkClassName={`w-[40px] h-[40px] text-md bg-gray-100 font-forh
+                  pageLinkClassName={`w-[40px] h-[40px] text-md bg-white font-forh
                flex items-center justify-center rounded-full`}
                   //previous page number
                   previousLinkClassName={`hidden`}

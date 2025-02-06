@@ -30,11 +30,18 @@ export default function CategoriesCard({ item }: any) {
 
     setGroupedItems(groupedArray);
   }, [item]);
-  
+
   return (
     <div className="rounded-[8px] bg-white p-[18px] flex flex-col gap-y-[10px] self-stretch h-full">
       <div className="flex items-center justify-between h-[60px]">
-        <h1 className="text-[20px]">{item?.ProdSaxeobaName}</h1>
+        <h1
+          onClick={() => {
+            router.push(`/category/${item.IdProdSaxeoba}`);
+          }}
+          className="text-[20px]"
+        >
+          {item?.ProdSaxeobaName}
+        </h1>
         <div className="bg-myGreen text-white shrink-0 flex items-center justify-center text-[18px] w-[45px] h-[45px] rounded-full">
           <FaTree />
         </div>
@@ -63,26 +70,41 @@ export default function CategoriesCard({ item }: any) {
                 {item1.map((item3: any, index: any) => (
                   <div
                     key={index}
-                    className="w-full aspect-square relative rounded-[5px] overflow-hidden"
+                    onClick={() => {
+                      router.push(
+                        `/category/${item?.IdProdSaxeoba}/${item3?.IdProdTypeGroup}`
+                      );
+                    }}
+                    className="w-full aspect-square cursor-pointer flex items-center justify-center relative rounded-[5px] overflow-hidden"
                   >
-                    <Image
-                      src={`${
-                        item3?.image
-                          ? `${process.env.NEXT_PUBLIC_API_URL}/${item3?.image}`
-                          : "/images/mainLogo.png"
-                      }`}
-                      alt={""}
-                      sizes="500px"
-                      fill
-                      style={{
-                        objectFit: "cover",
-                      }}
-                    />
+                    {item3?.image ? (
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/${item3?.image}`}
+                        alt={""}
+                        sizes="500px"
+                        fill
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <div className="w-[80%] h-[80%] relative">
+                        <Image
+                          src="/images/siteLogo.png"
+                          alt={""}
+                          sizes="500px"
+                          fill
+                          style={{
+                            objectFit: "contain",
+                          }}
+                        />
+                      </div>
+                    )}
                     <div
                       className="absolute w-full h-full flex items-end z-[1] p-[10px]
               bg-gradient-to-t from-[#1D1F1FD6] from-0% to-[#32343400] to-84%"
                     >
-                      <p className="break-all text-white text-[12px] w-full">
+                      <p className="text-white text-[12px] w-full">
                         {item3.ProdTypeGroupName}
                       </p>
                     </div>
@@ -97,7 +119,7 @@ export default function CategoriesCard({ item }: any) {
       <GreenButton
         name="მეტის ნახვა"
         action={() => {
-          router.push(`/products?IdProdSaxeoba=${item.IdProdSaxeoba}`);
+          router.push(`/category/${item.IdProdSaxeoba}`);
         }}
         style="h-[56px] max-tiny:h-[48px] text-[18px]"
       />

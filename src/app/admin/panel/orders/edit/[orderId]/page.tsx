@@ -23,7 +23,9 @@ export default function Page({ params }: { params: { orderId: string } }) {
   const [loaderEditAdminUserOrder, setLoaderEditAdminUserOrder] =
     useState<boolean>(true);
 
-  const [oneAdminUserOrderValues, setOneAdminUserOrderValues] = useState({});
+  const [oneAdminUserOrderValues, setOneAdminUserOrderValues] = useState<any>(
+    {}
+  );
   const [editAdminUserOrderValues, setEditAdminUserOrderValues] = useState({});
 
   useEffect(() => {
@@ -98,141 +100,81 @@ export default function Page({ params }: { params: { orderId: string } }) {
       }`}
     >
       <h1 className="w-full">შეკვეთის რედაქტირება</h1>
-      {/* <div className="grid grid-cols-3 gap-[20px] w-full"> */}
-      {/* <DropDown1value
-          title="ბლოგის კატეგორია"
-          data={allBlogCategData}
-          name="blogs_category_id"
-          firstValue={
-            allBlogCategData.find(
-              (item: any) => item.id === oneBlogValues.blogs_category_id
-            )?.name
-          }
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <Input1
-          title="მეტა სახელი"
-          name="meta_name"
-          type="text"
-          firstValue={oneBlogValues.meta_name}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <Input1
-          title="მეტა აღწერა"
-          name="meta_description"
-          type="text"
-          firstValue={oneBlogValues.meta_name}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
+
+      <div className="w-full">
+        <p>{oneAdminUserOrderValues?.bank_card_cvv}</p>
+
+        <p>{oneAdminUserOrderValues?.bank_card_expiration_date}</p>
+
+        <p>{oneAdminUserOrderValues?.bank_card_number}</p>
+
+        <p>{oneAdminUserOrderValues?.bank_transaction_id}</p>
+
+        <p>{oneAdminUserOrderValues?.comment}</p>
+
+        <p>{oneAdminUserOrderValues?.createdAt}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_address}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_address_lat}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_address_lng}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_building_number}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_day}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_house_door_number}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_price}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_street}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_time_from}</p>
+
+        <p>{oneAdminUserOrderValues?.delivery_time_to}</p>
+
+        <p>{oneAdminUserOrderValues?.description}</p>
+
+        <p>{oneAdminUserOrderValues?.driver_code}</p>
+
+        <p>{oneAdminUserOrderValues?.email}</p>
+
+        <p>{oneAdminUserOrderValues?.finally_price}</p>
+
+        <p>{oneAdminUserOrderValues?.invoice_number}</p>
+
+        <p>{oneAdminUserOrderValues?.is_delivery}</p>
+
+        <p>{oneAdminUserOrderValues?.lastName}</p>
+
+        <p>{oneAdminUserOrderValues?.name}</p>
+
+        <p>{oneAdminUserOrderValues?.order_status}</p>
+
+        <p>{oneAdminUserOrderValues?.pay_method}</p>
+
+        <p>{oneAdminUserOrderValues?.pay_status}</p>
+
+        <p>{oneAdminUserOrderValues?.phone}</p>
+
+        <p>{oneAdminUserOrderValues?.price}</p>
+
+        <p>{oneAdminUserOrderValues?.promo_code_id}</p>
+
+        <p>{oneAdminUserOrderValues?.refund_amount}</p>
+
+        <p>{oneAdminUserOrderValues?.saved_in_system}</p>
+
+        <p>{oneAdminUserOrderValues?.status}</p>
+
+        <p>{oneAdminUserOrderValues?.store_code}</p>
+
+        <p>{oneAdminUserOrderValues?.system_id}</p>
+
+        <p>{oneAdminUserOrderValues?.user_id}</p>
       </div>
-      <hr className="h-[1px] w-full" />
-      <div className="grid grid-cols-1 gap-[20px] w-full">
-        <Input1
-          title="სათაური"
-          name="name"
-          type="text"
-          firstValue={oneBlogValues.meta_name}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextArea1
-          title="მოკლე აღწერა"
-          name="description"
-          firstValue={oneBlogValues.description}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextEditor
-          title="ბლოგი"
-          name="description2"
-          firstValue={oneBlogValues.description2}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური EN"
-          name="name_eng"
-          type="text"
-          firstValue={oneBlogValues.name_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextArea1
-          title="მოკლე აღწერა"
-          name="description_eng"
-          firstValue={oneBlogValues.description_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextEditor
-          title="ბლოგი EN"
-          name="description2_eng"
-          firstValue={oneBlogValues.description2_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური Рус"
-          name="name_rus"
-          type="text"
-          firstValue={oneBlogValues.name_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextArea1
-          title="მოკლე აღწერა"
-          name="description_rus"
-          firstValue={oneBlogValues.description_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <TextEditor
-          title="ბლოგი Рус"
-          name="description2_rus"
-          firstValue={oneBlogValues.description2_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-      </div>
-      <hr className="h-[1px] w-full" />
-      <div className="grid grid-cols-3 gap-[20px] w-full">
-        <Input1
-          title="სორტირება (მიუთითეთ სასურველი რიცხვი)"
-          digit={true}
-          name="sort"
-          type="text"
-          firstValue={oneBlogValues.sort}
-          setAllValues={setEditBlogValues}
-          error={false}
-          handleInputKeyPress={handleInputKeyPress}
-        />
-        <DropDown1value
-          title="სტატუსი"
-          data={status}
-          name="status"
-          firstValue={
-            status.find((item: any) => item.id === oneBlogValues.status)?.name
-          }
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-      </div> */}
+
       <div className="w-[200px]">
         <GreenButton
           name="რედაქტირება"

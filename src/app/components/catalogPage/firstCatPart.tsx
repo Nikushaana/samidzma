@@ -53,13 +53,13 @@ export default function FirstCatPart({
   }, [screenWidth]);
 
   return (
-    <div className="mx-[264px] max-2xl:mx-[90px] max-lg:mx-[0px] rounded-[12px] bg-[#EAEDEE] p-[30px] max-lg:p-[0px] flex flex-col gap-y-[10px]">
+    <div className="mx-[264px] max-2xl:mx-[90px] max-lg:mx-[0px] rounded-[12px] bg-[#EAEDEE] p-[30px] max-lg:px-[0px] max-lg:py-[10px] flex flex-col gap-y-[10px]">
       <div className="max-lg:mx-[90px] max-tiny:mx-[25px]">
         <WhatUSearch />
       </div>
 
       <div className="w-full flex flex-col gap-y-[10px]">
-        <div className="aspect-[10/2] max-lg:aspect-[3/1] max-tiny:aspect-[6/4] max-lg:mx-[90px] max-tiny:mx-[25px] overflow-hidden">
+        <div className="h-[250px] max-sm:h-[180px] max-lg:mx-[90px] max-tiny:mx-[25px] overflow-hidden">
           {FrontCategoriesLoader ? (
             <div
               style={{
@@ -71,7 +71,7 @@ export default function FirstCatPart({
                 (item: any, index: number) => (
                   <div
                     key={item}
-                    className="w-full h-full rounded-[12px] loaderwave"
+                    className="w-full h-full rounded-[12px] loaderwave overflow-hidden"
                   ></div>
                 )
               )}
@@ -103,7 +103,7 @@ export default function FirstCatPart({
                     setCurrentPage(0);
                   }}
                   key={item?.IdProdSaxeoba}
-                  className={`flex flex-col items-center gap-y-[10px] p-[10px] max-lg:p-[8px] duration-200 cursor-pointer rounded-[12px] ${
+                  className={`flex flex-col items-center gap-y-[10px] h-full p-[10px] max-lg:p-[8px] duration-200 cursor-pointer rounded-[12px] ${
                     filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                       ? "bg-myGreen "
                       : " bg-white"
@@ -113,22 +113,34 @@ export default function FirstCatPart({
                     <div className="absolute z-[1] top-[10px] overflow-hidden right-[10px] bg-myGreen text-white text-[27px] max-lg:text-[22px] w-[45px] max-lg:w-[36px] aspect-square rounded-full flex items-center justify-center">
                       <FaTree />
                     </div>
-                    <Image
-                      src={`${
-                        item?.image
-                          ? `${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`
-                          : "/images/mainLogo.png"
-                      }`}
-                      alt={""}
-                      sizes="500px"
-                      fill
-                      style={{
-                        objectFit: "cover",
-                      }}
-                    />
+                    {item?.image ? (
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
+                        alt={""}
+                        sizes="500px"
+                        fill
+                        style={{
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full relative">
+                        <div className="w-[80%] h-[80%] relative">
+                          <Image
+                            src="/images/siteLogo.png"
+                            alt={""}
+                            sizes="500px"
+                            fill
+                            style={{
+                              objectFit: "contain",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <h1
-                    className={`break-all text-center text-[18px] max-tiny:text-[15px] line-clamp-3 ${
+                    className={`text-center text-[18px] max-tiny:text-[15px] line-clamp-3 ${
                       filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                         ? "text-white"
                         : ""
@@ -176,21 +188,33 @@ export default function FirstCatPart({
                           : ""
                       }`}
                     >
-                      <Image
-                        src={`${
-                          item1?.image
-                            ? `${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`
-                            : "/images/mainLogo.png"
-                        }`}
-                        alt=""
-                        sizes="500px"
-                        fill
-                        style={{
-                          objectFit: "cover",
-                        }}
-                      />
-                      <div className="absolute p-[10px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="break-all text-white text-[12px] w-full">
+                      {item1?.image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}
+                          alt={""}
+                          sizes="500px"
+                          fill
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full relative">
+                          <div className="w-[90%] h-[90%] relative">
+                            <Image
+                              src="/images/siteLogo.png"
+                              alt={""}
+                              sizes="500px"
+                              fill
+                              style={{
+                                objectFit: "contain",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute p-[10px] max-tiny:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
+                        <p className="text-white text-[10px] w-full">
                           {item1.ProdTypeGroupName}
                         </p>
                       </div>
@@ -241,21 +265,33 @@ export default function FirstCatPart({
                           : ""
                       }`}
                     >
-                      <Image
-                        src={`${
-                          item4?.image
-                            ? `${process.env.NEXT_PUBLIC_API_URL}/${item4?.image}`
-                            : "/images/mainLogo.png"
-                        }`}
-                        alt=""
-                        sizes="500px"
-                        fill
-                        style={{
-                          objectFit: "cover",
-                        }}
-                      />
-                      <div className="absolute p-[10px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="break-all text-white text-[12px]">
+                      {item4?.image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/${item4?.image}`}
+                          alt={""}
+                          sizes="500px"
+                          fill
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full relative">
+                          <div className="w-[90%] h-[90%] relative">
+                            <Image
+                              src="/images/siteLogo.png"
+                              alt={""}
+                              sizes="500px"
+                              fill
+                              style={{
+                                objectFit: "contain",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute p-[10px] max-tiny:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
+                        <p className="text-white text-[10px]">
                           {item4.ProdTypeName}
                         </p>
                       </div>

@@ -63,7 +63,7 @@ export default function UserOrderProdCard({
         className="relative cursor-pointer w-full h-[224px] max-tiny:h-auto max-tiny:aspect-[4/3] flex items-center justify-center rounded-[4px] overflow-hidden"
       >
         {prodImagesLoader ? (
-          <div className="w-full h-full rounded-[12px] loaderwave"></div>
+          <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
         ) : prodImages?.ProductPictureByte ? (
           <Image
             src={`data:image/png;base64,${prodImages?.ProductPictureByte}`}

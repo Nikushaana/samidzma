@@ -14,11 +14,13 @@ export default function DropDown1value({
   firstValue,
   searchable,
   render,
+  notInputStyle,
 }: any) {
   const targetRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [drop, setDrop] = useState(false);
   const [value, setValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const [filteredData, setFilteredData] = useState<any[]>([]);
 
   useEffect(() => {
@@ -63,10 +65,14 @@ export default function DropDown1value({
 
   useEffect(() => {
     if (searchable) {
-      if (value) {
+      if (searchValue) {
         setFilteredData(
           data.filter((item: any) =>
-            item.name || item.ProdSaxeobaName.toLowerCase().startsWith(value?.toLowerCase())
+            item.name
+              ? item.name.toLowerCase().startsWith(searchValue?.toLowerCase())
+              : item.ProdSaxeobaName.toLowerCase().startsWith(
+                  searchValue?.toLowerCase()
+                )
           )
         );
       } else {
@@ -75,7 +81,7 @@ export default function DropDown1value({
     } else {
       setFilteredData(data);
     }
-  }, [data, searchable, value]);
+  }, [data, searchable, searchValue]);
 
   return (
     <div className="flex flex-col gap-y-[5px] w-full">
@@ -85,30 +91,27 @@ export default function DropDown1value({
           onClick={() => {
             setDrop((pre) => !pre);
           }}
-          className={`rounded-full w-full h-[42px] py-[6px] px-[20px] flex bg-white duration-100 border-[1px] ${
-            error ? "border-myPink" : drop ? " " : "bg-[#EEEEEE] "
+          className={`w-full py-[6px] px-[20px] flex duration-100 border-[1px] ${
+            error
+              ? "border-myPink"
+              : drop
+              ? `${notInputStyle ? "rounded-t-[25px]" : "rounded-t-[25px] max-tiny:rounded-t-[22px]"}`
+              : `rounded-[33px] bg-[#EEEEEE] ${
+                  notInputStyle ? "" : "border-[#E2E2E2]"
+                }`
+          } ${
+            notInputStyle ? "h-[42px] bg-white" : "h-[52px] max-tiny:h-[42px]"
           } w-full flex gap-[10px] items-center cursor-pointer justify-between`}
         >
-          <div className="flex items-center gap-[10px] w-[calc(100%-30px)] h-full">
+          <div className="flex items-center gap-[10px] w-[calc(100%-30px)] h-full text-[14px]">
             {icon && (
               <div className="w-[20px] h-[40px] flex items-center justify-center text-[20px] cursor-pointer">
                 {icon}
               </div>
             )}
-            {searchable ? (
-              <input
-                ref={inputRef}
-                type="text"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                placeholder={placeholder}
-                className={`text-[14px] truncate select-none outline-none h-full bg-transparent ${
-                  icon ? "w-[calc(100%-40px)]" : "w-full"
-                }`}
-              />
-            ) : value ? (
+            {value ? (
               <p
-                className={`text-[14px] truncate text-start ${
+                className={`truncate text-start ${
                   icon ? "w-[calc(100%-40px)]" : "w-full"
                 }`}
               >
@@ -116,7 +119,7 @@ export default function DropDown1value({
               </p>
             ) : (
               <p
-                className={` truncate text-start text-gray-400 ${
+                className={`truncate text-start text-gray-400 ${
                   icon ? "w-[calc(100%-40px)]" : "w-full"
                 }`}
               >
@@ -136,30 +139,68 @@ export default function DropDown1value({
           style={{
             height: `${
               drop
-                ? filteredData?.length > 6
-                  ? 250
-                  : filteredData?.length * 40 + 10
+                ? filteredData?.length >= 6
+                  ? 260
+                  : searchable
+                  ? filteredData?.length * 40 + 70
+                  : filteredData?.length * 40 + 20
                 : 0
             }px`,
           }}
-          className={`absolute rounded-[8px] w-full bg-[white] shadow border-[1px] duration-100 overflow-hidden ${
-            filteredData?.length > 6 && "overflow-y-scroll showScrollVert"
-          } ${drop ? `top-[50px] z-[1] py-[5px]` : "top-[40px] z-[-2] py-0"}`}
+          className={`absolute w-full bg-[white] shadow border-[1px] flex flex-col ${
+            searchable && "gap-y-[10px]"
+          } duration-100 overflow-hidden ${
+            filteredData?.length >= 6 && "overflow-y-scroll showScrollVert"
+          } ${
+            drop
+              ? `z-[1] py-[10px] ${
+                  notInputStyle ? "top-[45px]" : "top-[55px] max-tiny:top-[45px] rounded-b-[8px]"
+                }`
+              : "top-[40px] z-[-2] py-0"
+          }`}
         >
-          {filteredData?.map((item: any, index: any) => (
-            <p
-              key={index}
-              onClick={() => {
-                setValue(item.name || item.ProdSaxeobaName);
-                setDrop(false);
-              }}
-              className={`px-[10px] flex items-center w-full h-[40px] text-[13px] truncate  cursor-pointer duration-100 select-none ${
-                (item.name == value || item.ProdSaxeobaName && item.ProdSaxeobaName == value) ? "bg-gray-200" : "hover:bg-gray-300"
-              } ${index % 2 === 0 ? "bg-[#F5F7FC]" : ""}`}
-            >
-              {item.name || item.ProdSaxeobaName}
-            </p>
-          ))}
+          {searchable && (
+            <div className="h-[40px] shrink-0 shadow mx-[5px] px-[8px] rounded-[5px] bg-white sticky top-0">
+              <input
+                ref={inputRef}
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="ძებნა.."
+                className={`truncate select-none outline-none h-full text-[13px] bg-transparent ${
+                  icon ? "w-[calc(100%-40px)]" : "w-full"
+                }`}
+              />
+            </div>
+          )}
+          <div>
+            {filteredData?.map((item: any, index: any) => (
+              <p
+                key={index}
+                onClick={() => {
+                  setValue((prev: any) =>
+                    item.name
+                      ? prev === item.name
+                        ? ""
+                        : item.name
+                      : prev === item.ProdSaxeobaName
+                      ? ""
+                      : item.ProdSaxeobaName
+                  );
+                  setSearchValue("");
+                  setDrop(false);
+                }}
+                className={`px-[10px] flex items-center w-full h-[40px] text-[13px] truncate  cursor-pointer duration-100 select-none ${
+                  item.name == value ||
+                  (item.ProdSaxeobaName && item.ProdSaxeobaName == value)
+                    ? "bg-gray-400"
+                    : "hover:bg-gray-300"
+                } ${index % 2 === 0 ? "bg-[#F5F7FC]" : ""}`}
+              >
+                {item.name || item.ProdSaxeobaName}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </div>

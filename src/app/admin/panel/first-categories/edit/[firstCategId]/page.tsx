@@ -17,6 +17,8 @@ import { FaTrashCan } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
 import DotsLoader from "@/app/components/loaders/DotsLoader";
 import useSecondCategories from "../../../../../../../dataFetchs/secondCategoriesContext";
+import CheckBox from "@/app/components/Inputs/CheckBox";
+import Toggle2value from "@/app/components/buttons/toggle2value";
 
 export default function Page({ params }: { params: { firstCategId: string } }) {
   const router = useRouter();
@@ -33,10 +35,24 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
 
   const [oneFirstCategValues, setOneFirstCategValues] = useState<any>({});
   const [oneFirstCategRender, setOneFirstCategRender] = useState<any>();
-  const [editFirstCategValues, setEditFirstCategValues] = useState({
+  const [editFirstCategValues, setEditFirstCategValues] = useState<any>({
     image: "",
     sort: 0,
+
+    forma: 0,
+    zoma: 0,
+    saxeoba1: 0,
+    masala: 0,
+    moculoba: 0,
+    tipi: 0,
+    feri: 0,
+    xangrdzlivoba: 0,
+    tema: 0,
+    sqesi: 0,
+    raodenoba_shefutvashi: 0,
   });
+
+  const [filters, setFilters] = useState<any>([]);
 
   useEffect(() => {
     setLoaderEditFirstCateg(true);
@@ -45,6 +61,74 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
       .then((res) => {
         setOneFirstCategValues(res.data);
         setLoaderEditFirstCateg(false);
+        setFilters([
+          {
+            id: 1,
+            title: "ფორმა",
+            name: "forma",
+            status: res.data.forma,
+          },
+          {
+            id: 2,
+            title: "ზომა",
+            name: "zoma",
+            status: res.data.zoma,
+          },
+          {
+            id: 3,
+            title: "სახეობა1",
+            name: "saxeoba1",
+            status: res.data.saxeoba1,
+          },
+          {
+            id: 4,
+            title: "მასალა",
+            name: "masala",
+            status: res.data.masala,
+          },
+          {
+            id: 5,
+            title: "მოცულობა",
+            name: "moculoba",
+            status: res.data.moculoba,
+          },
+          {
+            id: 6,
+            title: "ტიპი",
+            name: "tipi",
+            status: res.data.tipi,
+          },
+          {
+            id: 7,
+            title: "ფერი",
+            name: "feri",
+            status: res.data.feri,
+          },
+          {
+            id: 8,
+            title: "ხანგრძლივობა",
+            name: "xangrdzlivoba",
+            status: res.data.xangrdzlivoba,
+          },
+          {
+            id: 9,
+            title: "თემა",
+            name: "tema",
+            status: res.data.tema,
+          },
+          {
+            id: 10,
+            title: "სქესი",
+            name: "sqesi",
+            status: res.data.sqesi,
+          },
+          {
+            id: 11,
+            title: "რაოდენობა შეფუთვაში",
+            name: "raodenoba_shefutvashi",
+            status: res.data.raodenoba_shefutvashi,
+          },
+        ]);
       })
       .catch((err) => {})
       .finally(() => {});
@@ -57,6 +141,31 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
     const formData = new FormData(form);
 
     setLoaderEditFirstCateg(true);
+
+    formData.append("forma", editFirstCategValues.forma == "კი" ? "1" : "0");
+    formData.append("zoma", editFirstCategValues.zoma == "კი" ? "1" : "0");
+    formData.append(
+      "saxeoba1",
+      editFirstCategValues.saxeoba1 == "კი" ? "1" : "0"
+    );
+    formData.append("masala", editFirstCategValues.masala == "კი" ? "1" : "0");
+    formData.append(
+      "moculoba",
+      editFirstCategValues.moculoba == "კი" ? "1" : "0"
+    );
+    formData.append("tipi", editFirstCategValues.tipi == "კი" ? "1" : "0");
+    formData.append("feri", editFirstCategValues.feri == "კი" ? "1" : "0");
+    formData.append(
+      "xangrdzlivoba",
+      editFirstCategValues.xangrdzlivoba == "კი" ? "1" : "0"
+    );
+    formData.append("tema", editFirstCategValues.tema == "კი" ? "1" : "0");
+    formData.append("sqesi", editFirstCategValues.sqesi == "კი" ? "1" : "0");
+    formData.append(
+      "raodenoba_shefutvashi",
+      editFirstCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
+    );
+
     axiosAdmin
       .post(`admin/category/saxeobebi/${params.firstCategId}`, formData)
       .then((res) => {
@@ -145,6 +254,24 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
               setAllValues={setEditFirstCategValues}
               error={false}
             />
+          </div>
+          <h1 className="text-[17px">ფილტრის კონფიგურაცია</h1>
+          <div className="w-[300px] flex flex-col gap-y-[5px]">
+            {filters.map((item: any) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center gap-[20px] "
+              >
+                <h4 className="text-[14px]">{item.title}</h4>
+                <Toggle2value
+                  name={`${item.name}`}
+                  title1="არა"
+                  title2="კი"
+                  firstValue={item.status ? "კი" : "არა"}
+                  setAllValues={setEditFirstCategValues}
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className="w-[200px]">

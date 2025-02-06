@@ -71,7 +71,7 @@ export default function EverySlider({
             >
               {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
                 (index: any) => (
-                  <div key={index} className="w-full h-[450px] rounded-[12px] ">
+                  <div key={index} className="w-full h-[450px] rounded-[12px] overflow-hidden">
                     <div className="loaderwave"></div>
                   </div>
                 )

@@ -21,7 +21,7 @@ export default function DropDownFilials({ stock }: any) {
           <CiLocationOn />
           <p className="text-[14px] max-tiny:text-[13px]">
             ხელმისაწვდომია{" "}
-            <span className="font-semibold">{stock.length || 0}</span> ფილიალში
+            <span className="font-semibold">{stock?.length || 0}</span> ფილიალში
           </p>
         </div>
         <FiChevronDown
@@ -36,21 +36,21 @@ export default function DropDownFilials({ stock }: any) {
         }`}
         style={{
           height:
-            stock.length > 0
-              ? stock.length > 4
+            stock?.length > 0
+              ? stock?.length > 4
                 ? droped
                   ? 120
                   : 0
                 : droped
-                ? stock.length * 30
+                ? stock?.length * 30
                 : 0
               : droped
               ? 40
               : 0,
-          overflowY: stock.length > 4 ? "scroll" : "hidden",
+          overflowY: stock?.length > 4 ? "scroll" : "hidden",
         }}
       >
-        {stock.length > 0 ? (
+        {stock?.length > 0 ? (
           stock?.map((item: any, index: any) => (
             <div
               key={index}

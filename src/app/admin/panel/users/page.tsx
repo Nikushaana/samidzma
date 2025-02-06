@@ -4,11 +4,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { axiosAdmin } from "../../../../../dataFetchs/AxiosToken";
 import { BsXLg } from "react-icons/bs";
 import { FaTrashCan } from "react-icons/fa6";
-import { GoPencil } from "react-icons/go";
+import { GoPencil, GoPerson } from "react-icons/go";
 import DotsLoader from "@/app/components/loaders/DotsLoader";
 import { useRouter } from "next/navigation";
 import { ContextForSharingStates } from "../../../../../dataFetchs/sharedStates";
 import ReactPaginate from "react-paginate";
+import Image from "next/image";
 
 export default function Page() {
   const {
@@ -71,6 +72,21 @@ export default function Page() {
       });
   };
 
+  const HandleChangeStatusAdminUsers = (id: any, status: any) => {
+    setAdminUsersDeleteLoader(id);
+    axiosAdmin
+      .post(`admin/user/${id}`, {
+        status: status ? 0 : 1,
+      })
+      .then((res) => {
+        setAllAdminUsersRender(res);
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setAdminUsersDeleteLoader("");
+      });
+  };
+
   return (
     <div className="flex flex-col gap-y-[10px] items-center relative">
       <h1 className="w-full">მომხმარებლები</h1>
@@ -87,13 +103,44 @@ export default function Page() {
               AdminUsersDeleteLoader === item.id && "opacity-[0.5] mx-[20px]"
             }`}
           >
-            <p className="select-none">{item.name + " " + item.surname}</p>
+            <div className="flex items-center gap-[10px]">
+              <div className="relative w-[40px] h-[40px] flex items-center justify-center rounded-full overflow-hidden shadow">
+                {item?.img ? (
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.img}`}
+                    alt={""}
+                    sizes="500px"
+                    fill
+                    style={{
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <GoPerson />
+                )}
+              </div>
+
+              <p className="select-none">{item.name + " " + item.surname}</p>
+            </div>
+
             {AdminUsersDeleteLoader === item.id ? (
               <div className="w-[50px] h-[50px] flex items-center justify-center">
                 <DotsLoader />
               </div>
             ) : (
               <div className="flex items-center gap-[10px]">
+                <div
+                  onClick={() => {
+                    HandleChangeStatusAdminUsers(item.id, item.status);
+                  }}
+                  className={`px-[30px] h-[40px] rounded-full flex gap-[15px] items-center justify-center text-gray-600 text-[18px] group hover:bg-white cursor-pointer shadow duration-100 ${
+                    item.status
+                      ? "hover:shadow-md shadow-[red]"
+                      : "hover:shadow-md shadow-myGreen"
+                  }`}
+                >
+                  <p>{item.status ? "დაბლოკვა" : "გააქტიურება"}</p>
+                </div>
                 <div
                   onClick={() => {
                     router.push(`/admin/panel/users/edit/${item.id}`);

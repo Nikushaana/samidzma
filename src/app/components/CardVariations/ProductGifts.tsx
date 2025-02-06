@@ -51,7 +51,7 @@ export default function ProductGifts({ item, ProdGiftsData }: any) {
       <div className="flex items-center gap-[20px] w-[75%]">
         <div className="w-[62px] h-[62px] shrink-0 rounded-[4px] overflow-hidden relative">
           {prodImagesLoader ? (
-            <div className="w-full h-full rounded-[12px] loaderwave"></div>
+            <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
           ) : prodImages?.ProductPictureByte ? (
             <Image
               src={`data:image/png;base64,${prodImages?.ProductPictureByte}`}

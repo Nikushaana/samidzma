@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { axiosUser } from "./AxiosToken";
 
 const useFrontCategories = () => {
-  const [FrontCategoriesData, setFrontCategoriesData] = useState<SaxeobebiCategType[]>([]);
+  // SaxeobebiCategType[]
+  const [FrontCategoriesData, setFrontCategoriesData] = useState<any>([]);
   const [FrontCategoriesLoader, setFrontCategoriesLoader] =
     useState<boolean>(true);
 

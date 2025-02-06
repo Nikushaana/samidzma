@@ -28,19 +28,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <WhatUSearch />
           <div
             onClick={() => {
-              if (pathname.split("/")[2] === "order-placement") {
-                router.push("/cart");
-              } else {
+              if (
+                pathname.split("/")[3] === "order-completed-successfully" ||
+                pathname.split("/")[2] !== "order-placement"
+              ) {
                 router.push("/");
+              } else {
+                router.push("/cart");
               }
             }}
             className="flex  items-center gap-[10px] cursor-pointer"
           >
             <MdArrowBackIos className="text-[28px]  max-lg:text-[16px]" />
             <h1 className="text-[28px]  max-lg:text-[14px]">
-              {pathname.split("/")[2] === "order-placement"
-                ? "ჩემი კალათა"
-                : "მთავარი"}
+              {pathname.split("/")[3] === "order-completed-successfully" ||
+              pathname.split("/")[2] !== "order-placement"
+                ? "მთავარი"
+                : "ჩემი კალათა"}
             </h1>
           </div>
           <div
@@ -48,14 +52,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               makeOrderLoader && "pointer-events-none opacity-[0.5]"
             }`}
           >
-            <div className="w-[calc(100%-470px)] max-lg:w-full flex flex-col gap-y-[20px]">
+            <div
+              className={`flex flex-col gap-y-[20px] overflow-hidden ${
+                pathname.split("/")[3] === "order-completed-successfully"
+                  ? "w-full"
+                  : "w-[calc(100%-470px)] max-lg:w-full "
+              }`}
+            >
               {children}
             </div>
-            <CartCalculator />
+            {pathname.split("/")[3] !== "order-completed-successfully" && (
+              <CartCalculator />
+            )}
           </div>
         </div>
 
-        {pathname.split("/")[2] !== "order-placement" && (
+        {(pathname.split("/")[3] === "order-completed-successfully" ||
+          (pathname.split("/")[1] === "cart" &&
+            pathname.split("/")[2] !== "order-placement")) && (
           <div className="rounded-[12px] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0">
             <EverySlider
               data={productsData}

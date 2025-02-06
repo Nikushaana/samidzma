@@ -36,7 +36,7 @@ export default function EachProductSlider({
         <div className="w-full flex items-center justify-center h-[calc(100%-97px)] ">
           {mainLoader ? (
             <div className="h-full w-full">
-              <div className="w-full h-full rounded-[12px] loaderwave"></div>
+              <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
             </div>
           ) : prodMainImages.length > 0 ? (
             <Swiper
@@ -88,7 +88,7 @@ export default function EachProductSlider({
               ).map((item: any, index: number) => (
                 <div
                   key={item}
-                  className="w-full h-full rounded-[12px] loaderwave"
+                  className="w-full h-full rounded-[12px] loaderwave overflow-hidden"
                 ></div>
               ))}
             </div>

@@ -10,9 +10,14 @@ export default function ImgUploader({
   setAllValues,
   multiple,
   title,
+  render,
 }: any) {
   const [files, setFiles] = useState<File[]>([]);
   const inputElement = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setFiles([]);
+  }, [render]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {

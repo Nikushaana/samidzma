@@ -84,50 +84,84 @@ export default function Page({ params }: { params: { productId: string } }) {
       .get(`front/product/${params.productId}`)
       .then((res) => {
         setOneProduct(res.data);
-        setOneProductLoader(false);
+        if (!variation && res.data?.variation_product_picture?.length > 0) {
+          window.history.replaceState(
+            null,
+            "/products",
+            `/products/${params.productId}?variation=${res.data?.variation_product_picture[0]?.ProductCode}`
+          );
+        }
       })
       .catch((err) => {})
       .finally(() => {});
   }, [params.productId]);
 
-  // get active variation images
-  useEffect(() => {
-    if (variation ? variation : params.productId) {
-      setVariationImagesLoader(true);
-      axiosUser
-        .get(
-          `front/productPictureAll?ProdCode=${
-            variation ? variation : params.productId
-          }`
-        )
-        .then((res) => {
-          setVariationImages(res.data);
-          setVariationImagesLoader(false);
-        })
-        .catch((err) => {})
-        .finally(() => {});
-    }
-  }, [params.productId, variation]);
-  // get active variation images
+  // // get active variation images
+  // useEffect(() => {
+  //   if (oneProduct && (params.productId || variation)) {
+  //     setVariationImagesLoader(true);
+  //     axiosUser
+  //       .get(
+  //         `front/productPictureAll?ProdCode=${
+  //           variation ? variation : params.productId
+  //         }`
+  //       )
+  //       .then((res) => {
+  //         setVariationImages(res.data);
+  //         setVariationImagesLoader(false);
+  //         setOneProductLoader(false);
+  //       })
+  //       .catch((err) => {})
+  //       .finally(() => {});
+  //     // get active variation images
 
-  // get product stock
+  //     // get product stock
+  //     axiosUser
+  //       .get(
+  //         `front/productNashti?ProdCode=${
+  //           variation ? variation : params.productId
+  //         }`
+  //       )
+  //       // &StoreCode=20
+  //       .then((res) => {
+  //         setProdStock(res.data.StoreProdNashtebi[0].ProdNashtebi[0].Nashti);
+  //       })
+  //       .catch((err) => {})
+  //       .finally(() => {});
+  //   }
+  // }, [params.productId, oneProduct, variation]);
+  // // get product stock
+
   useEffect(() => {
-    if (variation ? variation : params.productId) {
-      axiosUser
-        .get(
-          `front/productNashti?ProdCode=${
-            variation ? variation : params.productId
-          }`
-        )
-        // &StoreCode=20
-        .then((res) => {
-          setProdStock(res.data.StoreProdNashtebi[0].ProdNashtebi[0].Nashti);
-        })
-        .catch((err) => {})
-        .finally(() => {});
-    }
-  }, [params.productId, variation]);
-  // get product stock
+    const fetchProductData = async () => {
+      if (oneProduct && (params.productId || variation)) {
+        setVariationImagesLoader(true);
+
+        try {
+          const prodCode = variation || params.productId;
+
+          const [imagesResponse, stockResponse] = await Promise.all([
+            axiosUser.get(`front/productPictureAll?ProdCode=${prodCode}`),
+            axiosUser.get(`front/productNashti?ProdCode=${prodCode}`),
+          ]);
+
+          setVariationImages(imagesResponse.data);
+          const stockData =
+            stockResponse.data?.StoreProdNashtebi?.[0]?.ProdNashtebi?.[0]
+              ?.Nashti;
+          if (stockData !== undefined) {
+            setProdStock(stockData);
+          }
+        } catch (error) {
+        } finally {
+          setVariationImagesLoader(false);
+          setOneProductLoader(false);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [params.productId, oneProduct, variation]);
 
   // add in cart
   const HandleAddCart = () => {
@@ -281,7 +315,7 @@ export default function Page({ params }: { params: { productId: string } }) {
             </div>
             <div className="w-[55%] max-tiny:w-full">
               {oneProductLoader ? (
-                <div className="w-full h-full rounded-[12px] loaderwave"></div>
+                <div className="w-full h-full rounded-[12px] overflow-hidden loaderwave"></div>
               ) : (
                 <div className="flex flex-col gap-y-[25px] p-[18px] rounded-[12px] bg-white w-full h-full">
                   <div className="flex items-center gap-[5px] max-tiny:hidden">
@@ -595,7 +629,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div
                           key={index}
-                          className="w-full h-[450px] rounded-[12px] "
+                          className="w-full h-[450px] rounded-[12px] overflow-hidden"
                         >
                           <div className="loaderwave"></div>
                         </div>
@@ -617,7 +651,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div
                           key={index}
-                          className="w-full h-[450px] rounded-[12px] "
+                          className="w-full h-[450px] rounded-[12px] overflow-hidden"
                         >
                           <div className="loaderwave"></div>
                         </div>

@@ -40,7 +40,7 @@ export default function RecomendedCardsPopUp() {
   const [variationProdId, setVariationProdId] = useState(
     openRecomendedPopUp?.split("?")[1]
   );
-
+  
   useEffect(() => {
     setMainProdId(openRecomendedPopUp?.split("?")[0]);
     setVariationProdId(openRecomendedPopUp?.split("?")[1]);
@@ -76,7 +76,11 @@ export default function RecomendedCardsPopUp() {
       .get(`front/product/${mainProdId}`)
       .then((res) => {
         setOneProduct(res.data);
-        setOneProductLoader(false);
+        // setOneProductLoader(false);
+
+        if (!variationProdId && res.data?.variation_product_picture?.length > 0) {
+          setVariationProdId(res.data?.variation_product_picture[0]?.ProductCode)
+        }
       })
       .catch((err) => {})
       .finally(() => {});
@@ -84,7 +88,8 @@ export default function RecomendedCardsPopUp() {
 
   // get active variation images
   useEffect(() => {
-    if (variationProdId ? variationProdId : mainProdId) {
+    if (oneProduct ) {
+      // && (variationProdId || mainProdId)
       setVariationImagesLoader(true);
       axiosUser
         .get(
@@ -97,14 +102,16 @@ export default function RecomendedCardsPopUp() {
           setVariationImagesLoader(false);
         })
         .catch((err) => {})
-        .finally(() => {});
+        .finally(() => {
+          setOneProductLoader(false);
+        });
     }
-  }, [mainProdId, variationProdId]);
+  }, [variationProdId, oneProduct]);
   // get active variation images
 
   // get product stock
   useEffect(() => {
-    if (variationProdId ? variationProdId : mainProdId) {
+    if (oneProduct) {
       axiosUser
         .get(
           `front/productNashti?ProdCode=${
@@ -118,7 +125,7 @@ export default function RecomendedCardsPopUp() {
         .catch((err) => {})
         .finally(() => {});
     }
-  }, [mainProdId, variationProdId]);
+  }, [oneProduct, variationProdId]);
   // get product stock
 
   // add in cart
@@ -165,6 +172,7 @@ export default function RecomendedCardsPopUp() {
           "SamiDzma-cart",
           JSON.stringify(CartLocalStorageData)
         );
+        setOpenRecomendedPopUp(null);
         setRenderCart(new Date());
         setIsInCart(true);
 
@@ -202,7 +210,7 @@ export default function RecomendedCardsPopUp() {
 
   return (
     <div
-      className={`fixed top-0 left-0 flex items-center justify-center w-[100vw] h-[100vh] ${
+      className={`fixed top-0 left-0 flex items-center justify-center w-[100vw] h-[100vh] px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] ${
         openRecomendedPopUp
           ? "z-[20] opacity-1 duration-100"
           : "z-[-20] opacity-0 duration-150"
@@ -217,7 +225,7 @@ export default function RecomendedCardsPopUp() {
         }`}
       ></div>
       <div
-        className={`max-w-[1920px] mx-[200px] max-2xl:mx-[90px] min-h-[555px] max-h-[90vh] overflow-y-scroll notshowScrollVert overflow-x-hidden max-lg:mx-[90px] max-tiny:mx-[25px] w-full bg-[#EAEDEE] p-[16px] flex gap-[26px] max-tiny:flex-col max-lg:gap-[16px] rounded-[12px]`}
+        className={`max-w-[1920px] min-h-[555px] max-h-[90vh] overflow-y-scroll notshowScrollVert overflow-x-hidden w-full bg-[#EAEDEE] p-[16px] flex gap-[26px] max-tiny:flex-col max-lg:gap-[16px] rounded-[12px]`}
       >
         <div className="w-[45%] max-tiny:w-full flex">
           <EachProductSlider
@@ -237,7 +245,7 @@ export default function RecomendedCardsPopUp() {
 
         <div className="w-[55%] max-tiny:w-full">
           {oneProductLoader ? (
-            <div className="w-full h-full rounded-[12px] loaderwave"></div>
+            <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
           ) : (
             <div className="flex flex-col gap-y-[25px] p-[18px] max-tiny:p-[10px] rounded-[12px] bg-white w-full h-full">
               <div className="flex items-center gap-[5px] ">

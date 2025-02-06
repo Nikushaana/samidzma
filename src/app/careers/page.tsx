@@ -209,6 +209,7 @@ export default function Page() {
                 name="vacancy_id"
                 setAllValues={setSendVacancyCvValues}
                 render={sendVacancyCvRender}
+                searchable={true}
                 error={errors.vacancy_id}
               />
               <TextArea1
@@ -233,7 +234,7 @@ export default function Page() {
               />
             </form>
           </div>
-          <div className="w-full h-full max-lg:max-h-[80vh] rounded-[12px] overflow-hidden bg-myBlack p-[30px] flex flex-col gap-y-[20px]">
+          <div className="w-full h-[700px] rounded-[12px] overflow-hidden bg-myBlack p-[30px] flex flex-col gap-y-[20px]">
             <VacancySlider />
           </div>
         </div>

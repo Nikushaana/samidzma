@@ -11,7 +11,7 @@ const SharingStatesContext = ({ children }: any) => {
   const screenWidth = useScreenWidth();
   const pathname = usePathname();
 
-  const [SearchPopUp, setSearchPopUp] = useState(false);
+  const [isCategoriesPopUp, setIsCategoriesPopUp] = useState(false);
   const [openRecomendedPopUp, setOpenRecomendedPopUp] = useState<number | null>(
     null
   );
@@ -38,15 +38,16 @@ const SharingStatesContext = ({ children }: any) => {
   const [userMenu, setUserMenu] = useState<boolean>(true);
 
   useEffect(() => {
-    if (burgerMenu) {
+    if (burgerMenu || isCategoriesPopUp) {
       document.body.classList.add("popup-open");
     } else {
       document.body.classList.remove("popup-open");
     }
-  }, [burgerMenu]);
+  }, [burgerMenu, isCategoriesPopUp]);
 
   useEffect(() => {
     setBurgerMenu(false);
+    setIsCategoriesPopUp(false)
   }, [pathname]);
 
   useEffect(() => {
@@ -99,10 +100,15 @@ const SharingStatesContext = ({ children }: any) => {
   ]);
 
   const [menuRoutes, setMenuRoutes] = useState([
+    // {
+    //   id: 1,
+    //   name: "პროდუქცია",
+    //   link: "products",
+    // },
     {
       id: 1,
-      name: "პროდუქცია",
-      link: "products",
+      name: "ყველა კატეგორია",
+      link: "all-category",
     },
     {
       id: 2,
@@ -126,34 +132,11 @@ const SharingStatesContext = ({ children }: any) => {
     },
   ]);
 
-  // context datas
-  const [sizes, setSizes] = useState([]);
-  const [gender, setGender] = useState([]);
-  const [style, setStyle] = useState([]);
-  const [color, setColor] = useState([]);
-
-  const fetchAllData = async () => {
-    try {
-      const [sizesResponse, genderResponse, styleResponse, colorResponse] =
-        await Promise.all([
-          axiosUser.get("front/size"),
-          axiosUser.get("front/sqesi"),
-          axiosUser.get("front/style"),
-          axiosUser.get("front/color"),
-        ]);
-
-      setSizes(sizesResponse.data);
-      setGender(genderResponse.data);
-      setStyle(styleResponse.data);
-      setColor(colorResponse.data);
-    } catch (error) {}
-  };
-
   return (
     <ContextForSharingStates.Provider
       value={{
-        SearchPopUp,
-        setSearchPopUp,
+        isCategoriesPopUp,
+        setIsCategoriesPopUp,
         openRecomendedPopUp,
         setOpenRecomendedPopUp,
         openPromoCodeInfoPopUp,
@@ -203,12 +186,6 @@ const SharingStatesContext = ({ children }: any) => {
         status,
         seen,
         menuRoutes,
-
-        sizes,
-        gender,
-        style,
-        color,
-        fetchAllData,
       }}
     >
       {children}

@@ -143,7 +143,6 @@ button {
   background: linear-gradient(90deg, #f5f7fc, #e7e7e7, #f5f7fc);
   background-size: 200% 100%;
   animation: wave 3s linear infinite;
-  border-radius: 10px;
 }
 
 body.popup-open {

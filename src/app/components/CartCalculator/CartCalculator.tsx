@@ -133,6 +133,19 @@ export default function CartCalculator() {
 
   const HandleMakeOrder = () => {
     setMakeOrderLoader(true);
+    localStorage.setItem(
+      "SamiDzma-order-placement-details",
+      JSON.stringify({
+        phone:
+          orderPlacementValues.phone &&
+          orderPlacementValues?.phone?.replace(/\s/g, ""),
+        name: orderPlacementValues.name,
+        email: orderPlacementValues.email,
+        is_delivery: orderPlacementValues.is_delivery,
+
+        pay_method: orderPlacementValues.pay_method,
+      })
+    );
     axiosUser
       .post(`front/order`, {
         order_details: orderPlacementValues.order_details,
@@ -183,14 +196,15 @@ export default function CartCalculator() {
         setAlertStatus(true);
         setAlertText("შეკვეთა წარმატებით შესრულდა");
 
-        if (res.data.comment === "payment_method-CASH,") {
-          router.push("/");
+        if (res.data.comment == "payment_method-CASH,") {
+          router.push("/cart/order-placement/order-completed-successfully");
         } else {
           window.location.replace(res.data);
         }
 
         localStorage.setItem("SamiDzma-cart", "[]");
         localStorage.setItem("SamiDzma-favorites", "[]");
+        localStorage.removeItem("SamiDzma-order-placement-details");
       })
       .catch((err) => {
         setAlertShow(true);

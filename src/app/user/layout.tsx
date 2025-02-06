@@ -197,7 +197,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <div className="flex items-center gap-[10px] justify-between w-full max-tiny:bg-white max-tiny:rounded-[12px] max-tiny:p-[10px]">
-              <div className="h-[114px] max-lg:h-[96px] max-tiny:h-[53px] aspect-square rounded-full bg-[#EEEEEE] flex items-center justify-center text-[55px] max-tiny:text-[30px] text-white">
+              <div className="relative h-[114px] max-lg:h-[96px] max-tiny:h-[53px] aspect-square rounded-full overflow-hidden bg-[#EEEEEE] flex items-center justify-center text-[55px] max-tiny:text-[30px] text-white">
                 {user?.img ? (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_API_URL}/${user?.img}`}
@@ -212,7 +212,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <GoPerson />
                 )}
               </div>
-              <div className="bg-myYellow flex flex-col items-center rounded-[12px] py-[20px] max-tiny:py-[10px] px-[40px] max-tiny:px-[20px]">
+              <div className="bg-myYellow flex flex-col items-center rounded-[12px] py-[20px] max-tiny:py-[10px] px-[40px] max-tiny:px-[10px]">
                 <p className="text-[14px]">ბონუსები</p>
                 <h1 className="text-[34px] max-tiny:text-[24px]">
                   {user?.points || 0}₾

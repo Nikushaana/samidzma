@@ -21,7 +21,7 @@ export default function VacancySlider() {
     <div className="w-full h-full relative">
       {vacancyLoader ? (
         <p className="text-white">ვაკანსიები იძებნება..</p>
-      ) : (
+      ) : vacancyData.length > 0 ?
         <Swiper
           modules={[Autoplay, EffectFade, Grid, Pagination]}
           slidesPerView={1}
@@ -56,7 +56,7 @@ export default function VacancySlider() {
             </SwiperSlide>
           ))}
         </Swiper>
-      )}
+      : <p className="text-white">ვაკანსიები არ არსებობს</p>}
     </div>
   );
 }

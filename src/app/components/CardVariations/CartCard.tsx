@@ -107,14 +107,14 @@ export default function CartCard({
                 sizes="500px"
                 fill
                 style={{
-                  objectFit: "cover",
+                  objectFit: "contain",
                 }}
               />
             ) : (
               <p className="text-center text-[14px]">ფოტო არ არსებობს</p>
             )
           ) : prodImagesLoader ? (
-            <div className="w-full h-full rounded-[12px] loaderwave"></div>
+            <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
           ) : prodImages?.ProductPictureByte ? (
             <Image
               src={`data:image/png;base64,${prodImages?.ProductPictureByte}`}

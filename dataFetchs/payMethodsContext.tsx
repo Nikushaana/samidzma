@@ -23,17 +23,17 @@ const usePaymethods = () => {
           {
             id: 2,
             pay_method: "BOG",
-            name: "საქართველოს ბანკი",
+            name: "ბარათით გადახდა",
             status: res.data.BOG,
           },
+          // {
+          //   id: 3,
+          //   pay_method: "TBC",
+          //   name: "თიბისი ბანკი",
+          //   status: res.data.TBC,
+          // },
           {
             id: 3,
-            pay_method: "TBC",
-            name: "თიბისი ბანკი",
-            status: res.data.TBC,
-          },
-          {
-            id: 4,
             pay_method: "UNIPAY",
             name: "UNIPAY",
             status: res.data.UNIPAY,

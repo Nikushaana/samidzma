@@ -92,7 +92,7 @@ export default function Page() {
         <div className="grid grid-cols-4 max-lg:grid-cols-2 max-tiny:grid-cols-1 gap-[20px]">
           {blogLoader
             ? [1, 2, 3, 4, 5, 6, 7, 8].map((item: any, index: number) => (
-                <div key={item} className="w-full h-[450px] rounded-[12px] ">
+                <div key={item} className="w-full h-[450px] rounded-[12px] overflow-hidden">
                   <div className="loaderwave"></div>
                 </div>
               ))

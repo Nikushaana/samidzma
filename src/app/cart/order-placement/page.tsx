@@ -31,6 +31,25 @@ export default function Page() {
 
   const { payMethodData } = usePaymethods();
 
+  const [samiDzmaOrderPlacementDetails, setSamiDzmaOrderPlacementDetails] =
+    useState<any>({});
+
+  useEffect(() => {
+    const getSamiDzmaOrderPlacementDetails = localStorage.getItem(
+      "SamiDzma-order-placement-details"
+    );
+    if (getSamiDzmaOrderPlacementDetails) {
+      const parsedDetails = JSON.parse(getSamiDzmaOrderPlacementDetails);
+
+      setSamiDzmaOrderPlacementDetails((prev: any) => ({
+        ...prev,
+        phone: parsedDetails.phone || "",
+        name: parsedDetails.name || "",
+        email: parsedDetails.email || "",
+      }));
+    }
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-y-[20px]">
       <div className="p-[30px] max-lg:p-[20px] pt-[20px] rounded-[12px] bg-white flex flex-col gap-y-[20px]">
@@ -68,6 +87,16 @@ export default function Page() {
               placeholder="+995 5-- --- ---"
               type="text"
               isNumber={true}
+              firstValue={
+                samiDzmaOrderPlacementDetails.phone
+                  ? samiDzmaOrderPlacementDetails.phone
+                      .replace(/[^0-9]/g, "")
+                      .replace(/\s/g, "")
+                      .replace(/(.{3})/g, "$1 ")
+                      .trim()
+                      .slice(0, 11)
+                  : ""
+              }
               name="phone"
               setAllValues={setOrderPlacementValues}
             />
@@ -77,6 +106,7 @@ export default function Page() {
             <Input1
               placeholder="Mark"
               type="text"
+              firstValue={samiDzmaOrderPlacementDetails.name || ""}
               name="name"
               setAllValues={setOrderPlacementValues}
             />
@@ -86,16 +116,12 @@ export default function Page() {
             <Input1
               placeholder="emailmax@gmai.com"
               type="text"
+              firstValue={samiDzmaOrderPlacementDetails.email || ""}
               name="email"
               setAllValues={setOrderPlacementValues}
             />
           </div>
         </div>
-
-        <GreenButton
-          name="გაგრძელება"
-          style="h-[56px] max-tiny:h-[48px] max-w-[200px] max-tiny:max-w-none max-tiny:w-full self-center text-[18px]"
-        />
       </div>
       <div className="p-[30px] max-lg:p-[20px] pt-[20px] rounded-[12px] bg-white flex flex-col gap-y-[20px]">
         <h1 className="text-[22px]">2. მიტანის მეთოდი</h1>
@@ -240,11 +266,6 @@ export default function Page() {
             )}
           </div>
         </div>
-
-        <GreenButton
-          name="გაგრძელება"
-          style="h-[56px] max-tiny:h-[48px] max-w-[200px] max-tiny:max-w-none max-tiny:w-full self-center text-[18px]"
-        />
       </div>
       <div className="p-[30px] max-lg:p-[20px] pt-[20px] rounded-[12px] bg-white flex flex-col gap-y-[20px]">
         <h1 className="text-[22px]">3. გადახდის მეთოდი</h1>
@@ -293,10 +314,6 @@ export default function Page() {
             </p>
           )}
         </div>
-        <GreenButton
-          name="გაგრძელება"
-          style="h-[56px] max-tiny:h-[48px] max-w-[200px] max-tiny:max-w-none max-tiny:w-full self-center text-[18px]"
-        />
       </div>
     </div>
   );

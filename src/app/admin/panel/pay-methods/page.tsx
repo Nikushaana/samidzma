@@ -17,32 +17,7 @@ export default function Page() {
     ContextForSharingStates
   );
 
-  const [payMethodData, setPayMethodData] = useState([
-    {
-      id: 1,
-      pay_method: "CASH",
-      name: "ნაღდი ანგარიშსწორება",
-      status: 0,
-    },
-    {
-      id: 2,
-      pay_method: "BOG",
-      name: "საქართველოს ბანკი",
-      status: 0,
-    },
-    {
-      id: 3,
-      pay_method: "TBC",
-      name: "თიბისი ბანკი",
-      status: 0,
-    },
-    {
-      id: 4,
-      pay_method: "UNIPAY",
-      name: "UNIPAY",
-      status: 0,
-    },
-  ]);
+  const [payMethodData, setPayMethodData] = useState<any>([]);
 
   const [allPaymethodsLoader, setAllPaymethodsLoader] = useState<boolean>(true);
   const [allPaymethodsId, setAllPaymethodsId] = useState<any>();
@@ -69,17 +44,17 @@ export default function Page() {
           {
             id: 2,
             pay_method: "BOG",
-            name: "საქართველოს ბანკი",
+            name: "ბარათით გადახდა",
             status: res.data.BOG,
           },
+          // {
+          //   id: 3,
+          //   pay_method: "TBC",
+          //   name: "თიბისი ბანკი",
+          //   status: res.data.TBC,
+          // },
           {
             id: 3,
-            pay_method: "TBC",
-            name: "თიბისი ბანკი",
-            status: res.data.TBC,
-          },
-          {
-            id: 4,
             pay_method: "UNIPAY",
             name: "UNIPAY",
             status: res.data.UNIPAY,

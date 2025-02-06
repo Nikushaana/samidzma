@@ -13,6 +13,7 @@ import { ContextForSharingStates } from "../../../../../../../../../dataFetchs/s
 import { axiosAdmin } from "../../../../../../../../../dataFetchs/AxiosToken";
 import useFirstCategories from "../../../../../../../../../dataFetchs/firstCategoriesContext";
 import useSecondCategories from "../../../../../../../../../dataFetchs/secondCategoriesContext";
+import Toggle2value from "@/app/components/buttons/toggle2value";
 
 export default function Page({ params }: { params: { thirdCategId: string } }) {
   const router = useRouter();
@@ -28,10 +29,24 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
     useState<boolean>(true);
 
   const [oneThirdCategValues, setOneThirdCategValues] = useState<any>({});
-  const [editThirdCategValues, setEditThirdCategValues] = useState({
+  const [editThirdCategValues, setEditThirdCategValues] = useState<any>({
     image: "",
     sort: "",
+
+    forma: 0,
+    zoma: 0,
+    saxeoba1: 0,
+    masala: 0,
+    moculoba: 0,
+    tipi: 0,
+    feri: 0,
+    xangrdzlivoba: 0,
+    tema: 0,
+    sqesi: 0,
+    raodenoba_shefutvashi: 0,
   });
+
+  const [filters, setFilters] = useState<any>([]);
 
   useEffect(() => {
     setLoaderEditThirdCateg(true);
@@ -40,6 +55,74 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
       .then((res) => {
         setOneThirdCategValues(res.data);
         setLoaderEditThirdCateg(false);
+        setFilters([
+          {
+            id: 1,
+            title: "ფორმა",
+            name: "forma",
+            status: res.data.forma,
+          },
+          {
+            id: 2,
+            title: "ზომა",
+            name: "zoma",
+            status: res.data.zoma,
+          },
+          {
+            id: 3,
+            title: "სახეობა1",
+            name: "saxeoba1",
+            status: res.data.saxeoba1,
+          },
+          {
+            id: 4,
+            title: "მასალა",
+            name: "masala",
+            status: res.data.masala,
+          },
+          {
+            id: 5,
+            title: "მოცულობა",
+            name: "moculoba",
+            status: res.data.moculoba,
+          },
+          {
+            id: 6,
+            title: "ტიპი",
+            name: "tipi",
+            status: res.data.tipi,
+          },
+          {
+            id: 7,
+            title: "ფერი",
+            name: "feri",
+            status: res.data.feri,
+          },
+          {
+            id: 8,
+            title: "ხანგრძლივობა",
+            name: "xangrdzlivoba",
+            status: res.data.xangrdzlivoba,
+          },
+          {
+            id: 9,
+            title: "თემა",
+            name: "tema",
+            status: res.data.tema,
+          },
+          {
+            id: 10,
+            title: "სქესი",
+            name: "sqesi",
+            status: res.data.sqesi,
+          },
+          {
+            id: 11,
+            title: "რაოდენობა შეფუთვაში",
+            name: "raodenoba_shefutvashi",
+            status: res.data.raodenoba_shefutvashi,
+          },
+        ]);
       })
       .catch((err) => {})
       .finally(() => {});
@@ -51,6 +134,31 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
     const formData = new FormData(form);
 
     setLoaderEditThirdCateg(true);
+
+    formData.append("forma", editThirdCategValues.forma == "კი" ? "1" : "0");
+    formData.append("zoma", editThirdCategValues.zoma == "კი" ? "1" : "0");
+    formData.append(
+      "saxeoba1",
+      editThirdCategValues.saxeoba1 == "კი" ? "1" : "0"
+    );
+    formData.append("masala", editThirdCategValues.masala == "კი" ? "1" : "0");
+    formData.append(
+      "moculoba",
+      editThirdCategValues.moculoba == "კი" ? "1" : "0"
+    );
+    formData.append("tipi", editThirdCategValues.tipi == "კი" ? "1" : "0");
+    formData.append("feri", editThirdCategValues.feri == "კი" ? "1" : "0");
+    formData.append(
+      "xangrdzlivoba",
+      editThirdCategValues.xangrdzlivoba == "კი" ? "1" : "0"
+    );
+    formData.append("tema", editThirdCategValues.tema == "კი" ? "1" : "0");
+    formData.append("sqesi", editThirdCategValues.sqesi == "კი" ? "1" : "0");
+    formData.append(
+      "raodenoba_shefutvashi",
+      editThirdCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
+    );
+
     axiosAdmin
       .post(`admin/category/productType/${params.thirdCategId}`, formData)
       .then((res) => {
@@ -113,6 +221,24 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
             setAllValues={setEditThirdCategValues}
             error={false}
           />
+        </div>
+        <h1 className="text-[17px">ფილტრის კონფიგურაცია</h1>
+        <div className="w-[300px] flex flex-col gap-y-[5px]">
+          {filters.map((item: any) => (
+            <div
+              key={item.id}
+              className="flex justify-between items-center gap-[20px] "
+            >
+              <h4 className="text-[14px]">{item.title}</h4>
+              <Toggle2value
+                name={`${item.name}`}
+                title1="არა"
+                title2="კი"
+                firstValue={item.status ? "კი" : "არა"}
+                setAllValues={setEditThirdCategValues}
+              />
+            </div>
+          ))}
         </div>
       </div>
       <div className="w-[200px]">

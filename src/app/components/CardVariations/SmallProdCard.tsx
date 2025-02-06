@@ -12,11 +12,11 @@ import { UserContext } from "../../../../dataFetchs/UserAxios";
 
 export default function SmallProdCard({ item }: any) {
   const router = useRouter();
-  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+  const { setOpenRecomendedPopUp, setAlertShow, setAlertStatus, setAlertText } = useContext(
     ContextForSharingStates
   );
   const { user } = useContext(UserContext);
-  
+
   const { setRenderCart, CartData, CartLocalStorageData } =
     useContext(CartAxiosContext);
 
@@ -54,52 +54,63 @@ export default function SmallProdCard({ item }: any) {
 
   // add in cart
   const HandleAddCart = () => {
-    if (user?.id) {
-      setAddCartLoader(true);
-      axiosUser
-        .post(`user/cart/`, {
-          product_id: item.ProdCode,
-          quantity: 1,
-          isComplete: 0,
-        })
-        .then((res) => {
+    if (item.ProductNameENG !== item.ProdCode) {
+      if (user?.id) {
+        setAddCartLoader(true);
+        axiosUser
+          .post(`user/cart/`, {
+            product_id: item.ProdCode,
+            quantity: 1,
+            isComplete: 0,
+          })
+          .then((res) => {
+            setAlertShow(true);
+            setAlertStatus(true);
+            setAlertText("კალათაში წარმატებით დაემატა");
+            setRenderCart(res);
+
+            setIsInCart(true);
+          })
+          .catch((err) => {
+            setAlertShow(true);
+            setAlertStatus(false);
+            setAlertText("კალათაში ვერ დაემატა!");
+          })
+          .finally(() => {
+            setAddCartLoader(false);
+          });
+      } else {
+        if (
+          !CartLocalStorageData.some(
+            (cartData: any) => cartData.product_id === item.ProdCode
+          )
+        ) {
+          CartLocalStorageData.push({
+            product_id: item.ProdCode,
+            quantity: 1,
+            isComplete: 0,
+          });
+          localStorage.setItem(
+            "SamiDzma-cart",
+            JSON.stringify(CartLocalStorageData)
+          );
+          setRenderCart(new Date());
+          setIsInCart(true);
+
           setAlertShow(true);
           setAlertStatus(true);
           setAlertText("კალათაში წარმატებით დაემატა");
-          setRenderCart(res);
-
-          setIsInCart(true);
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("კალათაში ვერ დაემატა!");
-        })
-        .finally(() => {
-          setAddCartLoader(false);
-        });
-    } else {
-      if (
-        !CartLocalStorageData.some(
-          (cartData: any) => cartData.product_id === item.ProdCode
-        )
-      ) {
-        CartLocalStorageData.push({
-          product_id: item.ProdCode,
-          quantity: 1,
-          isComplete: 0,
-        });
-        localStorage.setItem(
-          "SamiDzma-cart",
-          JSON.stringify(CartLocalStorageData)
-        );
-        setRenderCart(new Date());
-        setIsInCart(true);
-
-        setAlertShow(true);
-        setAlertStatus(true);
-        setAlertText("კალათაში წარმატებით დაემატა");
+        }
       }
+    } else {
+      setOpenRecomendedPopUp(
+        item.ProdAdditionalCode
+          ? `${item.ProdAdditionalCode}?${item.ProdCode}`
+          : item.ProdCode
+      );
+      setAlertShow(true);
+      setAlertStatus(true);
+      setAlertText("აირჩიე სასურველი ვარიაცია");
     }
   };
 
@@ -131,7 +142,7 @@ export default function SmallProdCard({ item }: any) {
         className="relative cursor-pointer w-full max-h-[150px] flex items-center justify-center aspect-[4/3] rounded-[4px] overflow-hidden"
       >
         {prodImagesLoader ? (
-          <div className="w-full h-full rounded-[12px] loaderwave"></div>
+          <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
         ) : prodImages?.ProductPictureByte ? (
           <Image
             src={`data:image/png;base64,${prodImages?.ProductPictureByte}`}

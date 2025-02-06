@@ -198,7 +198,7 @@ export default function Page() {
                   (item: any, index: number) => (
                     <div
                       key={item}
-                      className="w-full h-[574px] rounded-[12px] "
+                      className="w-full h-[574px] rounded-[12px] overflow-hidden"
                     >
                       <div className="loaderwave"></div>
                     </div>
@@ -239,7 +239,7 @@ export default function Page() {
                 //main container
                 containerClassName={`flex items-center gap-1`}
                 //single page number
-                pageLinkClassName={`w-[40px] h-[40px] text-md bg-gray-100 font-forh
+                pageLinkClassName={`w-[40px] h-[40px] text-md bg-white font-forh
                flex items-center justify-center rounded-full`}
                 //previous page number
                 previousLinkClassName={`hidden`}

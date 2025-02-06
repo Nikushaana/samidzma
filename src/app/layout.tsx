@@ -6,7 +6,6 @@ import Footer from "./components/footer/Footer";
 import SharingStatesContext from "../../dataFetchs/sharedStates";
 import AlertCust from "./components/AlertCust";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import SearchPopUp from "./components/popUps/SearchPopUp";
 import RecomendedCardsPopUp from "./components/popUps/RecomendedCardsPopUp";
 import UserAxiosContext from "../../dataFetchs/UserAxios";
 import WishListContext from "../../dataFetchs/wishListContext";
@@ -17,6 +16,7 @@ import ProductReviewPopUp from "./components/popUps/productReviewPopUp";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import BackgroundDesigns from "./components/decorationColumns/BackgroundDesigns";
+import CategoriesPopUp from "./components/popUps/CategoriesPopUp";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,7 +38,7 @@ export default function RootLayout({
             <UserAxiosContext>
               <WishListContext>
                 <CartContext>
-                  <div className="bg-[#f7f7f7] max-lg:bg-[#EAEDEE] overflow-hidden relative pt-[30px]">
+                  <div className="bg-[#f7f7f7] max-lg:bg-[#eaedee] overflow-hidden relative pt-[30px]">
                     <div className="fixed top-0 w-[100vw] bg-myGreen text-white z-[10] h-[30px] pointer-events-none">
                       <Marquee>საიტი მუშაობს ბეტა რეჟიმში</Marquee>
                     </div>
@@ -47,7 +47,7 @@ export default function RootLayout({
                     {children}
                     <Footer />
                     <BurgerMenu />
-                    <SearchPopUp />
+                    <CategoriesPopUp />
                     <RecomendedCardsPopUp />
                     <PromoCodeInfoPopUp />
                     <ProductReviewPopUp />

@@ -17,9 +17,8 @@ import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 export default function Header() {
   const { user } = useContext(UserContext);
 
-  const { setBurgerMenu, menuRoutes } = useContext(
-    ContextForSharingStates
-  );
+  const { setBurgerMenu, menuRoutes, isCategoriesPopUp, setIsCategoriesPopUp } =
+    useContext(ContextForSharingStates);
   const { WishListCounter, WishListLocalStorageData } =
     useContext(WishListAxiosContext);
 
@@ -33,6 +32,7 @@ export default function Header() {
       <div
         className={`max-w-[1920px] w-full items-center justify-between py-[12px] pl-[340px] pr-[264px] max-lg:px-[90px] max-tiny:px-[25px] mb-[10px] ${
           pathname.split("/")[1] === "products" ||
+          pathname.split("/")[1] === "category" ||
           pathname.split("/")[1] === "catalog-for-set"
             ? "max-2xl:pl-[160px] max-2xl:pr-[90px]"
             : "max-2xl:pl-[220px] max-2xl:pr-[160px] max-1.5xl:pl-[200px]"
@@ -59,7 +59,9 @@ export default function Header() {
                 <li
                   key={item.id}
                   onClick={() => {
-                    if (item.link) {
+                    if (item.link == "all-category") {
+                      setIsCategoriesPopUp(true);
+                    } else {
                       router.push(
                         item.link === "favorites"
                           ? `/user/${item.link}`
@@ -70,7 +72,9 @@ export default function Header() {
                   className={`h-full rounded-full text-[14px] cursor-pointer flex items-center px-[25px] ${
                     item.name === "FAQ" && "max-1.5xl:hidden"
                   } ${
-                    item.link === "favorites"
+                    item.link === "all-category"
+                      ? isCategoriesPopUp && "bg-myGreen"
+                      : item.link === "favorites"
                       ? pathname.split("/")[2] === item.link
                         ? "bg-myGreen"
                         : ""

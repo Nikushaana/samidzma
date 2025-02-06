@@ -133,52 +133,63 @@ export default function HorizontalCard({ item, narrow }: any) {
 
   // add in cart
   const HandleAddCart = () => {
-    if (user?.id) {
-      setAddCartLoader(true);
-      axiosUser
-        .post(`user/cart/`, {
-          product_id: item.ProdCode,
-          quantity: cartProdQuant,
-          isComplete: 0,
-        })
-        .then((res) => {
+    if (item.ProductNameENG !== item.ProdCode) {
+      if (user?.id) {
+        setAddCartLoader(true);
+        axiosUser
+          .post(`user/cart/`, {
+            product_id: item.ProdCode,
+            quantity: cartProdQuant,
+            isComplete: 0,
+          })
+          .then((res) => {
+            setAlertShow(true);
+            setAlertStatus(true);
+            setAlertText("კალათაში წარმატებით დაემატა");
+            setRenderCart(res);
+
+            setIsInCart(true);
+          })
+          .catch((err) => {
+            setAlertShow(true);
+            setAlertStatus(false);
+            setAlertText("კალათაში ვერ დაემატა!");
+          })
+          .finally(() => {
+            setAddCartLoader(false);
+          });
+      } else {
+        if (
+          !CartLocalStorageData.some(
+            (cartData: any) => cartData.product_id === item.ProdCode
+          )
+        ) {
+          CartLocalStorageData.push({
+            product_id: item.ProdCode,
+            quantity: cartProdQuant,
+            isComplete: 0,
+          });
+          localStorage.setItem(
+            "SamiDzma-cart",
+            JSON.stringify(CartLocalStorageData)
+          );
+          setRenderCart(new Date());
+          setIsInCart(true);
+
           setAlertShow(true);
           setAlertStatus(true);
           setAlertText("კალათაში წარმატებით დაემატა");
-          setRenderCart(res);
-
-          setIsInCart(true);
-        })
-        .catch((err) => {
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("კალათაში ვერ დაემატა!");
-        })
-        .finally(() => {
-          setAddCartLoader(false);
-        });
-    } else {
-      if (
-        !CartLocalStorageData.some(
-          (cartData: any) => cartData.product_id === item.ProdCode
-        )
-      ) {
-        CartLocalStorageData.push({
-          product_id: item.ProdCode,
-          quantity: cartProdQuant,
-          isComplete: 0,
-        });
-        localStorage.setItem(
-          "SamiDzma-cart",
-          JSON.stringify(CartLocalStorageData)
-        );
-        setRenderCart(new Date());
-        setIsInCart(true);
-
-        setAlertShow(true);
-        setAlertStatus(true);
-        setAlertText("კალათაში წარმატებით დაემატა");
+        }
       }
+    } else {
+      setOpenRecomendedPopUp(
+        item.ProdAdditionalCode
+          ? `${item.ProdAdditionalCode}?${item.ProdCode}`
+          : item.ProdCode
+      );
+      setAlertShow(true);
+      setAlertStatus(true);
+      setAlertText("აირჩიე სასურველი ვარიაცია");
     }
   };
 
@@ -251,7 +262,7 @@ export default function HorizontalCard({ item, narrow }: any) {
             className="relative cursor-pointer aspect-[4/3] h-[207px] max-tiny:h-full flex items-center justify-center rounded-[4px] overflow-hidden"
           >
             {prodImagesLoader ? (
-              <div className="w-full h-full rounded-[12px] loaderwave"></div>
+              <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
             ) : prodImages?.ProductPictureByte ? (
               <Image
                 src={`data:image/png;base64,${prodImages?.ProductPictureByte}`}

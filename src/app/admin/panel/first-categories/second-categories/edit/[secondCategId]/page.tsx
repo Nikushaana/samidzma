@@ -17,6 +17,7 @@ import { BsXLg } from "react-icons/bs";
 import useFirstCategories from "../../../../../../../../dataFetchs/firstCategoriesContext";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import useSecondCategories from "../../../../../../../../dataFetchs/secondCategoriesContext";
+import Toggle2value from "@/app/components/buttons/toggle2value";
 
 export default function Page({
   params,
@@ -36,11 +37,25 @@ export default function Page({
   const [oneSecondCategsRender, setOneSecondCategsRender] = useState<any>();
 
   const [oneSecondCategValues, setOneSecondCategValues] = useState<any>({});
-  const [editSecondCategValues, setEditSecondCategValues] = useState({
+  const [editSecondCategValues, setEditSecondCategValues] = useState<any>({
     image: "",
     IdProdSaxeoba: "",
     sort: "",
+
+    forma: 0,
+    zoma: 0,
+    saxeoba1: 0,
+    masala: 0,
+    moculoba: 0,
+    tipi: 0,
+    feri: 0,
+    xangrdzlivoba: 0,
+    tema: 0,
+    sqesi: 0,
+    raodenoba_shefutvashi: 0,
   });
+
+  const [filters, setFilters] = useState<any>([]);
 
   useEffect(() => {
     setLoaderEditSecondCateg(true);
@@ -49,6 +64,74 @@ export default function Page({
       .then((res) => {
         setOneSecondCategValues(res.data);
         setLoaderEditSecondCateg(false);
+        setFilters([
+          {
+            id: 1,
+            title: "ფორმა",
+            name: "forma",
+            status: res.data.forma,
+          },
+          {
+            id: 2,
+            title: "ზომა",
+            name: "zoma",
+            status: res.data.zoma,
+          },
+          {
+            id: 3,
+            title: "სახეობა1",
+            name: "saxeoba1",
+            status: res.data.saxeoba1,
+          },
+          {
+            id: 4,
+            title: "მასალა",
+            name: "masala",
+            status: res.data.masala,
+          },
+          {
+            id: 5,
+            title: "მოცულობა",
+            name: "moculoba",
+            status: res.data.moculoba,
+          },
+          {
+            id: 6,
+            title: "ტიპი",
+            name: "tipi",
+            status: res.data.tipi,
+          },
+          {
+            id: 7,
+            title: "ფერი",
+            name: "feri",
+            status: res.data.feri,
+          },
+          {
+            id: 8,
+            title: "ხანგრძლივობა",
+            name: "xangrdzlivoba",
+            status: res.data.xangrdzlivoba,
+          },
+          {
+            id: 9,
+            title: "თემა",
+            name: "tema",
+            status: res.data.tema,
+          },
+          {
+            id: 10,
+            title: "სქესი",
+            name: "sqesi",
+            status: res.data.sqesi,
+          },
+          {
+            id: 11,
+            title: "რაოდენობა შეფუთვაში",
+            name: "raodenoba_shefutvashi",
+            status: res.data.raodenoba_shefutvashi,
+          },
+        ]);
       })
       .catch((err) => {})
       .finally(() => {});
@@ -58,36 +141,60 @@ export default function Page({
     e.preventDefault();
     setLoaderEditSecondCateg(true);
 
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-      formData.append(
-        "IdProdSaxeoba",
-        allFirstCategsData.find(
-          (item: any) =>
-            item.ProdSaxeobaName === editSecondCategValues.IdProdSaxeoba
-        )?.IdProdSaxeoba || ""
-      );
+    formData.append(
+      "IdProdSaxeoba",
+      allFirstCategsData.find(
+        (item: any) =>
+          item.ProdSaxeobaName === editSecondCategValues.IdProdSaxeoba
+      )?.IdProdSaxeoba || ""
+    );
 
-      axiosAdmin
-        .post(
-          `admin/category/productTypeGroupe/${params.secondCategId}`,
-          formData
-        )
-        .then((res) => {
-          router.push("/admin/panel/first-categories/second-categories");
-          setAlertShow(true);
-          setAlertStatus(true);
-          setAlertText("წარმატებით რედაქტირდა");
-          fetchSecondCategories();
-        })
-        .catch((err) => {
-          setLoaderEditSecondCateg(false);
-          setAlertShow(true);
-          setAlertStatus(false);
-          setAlertText("ვერ რედაქტირდა!");
-        })
-        .finally(() => {});
+    formData.append("forma", editSecondCategValues.forma == "კი" ? "1" : "0");
+    formData.append("zoma", editSecondCategValues.zoma == "კი" ? "1" : "0");
+    formData.append(
+      "saxeoba1",
+      editSecondCategValues.saxeoba1 == "კი" ? "1" : "0"
+    );
+    formData.append("masala", editSecondCategValues.masala == "კი" ? "1" : "0");
+    formData.append(
+      "moculoba",
+      editSecondCategValues.moculoba == "კი" ? "1" : "0"
+    );
+    formData.append("tipi", editSecondCategValues.tipi == "კი" ? "1" : "0");
+    formData.append("feri", editSecondCategValues.feri == "კი" ? "1" : "0");
+    formData.append(
+      "xangrdzlivoba",
+      editSecondCategValues.xangrdzlivoba == "კი" ? "1" : "0"
+    );
+    formData.append("tema", editSecondCategValues.tema == "კი" ? "1" : "0");
+    formData.append("sqesi", editSecondCategValues.sqesi == "კი" ? "1" : "0");
+    formData.append(
+      "raodenoba_shefutvashi",
+      editSecondCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
+    );
+
+    axiosAdmin
+      .post(
+        `admin/category/productTypeGroupe/${params.secondCategId}`,
+        formData
+      )
+      .then((res) => {
+        router.push("/admin/panel/first-categories/second-categories");
+        setAlertShow(true);
+        setAlertStatus(true);
+        setAlertText("წარმატებით რედაქტირდა");
+        fetchSecondCategories();
+      })
+      .catch((err) => {
+        setLoaderEditSecondCateg(false);
+        setAlertShow(true);
+        setAlertStatus(false);
+        setAlertText("ვერ რედაქტირდა!");
+      })
+      .finally(() => {});
   };
 
   // third categs
@@ -168,6 +275,24 @@ export default function Page({
               setAllValues={setEditSecondCategValues}
               error={false}
             />
+          </div>
+          <h1 className="text-[17px">ფილტრის კონფიგურაცია</h1>
+          <div className="w-[300px] flex flex-col gap-y-[5px]">
+            {filters.map((item: any) => (
+              <div
+                key={item.id}
+                className="flex justify-between items-center gap-[20px] "
+              >
+                <h4 className="text-[14px]">{item.title}</h4>
+                <Toggle2value
+                  name={`${item.name}`}
+                  title1="არა"
+                  title2="კი"
+                  firstValue={item.status ? "კი" : "არა"}
+                  setAllValues={setEditSecondCategValues}
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className="w-[200px]">
