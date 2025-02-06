@@ -83,7 +83,7 @@ export default function CategoriesPopUp() {
                 className="overflow-x-auto notShowScrollHor max-tiny:overflow-hidden mb-[5px]"
               >
                 <div className="flex items-start max-tiny:flex-wrap py-[5px] gap-[10px] ">
-                  {FrontCategoriesData.map((item, index: number) => (
+                  {FrontCategoriesData.map((item: any, index: number) => (
                     <p
                       key={item?.IdProdSaxeoba}
                       onClick={() => {

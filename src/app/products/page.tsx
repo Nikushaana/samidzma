@@ -29,284 +29,284 @@ import ReactPaginate from "react-paginate";
 import useFilter from "../../../dataFetchs/filtersContext";
 
 export default function Page() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
-  const pathname = usePathname();
-  const pagemounted = useRef(false);
-  const { blogData, blogLoader } = useBlog();
-  const { sizes, gender, style, color, filterLoader } = useFilter();
+  // const targetRef = useRef<HTMLDivElement>(null);
+  // const router = useRouter();
+  // const pathname = usePathname();
+  // const pagemounted = useRef(false);
+  // const { blogData, blogLoader } = useBlog();
+  // // const { sizes, gender, style, color, filterLoader } = useFilter();
 
-  const screenWidth = useScreenWidth();
+  // const screenWidth = useScreenWidth();
 
-  const [filterStatus, setFilterStatus] = useState(true);
+  // const [filterStatus, setFilterStatus] = useState(true);
 
-  useEffect(() => {
-    setFilterStatus(screenWidth >= 1025 ? true : false);
-  }, [screenWidth]);
+  // useEffect(() => {
+  //   setFilterStatus(screenWidth >= 1025 ? true : false);
+  // }, [screenWidth]);
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      targetRef.current &&
-      !(targetRef.current as HTMLDivElement).contains(event.target as Node)
-    ) {
-      if (screenWidth <= 1025) {
-        setFilterStatus(false);
-      }
-    }
-  };
+  // const handleClickOutside = (event: MouseEvent) => {
+  //   if (
+  //     targetRef.current &&
+  //     !(targetRef.current as HTMLDivElement).contains(event.target as Node)
+  //   ) {
+  //     if (screenWidth <= 1025) {
+  //       setFilterStatus(false);
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    if (screenWidth <= 1025) {
-      document.addEventListener("click", handleClickOutside);
-      return () => {
-        document.removeEventListener("click", handleClickOutside);
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (screenWidth <= 1025) {
+  //     document.addEventListener("click", handleClickOutside);
+  //     return () => {
+  //       document.removeEventListener("click", handleClickOutside);
+  //     };
+  //   }
+  // }, []);
 
-  const [displayVar, setdisplayVar] = useState([
-    {
-      id: 1,
-      icon: <BsGrid3X3GapFill />,
-    },
-    {
-      id: 2,
-      icon: <TfiLayoutGrid4Alt />,
-    },
-    {
-      id: 3,
-      icon: <PiRowsFill />,
-    },
-  ]);
+  // const [displayVar, setdisplayVar] = useState([
+  //   {
+  //     id: 1,
+  //     icon: <BsGrid3X3GapFill />,
+  //   },
+  //   {
+  //     id: 2,
+  //     icon: <TfiLayoutGrid4Alt />,
+  //   },
+  //   {
+  //     id: 3,
+  //     icon: <PiRowsFill />,
+  //   },
+  // ]);
 
-  const [activeVar, setactiveVar] = useState(1);
+  // const [activeVar, setactiveVar] = useState(1);
 
-  // product filter values
-  const [productsPageData, setProductsPageData] = useState<any>([]);
-  const [productsPagePreLoader, setProductsPagePreLoader] =
-    useState<boolean>(true);
-  const [productsPageLoader, setProductsPageLoader] = useState<boolean>(true);
+  // // product filter values
+  // const [productsPageData, setProductsPageData] = useState<any>([]);
+  // const [productsPagePreLoader, setProductsPagePreLoader] =
+  //   useState<boolean>(true);
+  // const [productsPageLoader, setProductsPageLoader] = useState<boolean>(true);
 
-  const [currentPage, setCurrentPage] = useState<any>(0);
-  const [prodwholenum, setProdwholenum] = useState<any>();
-  const [pageCount, setPageCount] = useState(0);
+  // const [currentPage, setCurrentPage] = useState<any>(0);
+  // const [prodwholenum, setProdwholenum] = useState<any>();
+  // const [pageCount, setPageCount] = useState(0);
 
-  const [filterValues, setFilterValues] = useState<prodFilterType>({
-    IdProdSaxeoba: "",
-    IdProdTypeGroup: "",
-    IdProdType: "",
+  // const [filterValues, setFilterValues] = useState<prodFilterType>({
+  //   IdProdSaxeoba: "",
+  //   IdProdTypeGroup: "",
+  //   IdProdType: "",
 
-    FeriCode: [],
-    StyleCode: [],
-    SqesiCode: [],
-    SizeCode: [],
+  //   FeriCode: [],
+  //   StyleCode: [],
+  //   SqesiCode: [],
+  //   SizeCode: [],
 
-    minPrice: 10,
-    maxPrice: 200000,
+  //   minPrice: 10,
+  //   maxPrice: 200000,
 
-    ProdSaxeobaName: "",
-    ProdSaxeobaDescription: "",
-  });
+  //   ProdSaxeobaName: "",
+  //   ProdSaxeobaDescription: "",
+  // });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilterValues((prev) => ({
-      ...prev,
-      [name]:
-        name === "minPrice" || name === "maxPrice"
-          ? value.replace(/[^0-9.]/g, "")
-          : value,
-    }));
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setFilterValues((prev) => ({
+  //     ...prev,
+  //     [name]:
+  //       name === "minPrice" || name === "maxPrice"
+  //         ? value.replace(/[^0-9.]/g, "")
+  //         : value,
+  //   }));
+  // };
 
-  // get from params
+  // // get from params
 
-  useEffect(() => {
-    if (pagemounted.current) return;
-    pagemounted.current = true;
+  // useEffect(() => {
+  //   if (pagemounted.current) return;
+  //   pagemounted.current = true;
 
-    const searchParams = new URLSearchParams(window.location.search);
-    const currentPageFromParams = searchParams.get("currentPage");
+  //   const searchParams = new URLSearchParams(window.location.search);
+  //   const currentPageFromParams = searchParams.get("currentPage");
 
-    const IdProdSaxeobaFromParams = searchParams.get("IdProdSaxeoba");
-    const IdProdTypeGroupFromParams = searchParams.get("IdProdTypeGroup");
-    const IdProdTypeFromParams = searchParams.get("IdProdType");
+  //   const IdProdSaxeobaFromParams = searchParams.get("IdProdSaxeoba");
+  //   const IdProdTypeGroupFromParams = searchParams.get("IdProdTypeGroup");
+  //   const IdProdTypeFromParams = searchParams.get("IdProdType");
 
-    const StyleCodeFromParams = searchParams.get("StyleCode");
-    const SqesiCodeFromParams = searchParams.get("SqesiCode");
-    const FeriCodeFromParams = searchParams.get("FeriCode");
-    const SizeCodeFromParams = searchParams.get("SizeCode");
+  //   const StyleCodeFromParams = searchParams.get("StyleCode");
+  //   const SqesiCodeFromParams = searchParams.get("SqesiCode");
+  //   const FeriCodeFromParams = searchParams.get("FeriCode");
+  //   const SizeCodeFromParams = searchParams.get("SizeCode");
 
-    const minPriceFromParams = searchParams.get("minPrice");
-    const maxPriceFromParams = searchParams.get("maxPrice");
+  //   const minPriceFromParams = searchParams.get("minPrice");
+  //   const maxPriceFromParams = searchParams.get("maxPrice");
 
-    const currentPage = currentPageFromParams
-      ? parseInt(currentPageFromParams, 10) - 1
-      : 0;
+  //   const currentPage = currentPageFromParams
+  //     ? parseInt(currentPageFromParams, 10) - 1
+  //     : 0;
 
-    setCurrentPage(currentPage);
+  //   setCurrentPage(currentPage);
 
-    setFilterValues((prev) => ({
-      ...prev,
-      IdProdSaxeoba: IdProdSaxeobaFromParams ? IdProdSaxeobaFromParams : "",
-      IdProdTypeGroup: IdProdTypeGroupFromParams
-        ? IdProdTypeGroupFromParams
-        : "",
-      IdProdType: IdProdTypeFromParams ? IdProdTypeFromParams : "",
+  //   setFilterValues((prev) => ({
+  //     ...prev,
+  //     IdProdSaxeoba: IdProdSaxeobaFromParams ? IdProdSaxeobaFromParams : "",
+  //     IdProdTypeGroup: IdProdTypeGroupFromParams
+  //       ? IdProdTypeGroupFromParams
+  //       : "",
+  //     IdProdType: IdProdTypeFromParams ? IdProdTypeFromParams : "",
 
-      StyleCode: StyleCodeFromParams
-        ? StyleCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      SqesiCode: SqesiCodeFromParams
-        ? SqesiCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      FeriCode: FeriCodeFromParams
-        ? FeriCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      SizeCode: SizeCodeFromParams
-        ? SizeCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
+  //     StyleCode: StyleCodeFromParams
+  //       ? StyleCodeFromParams.split(",")
+  //           .map(Number)
+  //           .filter((n) => !isNaN(n))
+  //       : [],
+  //     SqesiCode: SqesiCodeFromParams
+  //       ? SqesiCodeFromParams.split(",")
+  //           .map(Number)
+  //           .filter((n) => !isNaN(n))
+  //       : [],
+  //     FeriCode: FeriCodeFromParams
+  //       ? FeriCodeFromParams.split(",")
+  //           .map(Number)
+  //           .filter((n) => !isNaN(n))
+  //       : [],
+  //     SizeCode: SizeCodeFromParams
+  //       ? SizeCodeFromParams.split(",")
+  //           .map(Number)
+  //           .filter((n) => !isNaN(n))
+  //       : [],
 
-      minPrice: minPriceFromParams
-        ? parseInt(minPriceFromParams)
-        : parseInt("0"),
-      maxPrice: maxPriceFromParams
-        ? parseInt(maxPriceFromParams)
-        : parseInt("200000"),
-    }));
-  }, []);
+  //     minPrice: minPriceFromParams
+  //       ? parseInt(minPriceFromParams)
+  //       : parseInt("0"),
+  //     maxPrice: maxPriceFromParams
+  //       ? parseInt(maxPriceFromParams)
+  //       : parseInt("200000"),
+  //   }));
+  // }, []);
 
-  // get from params
+  // // get from params
 
-  // set to params
-  useEffect(() => {
-    const searchParams = new URLSearchParams();
+  // // set to params
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams();
 
-    searchParams.set("currentPage", currentPage + 1);
+  //   searchParams.set("currentPage", currentPage + 1);
 
-    searchParams.set("IdProdSaxeoba", filterValues.IdProdSaxeoba?.toString());
-    searchParams.set(
-      "IdProdTypeGroup",
-      filterValues.IdProdTypeGroup.toString()
-    );
-    searchParams.set("IdProdType", filterValues.IdProdType.toString());
-    searchParams.set("StyleCode", filterValues.StyleCode.toString());
-    searchParams.set("SqesiCode", filterValues.SqesiCode.toString());
-    searchParams.set("FeriCode", filterValues.FeriCode.toString());
-    searchParams.set("SizeCode", filterValues.SizeCode.toString());
+  //   searchParams.set("IdProdSaxeoba", filterValues.IdProdSaxeoba?.toString());
+  //   searchParams.set(
+  //     "IdProdTypeGroup",
+  //     filterValues.IdProdTypeGroup.toString()
+  //   );
+  //   searchParams.set("IdProdType", filterValues.IdProdType.toString());
+  //   searchParams.set("StyleCode", filterValues.StyleCode.toString());
+  //   searchParams.set("SqesiCode", filterValues.SqesiCode.toString());
+  //   searchParams.set("FeriCode", filterValues.FeriCode.toString());
+  //   searchParams.set("SizeCode", filterValues.SizeCode.toString());
 
-    searchParams.set("minPrice", filterValues.minPrice.toString());
-    searchParams.set("maxPrice", filterValues.maxPrice.toString());
+  //   searchParams.set("minPrice", filterValues.minPrice.toString());
+  //   searchParams.set("maxPrice", filterValues.maxPrice.toString());
 
-    if (pathname === "/products") {
-      window.history.replaceState(
-        null,
-        "/products",
-        `/products?${searchParams.toString()}`
-      );
-    }
-  }, [filterValues, pathname, router, productsPagePreLoader, currentPage]);
-  // set to params
+  //   if (pathname === "/products") {
+  //     window.history.replaceState(
+  //       null,
+  //       "/products",
+  //       `/products?${searchParams.toString()}`
+  //     );
+  //   }
+  // }, [filterValues, pathname, router, productsPagePreLoader, currentPage]);
+  // // set to params
 
-  const [dropedFilter, setDropedFilter] = useState<any>("");
+  // const [dropedFilter, setDropedFilter] = useState<any>("");
 
-  // product filter values
+  // // product filter values
 
-  useEffect(() => {
-    if (!productsPagePreLoader) {
-      window.scrollTo({ top: 600, behavior: "smooth" });
-    }
-  }, [currentPage]);
+  // useEffect(() => {
+  //   if (!productsPagePreLoader) {
+  //     window.scrollTo({ top: 600, behavior: "smooth" });
+  //   }
+  // }, [currentPage]);
 
-  // product filter
+  // // product filter
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   const { signal } = controller;
 
-    setProductsPageLoader(true);
+  //   setProductsPageLoader(true);
 
-    axiosUser
-      .get(
-        `front/products?pageNumber=${currentPage + 1}&itemsOnPage=12&${
-          filterValues.StyleCode.length > 0
-            ? `StyleCode=${filterValues.StyleCode}`
-            : ""
-        }&${
-          filterValues.SqesiCode.length > 0
-            ? `SqesiCode=${filterValues.SqesiCode}`
-            : ""
-        }&${
-          filterValues.FeriCode.length > 0
-            ? `FeriCode=${filterValues.FeriCode}`
-            : ""
-        }&${
-          filterValues.SizeCode.length > 0
-            ? `SizeCode=${filterValues.SizeCode}`
-            : ""
-        }&${
-          filterValues.IdProdSaxeoba
-            ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
-            : ""
-        }&${
-          filterValues.IdProdTypeGroup
-            ? `IdProdTypeGroup=${filterValues.IdProdTypeGroup}`
-            : ""
-        }&${
-          filterValues.IdProdType ? `IdProdType=${filterValues.IdProdType}` : ""
-        }&${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&${
-          filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
-        }`,
-        { signal }
-      )
-      .then((res) => {
-        setProductsPagePreLoader(false);
-        setProductsPageData(res.data.products);
-        setProdwholenum(res.data.total);
-      })
-      .catch((err) => {
-        setProductsPagePreLoader(true);
-      })
-      .finally(() => {
-        setProductsPageLoader(false);
-      });
-    return () => controller.abort();
-  }, [
-    filterValues.IdProdSaxeoba,
-    filterValues.IdProdTypeGroup,
-    filterValues.IdProdType,
-    filterValues.StyleCode,
-    filterValues.SqesiCode,
-    filterValues.FeriCode,
-    filterValues.SizeCode,
-    filterValues.minPrice,
-    filterValues.maxPrice,
-    currentPage,
-  ]);
+  //   axiosUser
+  //     .get(
+  //       `front/products?pageNumber=${currentPage + 1}&itemsOnPage=12&${
+  //         filterValues.StyleCode.length > 0
+  //           ? `StyleCode=${filterValues.StyleCode}`
+  //           : ""
+  //       }&${
+  //         filterValues.SqesiCode.length > 0
+  //           ? `SqesiCode=${filterValues.SqesiCode}`
+  //           : ""
+  //       }&${
+  //         filterValues.FeriCode.length > 0
+  //           ? `FeriCode=${filterValues.FeriCode}`
+  //           : ""
+  //       }&${
+  //         filterValues.SizeCode.length > 0
+  //           ? `SizeCode=${filterValues.SizeCode}`
+  //           : ""
+  //       }&${
+  //         filterValues.IdProdSaxeoba
+  //           ? `IdProdSaxeoba=${filterValues.IdProdSaxeoba}`
+  //           : ""
+  //       }&${
+  //         filterValues.IdProdTypeGroup
+  //           ? `IdProdTypeGroup=${filterValues.IdProdTypeGroup}`
+  //           : ""
+  //       }&${
+  //         filterValues.IdProdType ? `IdProdType=${filterValues.IdProdType}` : ""
+  //       }&${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&${
+  //         filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
+  //       }`,
+  //       { signal }
+  //     )
+  //     .then((res) => {
+  //       setProductsPagePreLoader(false);
+  //       setProductsPageData(res.data.products);
+  //       setProdwholenum(res.data.total);
+  //     })
+  //     .catch((err) => {
+  //       setProductsPagePreLoader(true);
+  //     })
+  //     .finally(() => {
+  //       setProductsPageLoader(false);
+  //     });
+  //   return () => controller.abort();
+  // }, [
+  //   filterValues.IdProdSaxeoba,
+  //   filterValues.IdProdTypeGroup,
+  //   filterValues.IdProdType,
+  //   filterValues.StyleCode,
+  //   filterValues.SqesiCode,
+  //   filterValues.FeriCode,
+  //   filterValues.SizeCode,
+  //   filterValues.minPrice,
+  //   filterValues.maxPrice,
+  //   currentPage,
+  // ]);
 
-  useEffect(() => {
-    setPageCount(Math.ceil(prodwholenum / 12));
-  }, [prodwholenum]);
+  // useEffect(() => {
+  //   setPageCount(Math.ceil(prodwholenum / 12));
+  // }, [prodwholenum]);
 
-  const handlePageClick = (event: any) => {
-    setCurrentPage(event.selected);
-  };
+  // const handlePageClick = (event: any) => {
+  //   setCurrentPage(event.selected);
+  // };
 
-  // product filter
+  // // product filter
 
   
 
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full pb-[100px] flex flex-col gap-y-[48px] relative">
+      {/* <div className="max-w-[1920px] w-full pb-[100px] flex flex-col gap-y-[48px] relative">
         <FirstCatPart
           filterValues={filterValues}
           setFilterValues={setFilterValues}
@@ -792,7 +792,7 @@ export default function Page() {
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
