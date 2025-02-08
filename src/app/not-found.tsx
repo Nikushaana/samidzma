@@ -9,7 +9,7 @@ export default function NotFound() {
   const pathname = usePathname();
   return (
     <div
-      className={`px-[200px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] relative flex flex-col gap-y-[30px] ${
+      className={`px-[200px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] relative flex flex-col gap-y-[30px] ${
         pathname.split("/")[1] == "admin" &&
         "min-h-[100vh] items-center justify-center"
       }`}
@@ -17,7 +17,7 @@ export default function NotFound() {
       {pathname.split("/")[1] !== "admin" && <WhatUSearch />}
 
       <div className="flex flex-col items-center w-full">
-        <div className="relative h-[443px] w-[603px] max-lg:h-auto max-lg:w-[80%] max-tiny:w-full max-lg:aspect-[4/2]">
+        <div className="relative h-[443px] w-[603px] max-lg:h-auto max-lg:w-[80%] max-sm:w-full max-lg:aspect-[4/2]">
           <Image
             src="/images/404.png"
             alt={""}
@@ -28,7 +28,7 @@ export default function NotFound() {
             }}
           />
         </div>
-        <h1 className="text-[48px] max-lg:text-[28px] max-tiny:text-[18px]">
+        <h1 className="text-[48px] max-lg:text-[28px] max-sm:text-[18px]">
           გვერდი არ მოიძებნა
         </h1>
       </div>

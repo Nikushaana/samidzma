@@ -94,11 +94,11 @@ export default function SignIn() {
   };
   return (
     <div
-      className={`flex flex-col gap-y-[16px] px-[30px] max-tiny:p-[20px] py-[40px] duration-100 ${
+      className={`flex flex-col gap-y-[16px] px-[30px] max-sm:p-[20px] py-[40px] duration-100 ${
         userSignInLoader && "pointer-events-none opacity-[0.5]"
       }`}
     >
-      <div className="hidden max-tiny:flex flex-col">
+      <div className="hidden max-sm:flex flex-col">
         <h1 className="text-[22px]">საკონტაქტო ფორმა</h1>
         <p className="text-[14px]">შეავსე ფორმა, რათა დაგვიკავშირდეთ</p>
       </div>
@@ -141,7 +141,7 @@ export default function SignIn() {
         style="h-[56px] text-[18px]"
       />
 
-      <h1 className="text-center text-[#8A8A8A] mt-[10px] max-tiny:text-[12px]">
+      <h1 className="text-center text-[#8A8A8A] mt-[10px] max-sm:text-[12px]">
         ან დარეგისტრირდი შემდეგი ანგარიშებით:
       </h1>
       <div className="flex items-center justify-center gap-[30px]">

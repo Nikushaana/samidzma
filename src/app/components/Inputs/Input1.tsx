@@ -70,7 +70,7 @@ export default function Input1({
     <div className="flex flex-col gap-y-[5px] w-full">
       {title && <p className="text-[12px] mx-[20px]">{title}</p>}
       <div
-        className={`rounded-full w-full h-[52px] max-tiny:h-[42px] outline-none py-[6px] px-[15px] flex duration-100 border-[1px] ${
+        className={`rounded-full w-full h-[52px] max-sm:h-[42px] outline-none py-[6px] px-[15px] flex duration-100 border-[1px] ${
           error
             ? "border-myPink"
             : isFocused

@@ -40,9 +40,9 @@ export default function Page() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-center my-[100px] max-lg:mb-0 max-lg:mt-[40px] max-tiny:mt-0 gap-y-[100px] max-tiny:gap-y-[50px]">
-      <div className="relative max-tiny:order-last flex flex-col items-center justify-center">
-        <div className="absolute top-[30px] left-[50%] translate-x-[-220px] max-tiny:translate-x-[-160px] rotate-[270deg] w-[100px] h-[80px] max-tiny:h-[60px]">
+    <div className="flex flex-col items-center my-[100px] max-lg:mb-0 max-lg:mt-[40px] max-sm:mt-0 gap-y-[100px] max-sm:gap-y-[50px]">
+      <div className="relative max-sm:order-last flex flex-col items-center justify-center">
+        <div className="absolute top-[30px] left-[50%] translate-x-[-220px] max-sm:translate-x-[-160px] rotate-[270deg] w-[100px] h-[80px] max-sm:h-[60px]">
           <Image
             src="/images/starsimg.png"
             alt={""}
@@ -64,7 +64,7 @@ export default function Page() {
             }}
           />
         </div>
-        <div className="absolute top-[30px] right-[50%] translate-x-[220px] max-tiny:translate-x-[160px] w-[100px] h-[80px] max-tiny:h-[60px]">
+        <div className="absolute top-[30px] right-[50%] translate-x-[220px] max-sm:translate-x-[160px] w-[100px] h-[80px] max-sm:h-[60px]">
           <Image
             src="/images/starsimg.png"
             alt={""}
@@ -75,7 +75,7 @@ export default function Page() {
             }}
           />
         </div>
-        <h1 className="text-[48px] max-tiny:text-[24px]">გამარჯობა</h1>
+        <h1 className="text-[48px] max-sm:text-[24px]">გამარჯობა</h1>
         <p className="text-[14px] text-center">
           შენ იმყოფები შენს პირად გვერდზე. აქ ნახავ <br /> ინფორმაციას შენი
           შეკვეთებისა და ნაყიდი პროდუქტების <br /> შესახებ, ასევე ექსკლუზიური
@@ -91,7 +91,7 @@ export default function Page() {
             onClick={() => {
               router.push(`/user/${item.url}`);
             }}
-            className="flex items-center justify-between px-[20px] rounded-[8px] h-[103px] max-lg:h-[70px] max-tiny:h-[85px] gap-[15px] cursor-pointer border-[1px] border-[#E2E2E2] max-tiny:bg-white"
+            className="flex items-center justify-between px-[20px] rounded-[8px] h-[103px] max-lg:h-[70px] max-sm:h-[85px] gap-[15px] cursor-pointer border-[1px] border-[#E2E2E2] max-sm:bg-white"
           >
             <div className="flex items-center gap-[15px] justify-between">
               <div className="text-[25px] w-[30px] text-myGreen">

@@ -92,15 +92,19 @@ export default function DropDown1value({
             setDrop((pre) => !pre);
           }}
           className={`w-full py-[6px] px-[20px] flex duration-100 border-[1px] ${
-            error
-              ? "border-myPink"
-              : drop
-              ? `${notInputStyle ? "rounded-t-[25px]" : "rounded-t-[25px] max-tiny:rounded-t-[22px]"}`
+            drop
+              ? `${error && "border-myPink"} ${
+                  notInputStyle
+                    ? "rounded-t-[25px]"
+                    : "rounded-t-[25px] max-sm:rounded-t-[22px]"
+                }`
               : `rounded-[33px] bg-[#EEEEEE] ${
-                  notInputStyle ? "" : "border-[#E2E2E2]"
+                  notInputStyle
+                    ? ""
+                    : `${error ? "border-myPink" : "border-[#E2E2E2]"}`
                 }`
           } ${
-            notInputStyle ? "h-[42px] bg-white" : "h-[52px] max-tiny:h-[42px]"
+            notInputStyle ? "h-[42px] bg-white" : "h-[52px] max-sm:h-[42px]"
           } w-full flex gap-[10px] items-center cursor-pointer justify-between`}
         >
           <div className="flex items-center gap-[10px] w-[calc(100%-30px)] h-full text-[14px]">
@@ -154,7 +158,9 @@ export default function DropDown1value({
           } ${
             drop
               ? `z-[1] py-[10px] ${
-                  notInputStyle ? "top-[45px]" : "top-[55px] max-tiny:top-[45px] rounded-b-[8px]"
+                  notInputStyle
+                    ? "top-[45px]"
+                    : "top-[55px] max-sm:top-[45px] rounded-b-[8px]"
                 }`
               : "top-[40px] z-[-2] py-0"
           }`}

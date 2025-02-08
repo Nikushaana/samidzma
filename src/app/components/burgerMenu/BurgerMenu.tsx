@@ -27,7 +27,7 @@ export default function BurgerMenu() {
 
   return (
     <div
-      className={`px-[200px] max-lg:px-[90px] max-tiny:px-[25px] pt-[12px] w-[100vw] h-[100vh] duration-300 bg-myGreen fixed flex flex-col gap-y-[20px] top-0 z-20 ${
+      className={`px-[200px] max-lg:px-[90px] max-sm:px-[25px] pt-[12px] w-[100vw] h-[100vh] duration-300 bg-myGreen fixed flex flex-col gap-y-[20px] top-0 z-20 ${
         burgerMenu ? "left-0 " : "left-[-100vw]"
       }`}
     >
@@ -51,7 +51,7 @@ export default function BurgerMenu() {
           <div className="flex items-center gap-[20px]">
             <div className=" ">
               {!user.id && (
-                <div className="flex max-tiny:hidden items-center gap-[20px] text-[18px] px-[40px] bg-myBlack text-white rounded-full h-[56px]">
+                <div className="flex max-sm:hidden items-center gap-[20px] text-[18px] px-[40px] bg-myBlack text-white rounded-full h-[56px]">
                   <p
                     onClick={() => {
                       router.push("/auth/signin");
@@ -83,9 +83,9 @@ export default function BurgerMenu() {
             </div>
           </div>
         </div>
-        <div className="hidden max-tiny:flex">
+        <div className="hidden max-sm:flex">
           {!user.id && (
-            <div className="flex items-center gap-[20px] text-[18px] max-tiny:text-[16px] w-full justify-center bg-myBlack text-white rounded-full h-[56px]">
+            <div className="flex items-center gap-[20px] text-[18px] max-sm:text-[16px] w-full justify-center bg-myBlack text-white rounded-full h-[56px]">
               <p
                 onClick={() => {
                   router.push("/auth/signin");
@@ -131,7 +131,7 @@ export default function BurgerMenu() {
         )}
       </div>
 
-      <div className="flex flex-col gap-y-[40px] max-tiny:gap-y-[30px]">
+      <div className="flex flex-col gap-y-[40px] max-sm:gap-y-[30px]">
         {menuRoutes.map((item: any, index: number) => (
           <div
             key={item.id}
@@ -172,7 +172,7 @@ export default function BurgerMenu() {
                   : "ml-[-50px]"
               }`}
             />
-            <p className="text-[22px] max-tiny:text-[20px] select-none">
+            <p className="text-[22px] max-sm:text-[20px] select-none">
               {item.name}
             </p>
           </div>

@@ -12,9 +12,12 @@ import { UserContext } from "../../../../dataFetchs/UserAxios";
 
 export default function SmallProdCard({ item }: any) {
   const router = useRouter();
-  const { setOpenRecomendedPopUp, setAlertShow, setAlertStatus, setAlertText } = useContext(
-    ContextForSharingStates
-  );
+  const {
+    setOpenProductCardPopUp,
+    setAlertShow,
+    setAlertStatus,
+    setAlertText,
+  } = useContext(ContextForSharingStates);
   const { user } = useContext(UserContext);
 
   const { setRenderCart, CartData, CartLocalStorageData } =
@@ -103,7 +106,7 @@ export default function SmallProdCard({ item }: any) {
         }
       }
     } else {
-      setOpenRecomendedPopUp(
+      setOpenProductCardPopUp(
         item.ProdAdditionalCode
           ? `${item.ProdAdditionalCode}?${item.ProdCode}`
           : item.ProdCode

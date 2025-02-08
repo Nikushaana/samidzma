@@ -110,8 +110,8 @@ export default function Footer() {
     <div
       className={`z-[2] ${pathname.split("/")[1] === "admin" ? "hidden" : ""}`}
     >
-      <div className="px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] bg-myBlack flex flex-col gap-y-[15px] items-center pt-[20px] pb-[60px]">
-        <div className="w-[252px] h-[120px] max-tiny:h-[90px] relative">
+      <div className="px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] bg-myBlack flex flex-col gap-y-[15px] items-center pt-[20px] pb-[60px]">
+        <div className="w-[252px] h-[120px] max-sm:h-[90px] relative">
           <Image
             src="/images/plane.png"
             alt={""}
@@ -123,15 +123,15 @@ export default function Footer() {
           />
         </div>
         <div className="flex flex-col items-center">
-          <h1 className="text-white text-[28px] max-tiny:text-[21px]">
+          <h1 className="text-white text-[28px] max-sm:text-[21px]">
             გამოიწერე ჩვენი სიახლეები
           </h1>
-          <p className="text-white text-[18px] max-tiny:text-[14px] text-center">
+          <p className="text-white text-[18px] max-sm:text-[14px] text-center">
             გაიგე პირველმა ჩვენი სიახლეებისა და აქციების შესახებ
           </p>
         </div>
-        <div className="rounded-full overflow-hidden max-tiny:w-full h-[47px] max-tiny:h-[34px] flex">
-          <div className="bg-white flex items-center px-[20px] w-[342px] max-tiny:w-[calc(100%-130px)]">
+        <div className="rounded-full overflow-hidden max-sm:w-full h-[47px] max-sm:h-[34px] flex">
+          <div className="bg-white flex items-center px-[20px] w-[342px] max-sm:w-[calc(100%-130px)]">
             <input
               type="text"
               name=""
@@ -140,15 +140,15 @@ export default function Footer() {
               id=""
             />
           </div>
-          <div className="bg-myGreen text-white cursor-pointer flex items-center px-[20px] max-tiny:w-[130px]">
+          <div className="bg-myGreen text-white cursor-pointer flex items-center px-[20px] max-sm:w-[130px]">
             <h1>გამოიწერე</h1>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center bg-[#242727] overflow-hidden relative">
-        <div className="max-w-[1920px] w-full pl-[264px] pr-[380px] max-2xl:pl-[160px] max-2xl:pr-[320px] max-lg:px-[90px] max-tiny:px-[25px] grid grid-cols-4 max-lg:grid-cols-3 max-tiny:grid-cols-2 gap-[20px] text-white py-[60px]">
+        <div className="max-w-[1920px] w-full pl-[264px] pr-[380px] max-2xl:pl-[160px] max-2xl:pr-[320px] max-lg:px-[90px] max-sm:px-[25px] grid grid-cols-4 max-lg:grid-cols-3 max-sm:grid-cols-2 gap-[20px] text-white py-[60px]">
           <div className="flex flex-col gap-y-[20px] z-[1]">
-            <h1 className="text-[18px] max-tiny:text-[14px]">ჩვენ შესახებ</h1>
+            <h1 className="text-[18px] max-sm:text-[14px]">ჩვენ შესახებ</h1>
             <div className="flex flex-col gap-y-[5px]">
               {aboutUs.map((item, index: number) => (
                 <p
@@ -156,7 +156,7 @@ export default function Footer() {
                   onClick={() => {
                     router.push(`/${item.url}`);
                   }}
-                  className="text-[14px] max-tiny:text-[11px] cursor-pointer"
+                  className="text-[14px] max-sm:text-[11px] cursor-pointer"
                 >
                   {item.name}
                 </p>
@@ -164,7 +164,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="flex flex-col gap-y-[20px] z-[1]">
-            <h1 className="text-[18px] max-tiny:text-[14px]">
+            <h1 className="text-[18px] max-sm:text-[14px]">
               პროდუქტის კატეგორიები
             </h1>
             <div className="flex flex-col gap-y-[5px]">
@@ -174,7 +174,7 @@ export default function Footer() {
                   onClick={() => {
                     router.push(`/${item.url}`);
                   }}
-                  className="text-[14px] max-tiny:text-[11px] cursor-pointer"
+                  className="text-[14px] max-sm:text-[11px] cursor-pointer"
                 >
                   {item.name}
                 </p>
@@ -183,7 +183,7 @@ export default function Footer() {
           </div>
           <div className="col-span-2 gap-[20px] max-lg:gap-y-[40px] max-lg:col-span-1 grid grid-cols-2 max-lg:grid-cols-1 z-[1]">
             <div className="flex flex-col gap-y-[20px]">
-              <h1 className="text-[18px] max-tiny:text-[14px]">
+              <h1 className="text-[18px] max-sm:text-[14px]">
                 წესები და პირობები
               </h1>
               <div className="flex flex-col gap-y-[5px]">
@@ -193,7 +193,7 @@ export default function Footer() {
                     onClick={() => {
                       router.push(`/${item.url}`);
                     }}
-                    className="text-[14px] max-tiny:text-[11px] cursor-pointer"
+                    className="text-[14px] max-sm:text-[11px] cursor-pointer"
                   >
                     {item.name}
                   </p>
@@ -201,7 +201,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="flex flex-col items-end max-lg:items-start gap-y-[20px]">
-              <h1 className="text-[18px] max-tiny:text-[14px] text-end">
+              <h1 className="text-[18px] max-sm:text-[14px] text-end">
                 გვიპოვე სოციალურ ქსელებში (?)
               </h1>
               <div className="flex flex-col items-end max-lg:items-start gap-y-[5px]">
@@ -263,7 +263,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="bg-myBlack text-[#7E8389] flex justify-center items-center h-[58px] max-tiny:text-[12px]">
+      <div className="bg-myBlack text-[#7E8389] flex justify-center items-center h-[58px] max-sm:text-[12px]">
         <p>© 2024 samidzma - All Rights Reserved</p>
       </div>
     </div>

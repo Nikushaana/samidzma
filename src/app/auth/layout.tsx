@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
         <WhatUSearch />
 
         <div className="">
@@ -39,14 +39,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </p>
         </div>
 
-        <div className="flex justify-center pb-[40px] pt-[100px] max-tiny:py-0">
+        <div className="flex justify-center pb-[40px] pt-[100px] max-sm:py-0">
           <div className="rounded-[12px] overflow-hidden bg-white max-w-[684px] w-full">
-            <div className="grid grid-cols-2 h-[75px] max-tiny:h-[40px]">
+            <div className="grid grid-cols-2 h-[75px] max-sm:h-[40px]">
               <h1
                 onClick={() => {
                   router.push("/auth/signin");
                 }}
-                className={`flex items-center justify-center h-full text-[22px] max-tiny:text-[14px] cursor-pointer duration-200 ${
+                className={`flex items-center justify-center h-full text-[22px] max-sm:text-[14px] cursor-pointer duration-200 ${
                   pathname.split("/")[2] === "signin"
                     ? "text-[#888889]"
                     : "text-white bg-myBlack"
@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 onClick={() => {
                   router.push("/auth/signup");
                 }}
-                className={`flex items-center justify-center h-full text-[22px] max-tiny:text-[14px] cursor-pointer duration-200 ${
+                className={`flex items-center justify-center h-full text-[22px] max-sm:text-[14px] cursor-pointer duration-200 ${
                   pathname.split("/")[2] === "signup"
                     ? "text-[#888889]"
                     : "text-white bg-myBlack"

@@ -9,7 +9,7 @@ export default function WhatUSearch() {
   const { setSearchPopUp } = useContext(ContextForSharingStates);
 
   return (
-    <div className="rounded-full bg-white overflow-hidden flex justify-between">
+    <div className="rounded-full bg-white overflow-hidden flex justify-between shrink-0">
       <div className="flex items-center px-[20px] w-[calc(100%-50px)]">
         <input
           type="text"

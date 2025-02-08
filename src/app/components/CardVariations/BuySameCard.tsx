@@ -3,7 +3,7 @@ import React from "react";
 
 export default function BuySameCard({ FourCol, title }: any) {
   return (
-    <div className="relative rounded-[8px] max-tiny:rounded-none bg-white max-tiny:bg-transparent p-[25px] max-tiny:p-0 flex flex-col gap-y-[25px]">
+    <div className="relative rounded-[8px] max-sm:rounded-none bg-white max-sm:bg-transparent p-[25px] max-sm:p-0 flex flex-col gap-y-[25px]">
       <h1 className="text-[20px]">{title}</h1>
       {title === "დაასრულე ყიდვა" && (
         <p className="absolute top-[10px] right-[10px] bg-myPink rounded-[4px] px-[5px] text-white h-[28px] flex items-center">

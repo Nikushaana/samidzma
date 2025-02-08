@@ -10,6 +10,7 @@ import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import useSecondCategories from "../../../../../../dataFetchs/secondCategoriesContext";
 import Image from "next/image";
+import { IoIosRefresh } from "react-icons/io";
 
 export default function Page() {
   const { fetchSecondCategories, allSecondCategsData, allSecondCategsLoader } =
@@ -28,6 +29,25 @@ export default function Page() {
       .delete(`admin/category/productTypeGroupe/${id}`)
       .then((res) => {
         fetchSecondCategories();
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setSecondCategsDeleteLoader("");
+      });
+  };
+
+  //
+
+  const [SecondCategsSystemRefreshPopUp, setSecondCategsSystemRefreshPopUp] =
+    useState<string>("");
+
+  const HandleSystemRefreshSecondCategs = (id: any) => {
+    setSecondCategsDeleteLoader(id);
+    axiosAdmin
+      .get(`admin/category/updateProductTypeGroupeWithSystem/${id}`)
+      .then((res) => {
+        fetchSecondCategories();
+        setSecondCategsSystemRefreshPopUp("")
       })
       .catch((err) => {})
       .finally(() => {
@@ -75,6 +95,37 @@ export default function Page() {
               </div>
             ) : (
               <div className="flex items-center gap-[10px]">
+                <div className="relative">
+                  <div
+                    onClick={() => {
+                      setSecondCategsSystemRefreshPopUp(item.IdProdTypeGroup);
+                    }}
+                    className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[green] text-[18px] hover:bg-green-200 hover:shadow-md duration-300 cursor-pointer"
+                  >
+                    <IoIosRefresh />
+                  </div>
+                  {SecondCategsSystemRefreshPopUp === item.IdProdTypeGroup && (
+                    <div className="absolute top-[-5px] right-[0px] flex items-center gap-[10px] p-[10px] h-[50px] bg-[#f4f6f9] shadow-md rounded-[8px]">
+                      <div
+                        onClick={() => {
+                          HandleSystemRefreshSecondCategs(item.IdProdTypeGroup);
+                        }}
+                        className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[green] text-[18px] hover:bg-green-200 hover:shadow-md duration-300 cursor-pointer"
+                      >
+                        <IoIosRefresh />
+                      </div>
+                      <div
+                        onClick={() => {
+                          setSecondCategsSystemRefreshPopUp("");
+                        }}
+                        className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[18px] hover:shadow-md duration-300 cursor-pointer"
+                      >
+                        <BsXLg />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div
                   onClick={() => {
                     router.push(

@@ -74,5 +74,3 @@ export default function Page() {
     </div>
   );
 }
-// text-[#CACACA]
-// text-[#323434]

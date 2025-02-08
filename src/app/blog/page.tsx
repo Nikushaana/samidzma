@@ -40,7 +40,7 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       
-    <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[30px]">
+    <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[30px]">
       <div className="relative">
         <div className="rounded-full bg-white flex items-center gap-[5px] justify-between">
           <div className="flex items-center px-[20px] w-[calc(100%-50px)]">
@@ -87,9 +87,9 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <div className="relative rounded-[12px] bg-[#EAEDEE] p-[30px] max-tiny:p-0 overflow-hidden flex flex-col gap-y-[20px]">
+      <div className="relative rounded-[12px] bg-[#EAEDEE] p-[30px] max-sm:p-0 overflow-hidden flex flex-col gap-y-[20px]">
         <h1 className="text-[28px]">ბლოგი</h1>
-        <div className="grid grid-cols-4 max-lg:grid-cols-2 max-tiny:grid-cols-1 gap-[20px]">
+        <div className="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[20px]">
           {blogLoader
             ? [1, 2, 3, 4, 5, 6, 7, 8].map((item: any, index: number) => (
                 <div key={item} className="w-full h-[450px] rounded-[12px] overflow-hidden">

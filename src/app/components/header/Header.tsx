@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <div className="flex flex-col items-center">
       <div
-        className={`max-w-[1920px] w-full items-center justify-between py-[12px] pl-[340px] pr-[264px] max-lg:px-[90px] max-tiny:px-[25px] mb-[10px] ${
+        className={`max-w-[1920px] w-full items-center justify-between py-[12px] pl-[340px] pr-[264px] max-lg:px-[90px] max-sm:px-[25px] mb-[10px] ${
           pathname.split("/")[1] === "products" ||
           pathname.split("/")[1] === "category" ||
           pathname.split("/")[1] === "catalog-for-set"
@@ -52,8 +52,8 @@ export default function Header() {
             }}
           />
         </Link>
-        <div className="flex items-center max-lg:gap-[32px] max-tiny:gap-[20px] relative">
-          <div className="h-[56px] p-[6px] max-lg:px-[40px] max-tiny:px-[25px]  flex items-center gap-[40px] rounded-full bg-myBlack text-white">
+        <div className="flex items-center max-lg:gap-[32px] max-sm:gap-[20px] relative">
+          <div className="h-[56px] p-[6px] max-lg:px-[40px] max-sm:px-[25px]  flex items-center gap-[40px] max-2xl:gap-[20px] rounded-full bg-myBlack text-white">
             <ul className="flex items-center gap-[5px] h-full max-lg:hidden">
               {menuRoutes.map((item: any, index: number) => (
                 <li
@@ -87,7 +87,7 @@ export default function Header() {
                 </li>
               ))}
             </ul>
-            <div className="flex items-center gap-[20px] max-tiny:gap-[30px]">
+            <div className="flex items-center gap-[20px] max-sm:gap-[30px]">
               <div
                 onClick={() => {
                   router.push("/cart");

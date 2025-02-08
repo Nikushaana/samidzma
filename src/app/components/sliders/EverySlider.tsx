@@ -18,6 +18,7 @@ import CatalogSetCard from "../CardVariations/CatalogSetCard";
 import BuySameCard from "../CardVariations/BuySameCard";
 import useScreenWidth from "../ScreenWidth";
 import CommentsCard from "../CardVariations/CommentsCard";
+import { usePathname } from "next/navigation";
 
 export default function EverySlider({
   data,
@@ -30,6 +31,7 @@ export default function EverySlider({
 }: any) {
   let swiperRef = useRef<SwiperClass>(null!);
   const screenWidth = useScreenWidth();
+  const pathname = usePathname();
 
   const [sldsPerView, setSldsPerView] = useState<number>(slidesPerView);
 
@@ -71,7 +73,15 @@ export default function EverySlider({
             >
               {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
                 (index: any) => (
-                  <div key={index} className="w-full h-[450px] rounded-[12px] overflow-hidden">
+                  <div
+                    key={index}
+                    className={`w-full ${
+                      pathname.split("/")[1] == "catalog-for-set" &&
+                      card === "KitCard"
+                        ? "h-[310px] max-lg:h-[450px]"
+                        : " h-[450px]"
+                    } rounded-[12px] overflow-hidden`}
+                  >
                     <div className="loaderwave"></div>
                   </div>
                 )

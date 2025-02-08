@@ -115,11 +115,11 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
         <WhatUSearch />
 
         <div className="grid grid-cols-2 max-lg:grid-cols-1 items-end gap-[20px]">
-          <div className="relative w-full h-full max-lg:aspect-[2/1] rounded-[12px] overflow-hidden max-tiny:hidden">
+          <div className="relative w-full h-full max-lg:aspect-[2/1] rounded-[12px] overflow-hidden max-sm:hidden">
             <Image
               src="/images/careerpht.png"
               alt={""}

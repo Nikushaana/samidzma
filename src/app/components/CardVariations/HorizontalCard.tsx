@@ -19,8 +19,12 @@ import { UserContext } from "../../../../dataFetchs/UserAxios";
 
 export default function HorizontalCard({ item, narrow }: any) {
   const router = useRouter();
-  const { setOpenRecomendedPopUp, setAlertShow, setAlertStatus, setAlertText } =
-    useContext(ContextForSharingStates);
+  const {
+    setOpenProductCardPopUp,
+    setAlertShow,
+    setAlertStatus,
+    setAlertText,
+  } = useContext(ContextForSharingStates);
   const { user } = useContext(UserContext);
 
   const { setRenderWishList, WishListData, WishListLocalStorageData } =
@@ -182,7 +186,7 @@ export default function HorizontalCard({ item, narrow }: any) {
         }
       }
     } else {
-      setOpenRecomendedPopUp(
+      setOpenProductCardPopUp(
         item.ProdAdditionalCode
           ? `${item.ProdAdditionalCode}?${item.ProdCode}`
           : item.ProdCode
@@ -207,8 +211,8 @@ export default function HorizontalCard({ item, narrow }: any) {
   // add in cart
 
   return (
-    <div className="rounded-[12px] bg-white p-[10px] flex max-tiny:flex-col justify-between gap-[12px] h-full">
-      <div className="flex-wrap items-center justify-end gap-[8px] max-tiny:flex hidden ">
+    <div className="rounded-[12px] bg-white p-[10px] flex max-sm:flex-col justify-between gap-[12px] h-full">
+      <div className="flex-wrap items-center justify-end gap-[8px] max-sm:flex hidden ">
         <p
           className={`px-[10px] bg-myPink text-white  flex items-center rounded-full ${
             narrow ? "text-[10px] h-[28px]" : "text-[14px] h-[36px]"
@@ -247,7 +251,7 @@ export default function HorizontalCard({ item, narrow }: any) {
           <TbTruckDelivery />
         </div>
       </div>
-      <div className="flex justify-between gap-[12px] w-full max-tiny:w-auto">
+      <div className="flex justify-between gap-[12px] w-full max-sm:w-auto">
         <div className="flex items-center gap-[40px] max-lg:w-[50%]">
           <div
             onClick={() => {
@@ -259,7 +263,7 @@ export default function HorizontalCard({ item, narrow }: any) {
                 }`
               );
             }}
-            className="relative cursor-pointer aspect-[4/3] h-[207px] max-tiny:h-full flex items-center justify-center rounded-[4px] overflow-hidden"
+            className="relative cursor-pointer aspect-[4/3] h-[207px] max-sm:h-full flex items-center justify-center rounded-[4px] overflow-hidden"
           >
             {prodImagesLoader ? (
               <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
@@ -276,7 +280,7 @@ export default function HorizontalCard({ item, narrow }: any) {
             ) : (
               <p className="text-center text-[14px]">ფოტო არ არსებობს</p>
             )}
-            <div className="absolute bottom-[20px] max-lg:bottom-[10px] left-[20px] max-lg:left-[10px] z-[1] bg-myGreen text-white shrink-0 flex items-center justify-center text-[18px] w-[53px] max-tiny:w-[36px] aspect-square rounded-full">
+            <div className="absolute bottom-[20px] max-lg:bottom-[10px] left-[20px] max-lg:left-[10px] z-[1] bg-myGreen text-white shrink-0 flex items-center justify-center text-[18px] w-[53px] max-sm:w-[36px] aspect-square rounded-full">
               <FaTree />
             </div>
           </div>
@@ -294,8 +298,8 @@ export default function HorizontalCard({ item, narrow }: any) {
           </div>
         </div>
 
-        <div className="flex flex-col max-lg:gap-y-[5px] justify-between h-full pb-[20px] max-lg:w-[50%] max-tiny:pb-0">
-          <div className="flex flex-wrap items-center justify-end gap-[8px] max-tiny:hidden">
+        <div className="flex flex-col max-lg:gap-y-[5px] justify-between h-full pb-[20px] max-lg:w-[50%] max-sm:pb-0">
+          <div className="flex flex-wrap items-center justify-end gap-[8px] max-sm:hidden">
             <p
               className={`px-[10px] bg-myPink text-white  flex items-center rounded-full ${
                 narrow ? "text-[10px] h-[28px]" : "text-[14px] h-[36px]"
@@ -336,16 +340,16 @@ export default function HorizontalCard({ item, narrow }: any) {
               <TbTruckDelivery />
             </div>
           </div>
-          <h1 className="text-[22px] pl-[15px] hidden max-lg:flex max-tiny:hidden">
+          <h1 className="text-[22px] pl-[15px] hidden max-lg:flex max-sm:hidden">
             {item.ProductName}
           </h1>
-          <p className="text-[14px] pl-[15px] hidden max-lg:flex max-tiny:hidden">
+          <p className="text-[14px] pl-[15px] hidden max-lg:flex max-sm:hidden">
             {item.DescriptionName}
           </p>
-          <div className="flex flex-col gap-[12px] w-[280px] max-lg:w-full max-tiny:h-full">
+          <div className="flex flex-col gap-[12px] w-[280px] max-lg:w-full max-sm:h-full">
             <div className="max-lg:flex max-lg:items-end max-lg:justify-between">
               <div
-                className={`hidden max-lg:flex flex-col justify-between  max-tiny:hidden`}
+                className={`hidden max-lg:flex flex-col justify-between  max-sm:hidden`}
               >
                 <h1 className="text-[20px] pl-[15px]">{item.Fasi1}₾</h1>
                 <Counter
@@ -354,7 +358,7 @@ export default function HorizontalCard({ item, narrow }: any) {
                 />
               </div>
               <div
-                className={`flex items-center  max-tiny:justify-between w-full gap-[12px] justify-center`}
+                className={`flex items-center  max-sm:justify-between w-full gap-[12px] justify-center`}
               >
                 <div className="relative bg-myGreen text-white shrink-0 flex items-center justify-center text-[22px] w-[38px] h-[38px] rounded-full cursor-pointer">
                   <BsCart3 />
@@ -369,7 +373,7 @@ export default function HorizontalCard({ item, narrow }: any) {
                 </div>
                 <div
                   onClick={() => {
-                    setOpenRecomendedPopUp(
+                    setOpenProductCardPopUp(
                       item.ProdAdditionalCode
                         ? `${item.ProdAdditionalCode}?${item.ProdCode}`
                         : item.ProdCode
@@ -384,7 +388,7 @@ export default function HorizontalCard({ item, narrow }: any) {
 
             <GreenButton
               name="ყიდვა"
-              style="h-[56px] max-tiny:h-[48px] text-[18px]"
+              style="h-[56px] max-sm:h-[48px] text-[18px]"
               action={HandleAddCart}
               loader={addCartloader}
               dissabled={isInCart}
@@ -393,7 +397,7 @@ export default function HorizontalCard({ item, narrow }: any) {
           </div>
         </div>
       </div>
-      <div className="hidden max-tiny:flex flex-col">
+      <div className="hidden max-sm:flex flex-col">
         <h1 className="text-[20px] pl-[15px]">{item.Fasi1}₾</h1>
         <h1 className="text-[22px] pl-[15px] ">{item.ProductName}</h1>
         <p className="text-[14px] pl-[15px] ">{item.DescriptionName}</p>

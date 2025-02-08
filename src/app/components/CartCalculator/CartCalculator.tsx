@@ -222,7 +222,7 @@ export default function CartCalculator() {
       className="w-[450px] max-lg:w-full self-start overflow-hidden rounded-[12px]
          bg-white flex flex-col"
     >
-      <div className="p-[27px] max-tiny:p-[20px] flex flex-col gap-y-[10px]">
+      <div className="p-[27px] max-sm:p-[20px] flex flex-col gap-y-[10px]">
         <div className="flex items-center gap-[15px]">
           <h1 className="text-[22px]">პრომოკოდი</h1>
           <p className="text-[14px]">
@@ -255,7 +255,7 @@ export default function CartCalculator() {
         </div>
       </div>
       <hr className="w-full h-[1px] bg-gray-300" />
-      <div className="p-[27px] max-tiny:p-[20px]  flex flex-col gap-y-[20px]">
+      <div className="p-[27px] max-sm:p-[20px]  flex flex-col gap-y-[20px]">
         <GreenButton
           name={
             pathname.split("/")[2] === "order-placement"
@@ -270,7 +270,7 @@ export default function CartCalculator() {
           loader={
             pathname.split("/")[2] === "order-placement" && makeOrderLoader
           }
-          style="h-[56px] max-tiny:h-[48px] text-[18px]"
+          style="h-[56px] max-sm:h-[48px] text-[18px]"
         />
         <div className="flex flex-col gap-y-[5px]">
           {user.id && (
@@ -337,7 +337,7 @@ export default function CartCalculator() {
 
               <hr className="w-full h-[1px] bg-white" />
               <div className="bg-myBlack py-[20px] flex items-center justify-center relative overflow-hidden">
-                <div className="left-[-20px] bottom-[-30px] w-[100px] max-tiny:w-[70px] h-[70px] absolute">
+                <div className="left-[-20px] bottom-[-30px] w-[100px] max-sm:w-[70px] h-[70px] absolute">
                   <Image
                     src="/images/coin.png"
                     alt={""}
@@ -354,7 +354,7 @@ export default function CartCalculator() {
                   ქულას
                 </p>
 
-                <div className="right-[30px] max-tiny:right-[10px] top-[50%] translate-y-[-50%] max-tiny:translate-y-[-20%] w-[50px] h-[50px] absolute">
+                <div className="right-[30px] max-sm:right-[10px] top-[50%] translate-y-[-50%] max-sm:translate-y-[-20%] w-[50px] h-[50px] absolute">
                   <Image
                     src="/images/coin.png"
                     alt={""}

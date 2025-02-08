@@ -13,12 +13,12 @@ export default async function Home() {
 
   return (
     <div className="pb-[100px] flex flex-col items-center gap-y-[90px] max-lg:gap-y-[51px]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] flex flex-col gap-y-[90px] max-lg:gap-y-[50px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] flex flex-col gap-y-[90px] max-lg:gap-y-[50px] relative">
         <TopBanner />
         <EverySlider
           data={recomendedProductsData.data}
           title={
-            <h1 className="text-[28px] max-tiny:text-[22px]">
+            <h1 className="text-[28px] max-sm:text-[22px]">
               პოპულარული პროდუქტები
             </h1>
           }
@@ -30,7 +30,7 @@ export default async function Home() {
           <BlogsBackgroundDesigns/>
           <EverySlider
             data={blogData.data}
-            title={<h1 className="text-[28px] max-tiny:text-[22px]">ბლოგი</h1>}
+            title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
             card="BlogCard"
             slidesPerView={4}
             spaceBetween={20}
@@ -40,11 +40,11 @@ export default async function Home() {
       </div>
 
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-0">
-        <div className="rounded-[12px] max-lg:rounded-none bg-myBlack p-[30px] max-lg:px-[90px] max-tiny:px-[25px]">
+        <div className="rounded-[12px] max-lg:rounded-none bg-myBlack p-[30px] max-lg:px-[90px] max-sm:px-[25px]">
           <EverySlider
             data={[1, 2, 3, 4, 5, 6]}
             title={
-              <h1 className="text-[28px] max-tiny:text-[22px] text-white">
+              <h1 className="text-[28px] max-sm:text-[22px] text-white">
                 რეკომენდებული ნაკრებები
               </h1>
             }
@@ -56,7 +56,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] flex flex-col gap-y-[90px] max-lg:gap-y-[51px]">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] flex flex-col gap-y-[90px] max-lg:gap-y-[51px]">
         <div className="flex flex-col gap-y-[24px]">
           <EverySlider
             data={[1, 2, 3]}
@@ -65,7 +65,7 @@ export default async function Home() {
             spaceBetween={24}
             showButtons={true}
           />
-          <div className="max-tiny:hidden">
+          <div className="max-sm:hidden">
             <EverySlider
               data={[1, 2, 3]}
               card="buySameCardFour"
@@ -78,7 +78,7 @@ export default async function Home() {
         <EverySlider
           data={recomendedProductsData.data}
           title={
-            <h1 className="text-[28px] max-tiny:text-[22px]">
+            <h1 className="text-[28px] max-sm:text-[22px]">
               პოპულარული პროდუქტები
             </h1>
           }

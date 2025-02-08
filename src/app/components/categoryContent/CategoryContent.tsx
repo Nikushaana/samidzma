@@ -57,7 +57,7 @@ export const CategoryContent = ({
     }
   };
 
-  const [pathnameItems, setPathnameItems] = useState<number[]>([]);
+  const [pathnameItems, setPathnameItems] = useState<any>([]);
 
   const [filterStatus, setFilterStatus] = useState(true);
 
@@ -72,9 +72,43 @@ export const CategoryContent = ({
         .filter((segment) => segment && !isNaN(Number(segment)))
         .map(Number);
 
-      setPathnameItems(extractedNumbers);
+      if (!extractedNumbers.length) return;
+
+      // Extract data for each category
+      const firstCategory = FrontCategoriesData.find(
+        (item: any) => item.IdProdSaxeoba === extractedNumbers[0]
+      );
+
+      const secondCategory = firstCategory?.productTypeGroup?.find(
+        (item: any) => item.IdProdTypeGroup === extractedNumbers[1]
+      );
+
+      const thirdCategory = secondCategory?.productTypes?.find(
+        (item: any) => item.IdProdType === extractedNumbers[2]
+      );
+
+      // Create updated pathnameItems
+      const updatedItems = extractedNumbers.map((number, index) => {
+        let categoryData: any = {};
+        if (index === 0) categoryData = firstCategory || {};
+        else if (index === 1) categoryData = secondCategory || {};
+        else if (index === 2) categoryData = thirdCategory || {};
+
+        return {
+          id: index + 1,
+          pathCode: number,
+          pathCategName:
+            categoryData.ProdSaxeobaName ||
+            categoryData.ProdTypeGroupName ||
+            categoryData.ProdTypeName ||
+            "",
+          pathCategDescr: categoryData.description || "",
+        };
+      });
+
+      setPathnameItems(updatedItems);
     }
-  }, [pathname]);
+  }, [pathname, FrontCategoriesData]);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -158,9 +192,6 @@ export const CategoryContent = ({
 
     minPrice: 10,
     maxPrice: 200000,
-
-    ProdSaxeobaName: "",
-    ProdSaxeobaDescription: "",
   });
 
   const [FilterComponents, setFilterComponents] = useState<any>([]);
@@ -168,21 +199,21 @@ export const CategoryContent = ({
   // find status
   const findCategoryStatus = (pathItems: any[], data: any[], key: string) => {
     const firstLevel = data.find(
-      (item: any) => item.IdProdSaxeoba === pathItems[0]
+      (item: any) => item.IdProdSaxeoba == pathItems[0].pathCode
     );
     if (!firstLevel) return undefined;
 
-    if (pathItems.length === 1) return firstLevel[key];
+    if (pathItems[0].pathCode) return firstLevel[key];
 
     const secondLevel = firstLevel?.productTypeGroup?.find(
-      (item: any) => item.IdProdTypeGroup === pathItems[1]
+      (item: any) => item.IdProdTypeGroup == pathItems[1].pathCode
     );
     if (!secondLevel) return undefined;
 
-    if (pathItems.length === 2) return secondLevel[key];
+    if (pathItems[1].pathCode) return secondLevel[key];
 
     const thirdLevel = secondLevel?.productTypes?.find(
-      (item: any) => item.IdProdType === pathItems[2]
+      (item: any) => item.IdProdType == pathItems[2].pathCode
     );
     return thirdLevel?.[key];
   };
@@ -522,11 +553,17 @@ export const CategoryContent = ({
             ? `RaodenobaShefutvashiCode=${filterValues.RaodenobaShefutvashiCode}`
             : ""
         }&${
-          pathnameItems.length >= 1 ? `IdProdSaxeoba=${pathnameItems[0]}` : ""
+          pathnameItems[0]?.pathCode
+            ? `IdProdSaxeoba=${pathnameItems[0]?.pathCode}`
+            : ""
         }&${
-          pathnameItems.length >= 2 ? `IdProdTypeGroup=${pathnameItems[1]}` : ""
+          pathnameItems[1]?.pathCode
+            ? `IdProdTypeGroup=${pathnameItems[1]?.pathCode}`
+            : ""
         }&${
-          pathnameItems.length >= 3 ? `IdProdType=${pathnameItems[2]}` : ""
+          pathnameItems[2]?.pathCode
+            ? `IdProdType=${pathnameItems[2]?.pathCode}`
+            : ""
         }&${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&${
           filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
         }`,
@@ -571,7 +608,7 @@ export const CategoryContent = ({
           <div
             ref={scrollRef}
             onMouseMove={handleDrag}
-            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[50px] max-lg:px-[90px] max-tiny:px-[25px]"
+            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[50px] max-lg:px-[90px] max-sm:px-[25px]"
           >
             {firstCategsLoader
               ? Array.from({ length: 6 }, (_, i) => (
@@ -624,9 +661,9 @@ export const CategoryContent = ({
         </div>
       </div>
 
-      <div className="max-w-[1920px] px-[264px] max-2xl:px-[90px] max-tiny:px-[25px] w-full pb-[100px] flex flex-col gap-y-[48px]">
+      <div className="max-w-[1920px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px] w-full pb-[100px] flex flex-col gap-y-[48px]">
         <div className="flex flex-col gap-y-[20px]">
-          <div className="flex items-center gap-[5px]">
+          <div className="flex flex-wrap items-center gap-[5px]">
             <p
               onClick={() => {
                 router.push("/");
@@ -636,25 +673,30 @@ export const CategoryContent = ({
               მთავარი
             </p>
             <IoChevronForward className="text-[13px]" />
-            {pathnameItems.map((item: number, index: number) => (
+            {pathnameItems.map((item: any, index: number) => (
               <div
-                key={item}
+                key={item.id}
                 onClick={() =>
                   router.push(
-                    `/category/${pathnameItems.slice(0, index + 1).join("/")}`
+                    `/category/${pathnameItems
+                      .slice(0, index + 1)
+                      .map((i: any) => i.pathCode)
+                      .join("/")}`
                   )
                 }
               >
-                {index + 1 === pathnameItems.length ? (
+                {index + 1 === pathnameItems.length && item.pathCategName ? (
                   <p
                     key={index}
                     className="text-[14px] cursor-pointer font-semibold"
                   >
-                    {item}
+                    {item.pathCategName}
                   </p>
                 ) : (
                   <div key={index} className="flex items-center gap-[5px]">
-                    <p className="text-[14px] cursor-pointer">{item}</p>{" "}
+                    <p className="text-[14px] cursor-pointer">
+                      {item.pathCategName}
+                    </p>{" "}
                     <IoChevronForward className="text-[13px]" />
                   </div>
                 )}
@@ -673,12 +715,12 @@ export const CategoryContent = ({
                 <RiFilter2Fill />
               </div>
               <div
-                className={`w-[330px] max-2xl:w-[300px] max-tiny:w-full max-lg:absolute max-lg:top-[45px] flex flex-col gap-y-[10px] ${
-                  filterStatus ? "ml-0" : "ml-[-450px]"
+                className={`w-[330px] max-2xl:w-[300px] max-sm:w-full max-lg:absolute max-lg:top-[45px] flex flex-col gap-y-[10px] ${
+                  filterStatus ? "ml-0" : "ml-[-700px]"
                 } duration-200 max-lg:z-[2] max-lg:shadow rounded-[12px] self-start bg-white p-[20px] flex flex-col gap-y-[10px] sticky top-[20px]`}
               >
                 <h1 className="text-[17px]">
-                  {pathname.split("/").filter(Boolean).pop()}
+                  {pathnameItems[pathnameItems.length - 1]?.pathCategName}
                 </h1>
 
                 {FilterComponents.find((item: any) => item.status === 1) ? (
@@ -700,7 +742,7 @@ export const CategoryContent = ({
                           }}
                           className="flex items-center justify-between cursor-pointer"
                         >
-                          <h1 className="text-[28px] max-lg:text-[24px] max-tiny:text-[22px]">
+                          <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
                             {filter.name}
                           </h1>
                           <IoIosArrowUp
@@ -770,7 +812,7 @@ export const CategoryContent = ({
                         }}
                         className="flex items-center justify-between cursor-pointer"
                       >
-                        <h1 className="text-[28px] max-lg:text-[24px] max-tiny:text-[22px]">
+                        <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
                           ფასი
                         </h1>
                         <IoIosArrowUp
@@ -790,7 +832,7 @@ export const CategoryContent = ({
                         <div className="flex flex-col gap-[10px]">
                           <div className="flex items-center justify-between gap-[5px]">
                             <div
-                              className={`rounded-full w-[50%] h-[52px] max-tiny:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                              className={`rounded-full w-[50%] h-[52px] max-sm:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
                             >
                               <input
                                 onChange={handleInputChange}
@@ -804,7 +846,7 @@ export const CategoryContent = ({
                             </div>
                             <p>-</p>
                             <div
-                              className={`rounded-full w-[50%] h-[52px] max-tiny:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                              className={`rounded-full w-[50%] h-[52px] max-sm:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
                             >
                               <input
                                 onChange={handleInputChange}
@@ -883,7 +925,7 @@ export const CategoryContent = ({
 
             <div className="w-[calc(100%-350px)] max-2xl:w-[calc(100%-320px)] max-lg:w-full flex flex-col gap-y-[48px]">
               <div
-                className={`w-full grid grid-cols-5 max-xl:grid-cols-4 max-lg:grid-cols-4 max-tiny:grid-cols-3 gap-[30px] gap-y-[20px] max-sm:gap-[15px] ${
+                className={`w-full grid grid-cols-5 max-xl:grid-cols-4 max-lg:grid-cols-4 max-sm:grid-cols-3 gap-[30px] gap-y-[20px] max-sm:gap-[15px] ${
                   !childCategsloader && childCategsData.length === 0
                     ? "hidden"
                     : ""
@@ -914,7 +956,7 @@ export const CategoryContent = ({
                             }`
                           )
                         }
-                        className={`relative flex flex-col w-full aspect-square max-sm:aspect-[2/3] cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white `}
+                        className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white `}
                       >
                         {item1?.image ? (
                           <Image
@@ -941,7 +983,7 @@ export const CategoryContent = ({
                             </div>
                           </div>
                         )}
-                        <div className="absolute p-[10px] max-tiny:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
+                        <div className="absolute p-[10px] max-sm:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
                           <p className="text-white text-[11px]">
                             {pathnameItems.length === 1
                               ? item1.ProdTypeGroupName
@@ -955,18 +997,21 @@ export const CategoryContent = ({
 
               {FilterComponents.find((item: any) => item.status === 1) && (
                 <div className="flex flex-col gap-y-[20px]">
-                  <div className="flex justify-between gap-[20px] max-tiny:flex-col">
+                  <div className="flex justify-between gap-[20px] max-sm:flex-col">
                     <div className="flex flex-col gap-y-[10px] w-[40%]">
                       <h1 className="text-[28px]">
-                        {pathname.split("/").filter(Boolean).pop()}
+                        {pathnameItems[pathnameItems.length - 1]?.pathCategName}
                       </h1>
                       <p className="text-[14px]">
-                        {pathname.split("/").filter(Boolean).pop()} აღწერა
+                        {
+                          pathnameItems[pathnameItems.length - 1]
+                            ?.pathCategDescr
+                        }
                       </p>
                     </div>
-                    <div className="flex flex-col max-tiny:flex-col-reverse gap-y-[20px] w-[40%]  max-lg:w-[50%] max-tiny:w-full items-end">
-                      <div className="flex max-lg:flex-col-reverse max-tiny:flex-row max-lg:items-end items-center gap-[20px] w-full">
-                        <div className=" w-[calc(100%-146px)] max-lg:w-full max-tiny:w-[calc(100%-146px)]">
+                    <div className="flex flex-col max-sm:flex-col-reverse gap-y-[20px] w-[40%]  max-lg:w-[50%] max-sm:w-full items-end">
+                      <div className="flex max-lg:flex-col-reverse max-sm:flex-row max-lg:items-end items-center gap-[20px] w-full">
+                        <div className=" w-[calc(100%-146px)] max-lg:w-full max-sm:w-[calc(100%-146px)]">
                           <DropDown1value
                             placeholder="დალაგება ფასით"
                             notInputStyle={true}
@@ -991,7 +1036,7 @@ export const CategoryContent = ({
                           ))}
                         </div>
                       </div>
-                      <ul className="grid grid-cols-2 max-lg:grid-cols-1 max-tiny:grid-cols-2 w-full gap-[10px] text-[14px] max-tiny:text-[13px] list-inside list-disc">
+                      <ul className="grid grid-cols-2 max-lg:grid-cols-1 max-sm:grid-cols-2 w-full gap-[10px] text-[14px] max-sm:text-[13px] list-inside list-disc">
                         <li>დაფქული დარიჩნი</li>
                         <li>დაფქული დარიჩნი</li>
                         <li>დაფქული დარიჩნი</li>
@@ -1004,7 +1049,7 @@ export const CategoryContent = ({
 
                   <div className="w-full flex flex-col gap-y-[100px]">
                     {productsPagePreLoader && (
-                      <div className="w-full grid gap-[20px] grid-cols-3 max-xl:grid-cols-2 max-tiny:grid-cols-1">
+                      <div className="w-full grid gap-[20px] grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1">
                         {Array.from({ length: 12 }, (_, i) => i + 1).map(
                           (item: any, index: number) => (
                             <div
@@ -1023,9 +1068,9 @@ export const CategoryContent = ({
                       <div
                         className={`w-full grid gap-[20px] duration-100  ${
                           activeVar === 1
-                            ? "grid-cols-3 max-xl:grid-cols-2 max-tiny:grid-cols-1"
+                            ? "grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1"
                             : activeVar === 2
-                            ? "grid-cols-4 max-xl:grid-cols-2 max-tiny:grid-cols-1"
+                            ? "grid-cols-4 max-xl:grid-cols-2 max-sm:grid-cols-1"
                             : activeVar === 3 && "grid-cols-1"
                         }`}
                       >
@@ -1091,7 +1136,7 @@ export const CategoryContent = ({
           <EverySlider
             data={blogData}
             loader={blogLoader}
-            title={<h1 className="text-[28px] max-tiny:text-[22px]">ბლოგი</h1>}
+            title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
             card="BlogCard"
             slidesPerView={4}
             spaceBetween={20}

@@ -106,12 +106,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[100px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[100px] relative">
         <div className="flex flex-col gap-y-[30px] max-lg:gap-y-[25px]">
           <WhatUSearch />
 
           <div
-            className={`hidden max-tiny:flex flex-col bg-white rounded-[33px] ${
+            className={`hidden max-md:flex flex-col bg-white rounded-[33px] ${
               user?.id ? "" : "opacity-[0.8] pointer-events-none"
             }`}
           >
@@ -192,12 +192,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div
-            className={`rounded-[12px] p-[20px] max-tiny:p-0 max-tiny:bg-transparent h-full bg-white flex max-lg:flex-col gap-[100px] max-2xl:gap-[50px] max-lg:gap-y-[10px] items-center justify-between ${
+            className={`rounded-[12px] p-[20px] max-sm:p-0 max-sm:bg-transparent h-full bg-white flex max-lg:flex-col gap-[100px] max-2xl:gap-[50px] max-lg:gap-y-[10px] items-center justify-between ${
               user?.id ? "" : "opacity-[0.8] pointer-events-none"
             }`}
           >
-            <div className="flex items-center gap-[10px] justify-between w-full max-tiny:bg-white max-tiny:rounded-[12px] max-tiny:p-[10px]">
-              <div className="relative h-[114px] max-lg:h-[96px] max-tiny:h-[53px] aspect-square rounded-full overflow-hidden bg-[#EEEEEE] flex items-center justify-center text-[55px] max-tiny:text-[30px] text-white">
+            <div className="flex items-center gap-[10px] justify-between w-full max-sm:bg-white max-sm:rounded-[12px] max-sm:p-[10px]">
+              <div className="relative h-[114px] max-lg:h-[96px] max-sm:h-[53px] aspect-square rounded-full overflow-hidden bg-[#EEEEEE] flex items-center justify-center text-[55px] max-sm:text-[30px] text-white">
                 {user?.img ? (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_API_URL}/${user?.img}`}
@@ -212,21 +212,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <GoPerson />
                 )}
               </div>
-              <div className="bg-myYellow flex flex-col items-center rounded-[12px] py-[20px] max-tiny:py-[10px] px-[40px] max-tiny:px-[10px]">
+              <div className="bg-myYellow flex flex-col items-center rounded-[12px] py-[20px] max-sm:py-[10px] px-[40px] max-sm:px-[10px]">
                 <p className="text-[14px]">ბონუსები</p>
-                <h1 className="text-[34px] max-tiny:text-[24px]">
+                <h1 className="text-[34px] max-sm:text-[24px]">
                   {user?.points || 0}₾
                 </h1>
               </div>
               <div className="flex flex-col gap-y-[5px]">
-                <div className="flex items-center justify-between text-[14px] gap-[30px] max-tiny:gap-[10px]">
+                <div className="flex items-center justify-between text-[14px] gap-[30px] max-sm:gap-[10px]">
                   <div className="flex items-center gap-[10px] text-[#9FA1A1]">
                     <BsCart3 className="text-[17px]" />
                     <p className="text-[14px] max-lg:text-[12px]">შეკვეთები</p>
                   </div>
                   <h1>0</h1>
                 </div>
-                <div className="flex items-center justify-between text-[14px] gap-[30px] max-tiny:gap-[10px]">
+                <div className="flex items-center justify-between text-[14px] gap-[30px] max-sm:gap-[10px]">
                   <div className="flex items-center gap-[10px] text-[#9FA1A1]">
                     <FaRegCommentAlt className="text-[16px]" />
                     <p className="text-[14px] max-lg:text-[12px]">
@@ -235,7 +235,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </div>
                   <h1>0</h1>
                 </div>
-                <div className="flex items-center justify-between text-[14px] gap-[30px] max-tiny:gap-[10px]">
+                <div className="flex items-center justify-between text-[14px] gap-[30px] max-sm:gap-[10px]">
                   <div className="flex items-center gap-[10px] text-[#9FA1A1]">
                     <FaRegHeart className="text-[17px]" />
                     <p className="text-[14px] max-lg:text-[12px]">რჩეულები</p>
@@ -245,8 +245,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
 
-            <div className="rounded-[12px] h-full max-lg:w-full bg-myGreen text-white p-[20px] max-tiny:py-[10px] flex items-center justify-between gap-[20px] max-tiny:gap-[10px]">
-              <div className="relative w-[88px] max-tiny:w-[50px] aspect-square">
+            <div className="rounded-[12px] h-full max-lg:w-full bg-myGreen text-white p-[20px] max-sm:py-[10px] flex items-center justify-between gap-[20px] max-sm:gap-[10px]">
+              <div className="relative w-[88px] max-sm:w-[50px] aspect-square">
                 <Image
                   src="/images/mainWhiteLogo.png"
                   alt={""}
@@ -257,12 +257,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   }}
                 />
               </div>
-              <p className="text-[14px] max-tiny:text-[12px] w-[174px] max-lg:w-[50%]">
+              <p className="text-[14px] max-sm:text-[12px] w-[174px] max-lg:w-[50%]">
                 მიიღე მონაწილეობა საზაფხულო აქციაში და დასაჩუქრდი 500 ქულიანი
                 ბონუსით
               </p>
-              <div className="flex items-center gap-[20px] max-tiny:gap-0">
-                <div className="relative w-[70px] max-tiny:w-[30px] aspect-square self-end">
+              <div className="flex items-center gap-[20px] max-sm:gap-0">
+                <div className="relative w-[70px] max-sm:w-[30px] aspect-square self-end">
                   <Image
                     src="/images/starsimg1-2.png"
                     alt={""}
@@ -273,7 +273,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     }}
                   />
                 </div>
-                <div className="relative w-[80px]  max-tiny:w-[40px] aspect-square self-start">
+                <div className="relative w-[80px]  max-sm:w-[40px] aspect-square self-start">
                   <Image
                     src="/images/starsimg2-2.png"
                     alt={""}
@@ -287,9 +287,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
           </div>
-          <div className="flex gap-[25px] max-tiny:gap-[10px] ">
+          <div className="flex gap-[25px] max-sm:gap-[10px] ">
             <div
-              className={`rounded-[12px] bg-white flex flex-col justify-between py-[60px] max-lg:py-[40px] duration-200 max-tiny:hidden ${
+              className={`rounded-[12px] bg-white flex flex-col justify-between py-[60px] max-lg:py-[40px] duration-200 max-md:hidden ${
                 userPanelMenu
                   ? `w-[330px] max-lg:w-[233px] px-[30px] max-lg:px-[20px]`
                   : "w-[40px]"
@@ -366,7 +366,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div
               className={`rounded-[12px] bg-white max-lg:bg-transparent ${
                 screenWidth && screenWidth < 992
-                  ? `w-[calc(100%-65px)] max-tiny:w-full`
+                  ? `w-[calc(100%-65px)] max-md:w-full`
                   : "w-[calc(100%-355px)] max-lg:w-[calc(100%-233px)] p-[20px]"
               }`}
             >
@@ -380,7 +380,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             data={productsData}
             loader={productsLoader}
             title={
-              <h1 className="text-[28px] max-tiny:text-[22px]">
+              <h1 className="text-[28px] max-sm:text-[22px]">
                 შეიძლება ამ პროდუქტებით დაინტერესდე
               </h1>
             }

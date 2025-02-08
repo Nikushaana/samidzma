@@ -74,8 +74,8 @@ export default function Page({ params }: { params: { productId: string } }) {
   const [oneProduct, setOneProduct] = useState<any>({});
   const [oneProductLoader, setOneProductLoader] = useState<boolean>(true);
 
-  const [variationImages, setVariationImages] = useState<any>([]);
-  const [variationImagesLoader, setVariationImagesLoader] =
+  const [mainVariationImages, setMainVariationImages] = useState<any>([]);
+  const [variationImagesStockLoader, setMainVariationImagesStockLoader] =
     useState<any>(false);
 
   useEffect(() => {
@@ -84,11 +84,11 @@ export default function Page({ params }: { params: { productId: string } }) {
       .get(`front/product/${params.productId}`)
       .then((res) => {
         setOneProduct(res.data);
-        if (!variation && res.data?.variation_product_picture?.length > 0) {
+        if (!variation && res.data?.product_variations?.length > 0) {
           window.history.replaceState(
             null,
             "/products",
-            `/products/${params.productId}?variation=${res.data?.variation_product_picture[0]?.ProductCode}`
+            `/products/${params.productId}?variation=${res.data?.product_variations[0]?.ProdCode}`
           );
         }
       })
@@ -96,46 +96,12 @@ export default function Page({ params }: { params: { productId: string } }) {
       .finally(() => {});
   }, [params.productId]);
 
-  // // get active variation images
-  // useEffect(() => {
-  //   if (oneProduct && (params.productId || variation)) {
-  //     setVariationImagesLoader(true);
-  //     axiosUser
-  //       .get(
-  //         `front/productPictureAll?ProdCode=${
-  //           variation ? variation : params.productId
-  //         }`
-  //       )
-  //       .then((res) => {
-  //         setVariationImages(res.data);
-  //         setVariationImagesLoader(false);
-  //         setOneProductLoader(false);
-  //       })
-  //       .catch((err) => {})
-  //       .finally(() => {});
-  //     // get active variation images
-
-  //     // get product stock
-  //     axiosUser
-  //       .get(
-  //         `front/productNashti?ProdCode=${
-  //           variation ? variation : params.productId
-  //         }`
-  //       )
-  //       // &StoreCode=20
-  //       .then((res) => {
-  //         setProdStock(res.data.StoreProdNashtebi[0].ProdNashtebi[0].Nashti);
-  //       })
-  //       .catch((err) => {})
-  //       .finally(() => {});
-  //   }
-  // }, [params.productId, oneProduct, variation]);
-  // // get product stock
+  // get active variation images  get active variation images
 
   useEffect(() => {
     const fetchProductData = async () => {
       if (oneProduct && (params.productId || variation)) {
-        setVariationImagesLoader(true);
+        setMainVariationImagesStockLoader(true);
 
         try {
           const prodCode = variation || params.productId;
@@ -145,16 +111,12 @@ export default function Page({ params }: { params: { productId: string } }) {
             axiosUser.get(`front/productNashti?ProdCode=${prodCode}`),
           ]);
 
-          setVariationImages(imagesResponse.data);
-          const stockData =
-            stockResponse.data?.StoreProdNashtebi?.[0]?.ProdNashtebi?.[0]
-              ?.Nashti;
-          if (stockData !== undefined) {
-            setProdStock(stockData);
-          }
+          setMainVariationImages(imagesResponse.data);
+
+          setProdStock(stockResponse.data?.StoreProdNashtebi);
         } catch (error) {
         } finally {
-          setVariationImagesLoader(false);
+          setMainVariationImagesStockLoader(false);
           setOneProductLoader(false);
         }
       }
@@ -162,6 +124,7 @@ export default function Page({ params }: { params: { productId: string } }) {
 
     fetchProductData();
   }, [params.productId, oneProduct, variation]);
+  // get active variation images  get active variation images
 
   // add in cart
   const HandleAddCart = () => {
@@ -278,60 +241,61 @@ export default function Page({ params }: { params: { productId: string } }) {
   ]);
   // yt video key
 
+  console.log(mainVariationImages);
+
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
         <div className="flex flex-col gap-y-[20px]">
           <WhatUSearch />
-          <div className="flex gap-[26px] max-lg:p-[5px] max-tiny:flex-col max-lg:gap-[16px] h-full  max-lg:bg-white max-lg:rounded-[12px] ">
-            <div className="hidden max-tiny:flex items-center justify-center gap-[5px]">
+          <div className="flex gap-[26px] max-lg:p-[5px] max-sm:flex-col max-lg:gap-[16px] h-full  max-lg:bg-white max-lg:rounded-[12px] ">
+            <div className="hidden max-sm:flex items-center justify-center gap-[5px]">
               <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
-                <p className="text-[14px] max-tiny:text-[12px]">Sale -5%</p>
+                <p className="text-[14px] max-sm:text-[12px]">Sale -5%</p>
               </div>
               <div className="rounded-full text-white bg-myGreen flex items-center px-[15px] h-[36px]">
-                <p className="text-[14px] max-tiny:text-[12px]">მარაგშია</p>
+                <p className="text-[14px] max-sm:text-[12px]">მარაგშია</p>
               </div>
               <div className="rounded-full text-black bg-myYellow flex items-center gap-[10px] px-[15px] h-[36px]">
-                <BiStar className="text-[20px] max-tiny:text-[15px]" />
-                <p className="text-[14px] max-tiny:text-[12px]">4-7</p>
+                <BiStar className="text-[20px] max-sm:text-[15px]" />
+                <p className="text-[14px] max-sm:text-[12px]">4-7</p>
               </div>
               <div className="rounded-full text-white bg-myBlack flex items-center justify-center h-[36px] w-[36px]">
                 <TbTruckDelivery className="text-[20px]" />
               </div>
             </div>
-            <div className="w-[45%] max-tiny:w-full flex">
+            <div className="w-[45%] max-sm:w-full flex">
               <EachProductSlider
-                prodMainImages={variationImages}
+                prodMainImages={mainVariationImages}
+                // prodMainImages={
+                //   oneProduct?.product_picture?.length > 0 &&
+                //   oneProduct?.product_picture
+                // }
                 prodVariationImages={
-                  oneProduct?.variation_product_picture?.length > 0
-                    ? oneProduct?.variation_product_picture
-                    : oneProduct?.product_picture
+                  oneProduct?.product_variations?.length > 0 &&
+                  oneProduct?.product_variations
                 }
                 variation={variation}
                 mainId={params.productId}
                 mainLoader={oneProductLoader}
-                activeImagessLoader={variationImagesLoader}
+                activeImagessLoader={variationImagesStockLoader}
               />
             </div>
-            <div className="w-[55%] max-tiny:w-full">
+            <div className="w-[55%] max-sm:w-full">
               {oneProductLoader ? (
                 <div className="w-full h-full rounded-[12px] overflow-hidden loaderwave"></div>
               ) : (
                 <div className="flex flex-col gap-y-[25px] p-[18px] rounded-[12px] bg-white w-full h-full">
-                  <div className="flex items-center gap-[5px] max-tiny:hidden">
+                  <div className="flex items-center gap-[5px] max-sm:hidden">
                     <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
-                      <p className="text-[14px] max-tiny:text-[12px]">
-                        Sale -5%
-                      </p>
+                      <p className="text-[14px] max-sm:text-[12px]">Sale -5%</p>
                     </div>
                     <div className="rounded-full text-white bg-myGreen flex items-center px-[15px] h-[36px]">
-                      <p className="text-[14px] max-tiny:text-[12px]">
-                        მარაგშია
-                      </p>
+                      <p className="text-[14px] max-sm:text-[12px]">მარაგშია</p>
                     </div>
                     <div className="rounded-full text-black bg-myYellow flex items-center gap-[10px] px-[15px] h-[36px]">
-                      <BiStar className="text-[20px] max-tiny:text-[15px]" />
-                      <p className="text-[14px] max-tiny:text-[12px]">4-7</p>
+                      <BiStar className="text-[20px] max-sm:text-[15px]" />
+                      <p className="text-[14px] max-sm:text-[12px]">4-7</p>
                     </div>
                     <div className="rounded-full text-white bg-myBlack flex items-center justify-center h-[36px] w-[36px]">
                       <TbTruckDelivery className="text-[20px]" />
@@ -345,8 +309,8 @@ export default function Page({ params }: { params: { productId: string } }) {
                       : oneProduct?.product?.ProductName}
                   </h1>
                   <div className="flex flex-col gap-y-[10px]">
-                    <div className="flex items-center max-tiny:justify-between gap-[40px]">
-                      <h1 className="text-[28px] max-tiny:text-[20px]">
+                    <div className="flex items-center max-sm:justify-between gap-[40px]">
+                      <h1 className="text-[28px] max-sm:text-[20px]">
                         {variation
                           ? complect
                             ? (
@@ -368,11 +332,13 @@ export default function Page({ params }: { params: { productId: string } }) {
                             )?.toFixed(2)}
                         ₾
                       </h1>
-                      <div className="border-[1px] rounded-full text-[14px] h-[38px] flex items-center">
+                      <div
+                        onClick={() => {
+                          setComplect((prev: any) => !prev);
+                        }}
+                        className="border-[1px] rounded-full text-[14px] h-[38px] flex items-center"
+                      >
                         <p
-                          onClick={() => {
-                            setComplect(false);
-                          }}
                           className={`rounded-full h-full flex items-center gap-[2px] px-[15px] duration-100 cursor-pointer ${
                             complect ? "" : "bg-myGreen text-white"
                           }`}
@@ -380,14 +346,11 @@ export default function Page({ params }: { params: { productId: string } }) {
                           <span className="text-[18px]">1</span> ც
                         </p>
                         <div
-                          onClick={() => {
-                            setComplect(true);
-                          }}
                           className={`rounded-full h-full flex items-center px-[20px] duration-100 cursor-pointer ${
                             complect ? "bg-myGreen text-white" : ""
                           }`}
                         >
-                          <p className="max-tiny:text-[10px] flex items-center gap-[2px]">
+                          <p className="max-sm:text-[10px] flex items-center gap-[2px]">
                             შეკვრა /
                             <span className="text-[18px]">
                               {variation
@@ -404,7 +367,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                       </div>
                     </div>
                     <Counter
-                      prodStock={prodStock}
+                      prodStock={prodStock[0]?.ProdNashtebi[0]?.Nashti}
                       setCounterValue={setCartProdQuant}
                     />
                     <div className="flex items-center gap-[10px]">
@@ -434,10 +397,10 @@ export default function Page({ params }: { params: { productId: string } }) {
                     </div>
                   </div>
                   <div className="flex max-lg:flex-col max-lg:gap-0 items-start gap-[20px]">
-                    <h1 className="text-[22px] max-tiny:text-[18px]">
+                    <h1 className="text-[22px] max-sm:text-[18px]">
                       მიტანის სერვისი
                     </h1>
-                    <div className="flex flex-col max-tiny:gap-y-[5px] max-lg:w-full">
+                    <div className="flex flex-col max-sm:gap-y-[5px] max-lg:w-full">
                       <div className="bg-[#EAEDEE] h-[38px] px-[20px] flex items-center rounded-full">
                         <p className="text-[10px]">Georgia</p>
                       </div>
@@ -469,11 +432,11 @@ export default function Page({ params }: { params: { productId: string } }) {
                   <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
                     <GreenButton
                       name="ყიდვა"
-                      style="h-[56px] max-tiny:h-[48px] text-[18px]"
+                      style="h-[56px] max-sm:h-[48px] text-[18px]"
                       action={HandleAddCart}
                       loader={addCartloader}
                       dissabled={isInCart}
-                      // dissabled={isInCart || prodStock === 0}
+                      // dissabled={isInCart || prodStock[0].ProdNashtebi[0].Nashti === 0}
                     />
 
                     <div className="flex items-center gap-[20px] max-lg:justify-center max-lg:flex-row-reverse">
@@ -494,13 +457,13 @@ export default function Page({ params }: { params: { productId: string } }) {
                       </p>
                     </div>
                   </div>
-                  <DropDownFilials stock={oneProduct?.stock} />
+                  <DropDownFilials stock={prodStock} />
                 </div>
               )}
             </div>
           </div>
           <div className="flex flex-col gap-y-[30px]">
-            <div className="w-full grid grid-cols-3 max-tiny:grid-cols-7 border-b-[2px]">
+            <div className="w-full grid grid-cols-3 max-sm:grid-cols-7 border-b-[2px]">
               {prodInfos.map((item: any, index: any) => (
                 <div
                   key={item.id}
@@ -509,14 +472,14 @@ export default function Page({ params }: { params: { productId: string } }) {
                   }}
                   className={`${
                     index == 0
-                      ? "max-tiny:col-span-2"
+                      ? "max-sm:col-span-2"
                       : index == 1
-                      ? "max-tiny:col-span-3"
-                      : index == 2 && "max-tiny:col-span-2"
+                      ? "max-sm:col-span-3"
+                      : index == 2 && "max-sm:col-span-2"
                   }`}
                 >
                   <h1
-                    className={`text-[28px] max-tiny:text-[14px] select-none max-tiny:h-[25px] cursor-pointer text-center duration-100  ${
+                    className={`text-[28px] max-sm:text-[14px] select-none max-sm:h-[25px] cursor-pointer text-center duration-100  ${
                       productDetiles === item.id ? "text-myGreen" : ""
                     }`}
                   >
@@ -549,7 +512,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                           : oneProduct?.product?.DescriptionName}
                       </p>
                     )}
-                    <ul className="grid grid-cols-2 max-tiny:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
+                    <ul className="grid grid-cols-2 max-sm:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
                       <li>Aromatic ground cinnamon</li>
                       <li>Aromatic ground cinnamon</li>
                       <li>Aromatic ground cinnamon</li>
@@ -592,7 +555,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                   data={productsData}
                   loader={productsLoader}
                   title={
-                    <h1 className="text-[28px] max-tiny:text-[24px]">
+                    <h1 className="text-[28px] max-sm:text-[24px]">
                       რეკომენდებული ნაკრებები
                     </h1>
                   }
@@ -608,7 +571,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                   <EverySlider
                     data={prodReviewData?.data}
                     title={
-                      <h1 className="text-[28px] max-tiny:text-[24px]">
+                      <h1 className="text-[28px] max-sm:text-[24px]">
                         შეფასებები
                       </h1>
                     }
@@ -621,10 +584,10 @@ export default function Page({ params }: { params: { productId: string } }) {
               )}
 
               <div className="flex flex-col gap-y-[20px]">
-                <h1 className="text-[28px] max-tiny:text-[24px]">
+                <h1 className="text-[28px] max-sm:text-[24px]">
                   შეიძლება ასევე მოგეწონოს
                 </h1>
-                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-tiny:grid-cols-1 gap-[17px]">
+                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[17px]">
                   {productsLoader
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div
@@ -643,10 +606,10 @@ export default function Page({ params }: { params: { productId: string } }) {
               </div>
 
               <div className="flex flex-col gap-y-[20px]">
-                <h1 className="text-[28px] max-tiny:text-[24px]">
+                <h1 className="text-[28px] max-sm:text-[24px]">
                   შენთვის რეკომენდებული
                 </h1>
-                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-tiny:grid-cols-1 gap-[17px]">
+                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[17px]">
                   {productsLoader
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div

@@ -45,7 +45,7 @@ export default function Page() {
   ]);
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
         <WhatUSearch />
 
         <div className="flex flex-col gap-y-[20px]">
@@ -68,23 +68,23 @@ export default function Page() {
           </ul>
         </div>
 
-        <div className="w-full grid grid-cols-6 max-lg:grid-cols-3 gap-[15px] max-lg:gap-[30px] max-tiny:gap-[10px]">
+        <div className="w-full grid grid-cols-6 max-lg:grid-cols-3 gap-[15px] max-lg:gap-[30px] max-sm:gap-[10px]">
           {animInfo.map((item: AnimInfoType, index: number) => (
             <div
               key={item.id}
               className={`w-full aspect-square rounded-full flex flex-col
-                 items-center justify-center gap-y-[10px] max-tiny:gap-y-0 ${
+                 items-center justify-center gap-y-[10px] max-sm:gap-y-0 ${
                    index % 2 === 1
                      ? `bg-myGreen text-white ${
                          index == 3 || index == 5
-                           ? "mt-[70px] max-lg:mt-[-70px] max-tiny:mt-[-30px]"
-                           : "mt-[70px] max-tiny:mt-[30px]"
+                           ? "mt-[70px] max-lg:mt-[-70px] max-sm:mt-[-30px]"
+                           : "mt-[70px] max-sm:mt-[30px]"
                        }`
                      : "bg-myYellow"
                  }`}
             >
-              <h1 className="text-[42px] max-tiny:text-[21px]">{item.value}</h1>
-              <h1 className="text-[18px] max-tiny:text-[9px] text-center">
+              <h1 className="text-[42px] max-sm:text-[21px]">{item.value}</h1>
+              <h1 className="text-[18px] max-sm:text-[9px] text-center">
                 {item.name}
               </h1>
             </div>

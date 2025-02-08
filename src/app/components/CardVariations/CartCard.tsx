@@ -97,7 +97,7 @@ export default function CartCard({
       >
         <BsXLg />
       </div>
-      <div className="flex items-center gap-[27px] max-tiny:w-[40%]">
+      <div className="flex items-center gap-[27px] max-sm:w-[40%]">
         <div className="relative aspect-video h-[175px] max-lg:aspect-square flex items-center justify-center rounded-[8px] overflow-hidden">
           {user?.id ? (
             cartImg ? (
@@ -129,7 +129,7 @@ export default function CartCard({
             <p className="text-center text-[14px]">ფოტო არ არსებობს</p>
           )}
         </div>
-        <div className="flex flex-col gap-y-[10px] max-tiny:hidden">
+        <div className="flex flex-col gap-y-[10px] max-sm:hidden">
           <div className="flex items-center gap-[10px] text-[#509E07]">
             <FaCheck />
             <p>მარაგშია</p>
@@ -139,15 +139,15 @@ export default function CartCard({
         </div>
       </div>
 
-      <div className="flex flex-col items-end max-tiny:items-start gap-y-[20px] max-tiny:gap-y-[5px]">
-        <div className="items-center gap-[10px] text-[#509E07] hidden max-tiny:flex">
+      <div className="flex flex-col items-end max-sm:items-start gap-y-[20px] max-sm:gap-y-[5px]">
+        <div className="items-center gap-[10px] text-[#509E07] hidden max-sm:flex">
           <FaCheck />
           <p>მარაგშია</p>
         </div>
-        <h1 className="text-[22px] hidden max-tiny:flex">
+        <h1 className="text-[22px] hidden max-sm:flex">
           {productItemData.ProductName}
         </h1>
-        <p className="text-[14px] hidden max-tiny:flex">
+        <p className="text-[14px] hidden max-sm:flex">
           ზომა: {productItemData.ZomaName}
         </p>
         <h1 className="text-[20px]">

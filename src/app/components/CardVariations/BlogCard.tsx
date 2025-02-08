@@ -51,7 +51,7 @@ export default function BlogCard({ item, colspan }: any) {
           onClick={() => {
             // router.push("/blog/1");
           }}
-          className="text-[18px] max-tiny:text-[14px] underline text-myGreen"
+          className="text-[18px] max-sm:text-[14px] underline text-myGreen"
         >
           წაიკითხე ვრცლად
         </p>

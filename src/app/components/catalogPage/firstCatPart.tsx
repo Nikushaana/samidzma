@@ -17,7 +17,6 @@ import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 export default function FirstCatPart({
   filterValues,
   setFilterValues,
-  isProducts,
   setCurrentPage,
 }: any) {
   const { FrontCategoriesData, FrontCategoriesLoader } = useFrontCategories();
@@ -25,22 +24,6 @@ export default function FirstCatPart({
   const [sldsPerView, setSldsPerView] = useState<number>(7);
 
   const screenWidth = useScreenWidth();
-
-  const [actSecCategory, setActSecCategory] = useState<any>({});
-
-  useEffect(() => {
-    if (FrontCategoriesData[0]?.IdProdSaxeoba) {
-      if (filterValues?.IdProdSaxeoba) {
-        setActSecCategory(
-          FrontCategoriesData.find(
-            (item2: any) => item2.IdProdSaxeoba == filterValues.IdProdSaxeoba
-          )
-        );
-      } else {
-        setActSecCategory({});
-      }
-    }
-  }, [FrontCategoriesData, filterValues?.IdProdSaxeoba]);
 
   useEffect(() => {
     if (screenWidth > 1025) {
@@ -54,12 +37,12 @@ export default function FirstCatPart({
 
   return (
     <div className="mx-[264px] max-2xl:mx-[90px] max-lg:mx-[0px] rounded-[12px] bg-[#EAEDEE] p-[30px] max-lg:px-[0px] max-lg:py-[10px] flex flex-col gap-y-[10px]">
-      <div className="max-lg:mx-[90px] max-tiny:mx-[25px]">
+      <div className="max-lg:mx-[90px] max-sm:mx-[25px]">
         <WhatUSearch />
       </div>
 
       <div className="w-full flex flex-col gap-y-[10px]">
-        <div className="h-[250px] max-sm:h-[180px] max-lg:mx-[90px] max-tiny:mx-[25px] overflow-hidden">
+        <div className="h-[250px] max-sm:h-[180px] max-lg:mx-[90px] max-sm:mx-[25px] overflow-hidden">
           {FrontCategoriesLoader ? (
             <div
               style={{
@@ -95,8 +78,7 @@ export default function FirstCatPart({
                         prev.IdProdSaxeoba == item?.IdProdSaxeoba
                           ? ""
                           : item?.IdProdSaxeoba,
-                      ProdSaxeobaName: item?.ProdSaxeobaName,
-                      ProdSaxeobaDescription: item?.description,
+                      
                       IdProdTypeGroup: "",
                       IdProdType: "",
                     }));
@@ -140,7 +122,7 @@ export default function FirstCatPart({
                     )}
                   </div>
                   <h1
-                    className={`text-center text-[18px] max-tiny:text-[15px] line-clamp-3 ${
+                    className={`text-center text-[18px] max-sm:text-[15px] line-clamp-3 ${
                       filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                         ? "text-white"
                         : ""
@@ -153,153 +135,6 @@ export default function FirstCatPart({
             </Swiper>
           )}
         </div>
-        {isProducts &&
-          !FrontCategoriesLoader &&
-          actSecCategory?.productTypeGroup?.length > 0 && (
-            <div className="bg-myGreen p-[10px] rounded-[12px] max-lg:rounded-none max-h-[150px] overflow-hidden">
-              <Swiper
-                modules={[Autoplay, EffectFade, Pagination]}
-                slidesPerView={
-                  screenWidth <= 1025 ? (screenWidth <= 500 ? 4 : 9) : 13
-                }
-                spaceBetween={7}
-                loop={true}
-                pagination={false}
-                className="w-[calc(100%+5vw)] max-sm:w-[calc(100%+10vw)] items-stretch self-stretch flex BannerSlider"
-              >
-                {actSecCategory?.productTypeGroup?.map(
-                  (item1: any, index: any) => (
-                    <SwiperSlide
-                      key={item1.IdProdTypeGroup}
-                      onClick={() => {
-                        setFilterValues((prev: any) => ({
-                          ...prev,
-                          IdProdTypeGroup:
-                            prev.IdProdTypeGroup == item1.IdProdTypeGroup
-                              ? ""
-                              : item1.IdProdTypeGroup,
-                          IdProdType: "",
-                        }));
-                        setCurrentPage(0);
-                      }}
-                      className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-myYellow duration-150 ${
-                        filterValues.IdProdTypeGroup == item1.IdProdTypeGroup
-                          ? "border-[3px]"
-                          : ""
-                      }`}
-                    >
-                      {item1?.image ? (
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}
-                          alt={""}
-                          sizes="500px"
-                          fill
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full relative">
-                          <div className="w-[90%] h-[90%] relative">
-                            <Image
-                              src="/images/siteLogo.png"
-                              alt={""}
-                              sizes="500px"
-                              fill
-                              style={{
-                                objectFit: "contain",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                      <div className="absolute p-[10px] max-tiny:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="text-white text-[10px] w-full">
-                          {item1.ProdTypeGroupName}
-                        </p>
-                      </div>
-                    </SwiperSlide>
-                  )
-                )}
-              </Swiper>
-            </div>
-          )}
-        {isProducts &&
-          !FrontCategoriesLoader &&
-          actSecCategory?.productTypeGroup?.find(
-            (item2: any) =>
-              item2.IdProdTypeGroup == filterValues.IdProdTypeGroup
-          )?.productTypes.length > 0 && (
-            <div className="bg-myYellow p-[10px] rounded-[12px] max-lg:rounded-none max-h-[150px] overflow-hidden">
-              <Swiper
-                modules={[Autoplay, EffectFade, Pagination]}
-                slidesPerView={
-                  screenWidth <= 1025 ? (screenWidth <= 500 ? 4 : 9) : 13
-                }
-                spaceBetween={7}
-                loop={true}
-                pagination={false}
-                className="w-[calc(100%+5vw)] max-sm:w-[calc(100%+10vw)] items-stretch self-stretch flex BannerSlider"
-              >
-                {actSecCategory?.productTypeGroup
-                  ?.find(
-                    (item3: any) =>
-                      item3.IdProdTypeGroup == filterValues.IdProdTypeGroup
-                  )
-                  ?.productTypes?.map((item4: any, index: any) => (
-                    <SwiperSlide
-                      key={item4.IdProdType}
-                      onClick={() => {
-                        setFilterValues((prev: any) => ({
-                          ...prev,
-                          IdProdType:
-                            prev.IdProdType == item4.IdProdType
-                              ? ""
-                              : item4.IdProdType,
-                        }));
-                        setCurrentPage(0);
-                      }}
-                      className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white duration-150 ${
-                        filterValues.IdProdType == item4.IdProdType
-                          ? "border-[3px]"
-                          : ""
-                      }`}
-                    >
-                      {item4?.image ? (
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_API_URL}/${item4?.image}`}
-                          alt={""}
-                          sizes="500px"
-                          fill
-                          style={{
-                            objectFit: "cover",
-                          }}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full relative">
-                          <div className="w-[90%] h-[90%] relative">
-                            <Image
-                              src="/images/siteLogo.png"
-                              alt={""}
-                              sizes="500px"
-                              fill
-                              style={{
-                                objectFit: "contain",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )}
-                      <div className="absolute p-[10px] max-tiny:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                        <p className="text-white text-[10px]">
-                          {item4.ProdTypeName}
-                        </p>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-              </Swiper>
-            </div>
-          )}
       </div>
     </div>
   );

@@ -23,11 +23,11 @@ export default function ProductReview({
     <div className="flex flex-col gap-y-[20px]">
       <h1 className="text-[28px]">მომხმარებელთა შეფასებები</h1>
       <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[20px] max-lg:gap-[10px]">
-        <div className="bg-white p-[30px] max-tiny:p-[20px] rounded-[12px] flex items-center gap-[40px] justify-center">
+        <div className="bg-white p-[30px] max-sm:p-[20px] rounded-[12px] flex items-center gap-[40px] justify-center">
           <div className="flex flex-col gap-y-[5px]">
-            <div className="flex justify-center items-center  gap-[5px] bg-myYellow h-[48px] max-tiny:h-[35px] rounded-full px-[0px]">
-              <BiStar className="text-[28px] max-tiny:text-[20px]" />
-              <h1 className="text-[26px] max-tiny:text-[18px] mt-[3px]">
+            <div className="flex justify-center items-center  gap-[5px] bg-myYellow h-[48px] max-sm:h-[35px] rounded-full px-[0px]">
+              <BiStar className="text-[28px] max-sm:text-[20px]" />
+              <h1 className="text-[26px] max-sm:text-[18px] mt-[3px]">
                 {prodReviewData?.average}
               </h1>
             </div>
@@ -61,7 +61,7 @@ export default function ProductReview({
             )}
           </div>
         </div>
-        <div className="bg-white p-[30px] max-tiny:p-[20px] rounded-[12px] flex max-tiny:flex-col max-tiny:gap-[10px] items-center gap-[40px] justify-between">
+        <div className="bg-white p-[30px] max-sm:p-[20px] rounded-[12px] flex max-sm:flex-col max-sm:gap-[10px] items-center gap-[40px] justify-between">
           <h1 className="text-[22px]">
             დატოვე შენი კომენტარი პროდუქტის შესახებ
           </h1>
@@ -77,7 +77,7 @@ export default function ProductReview({
                 setAlertText("გაიარე ავტორიზაცია შეფასების დასაფიქსირებლად!");
               }
             }}
-            style="h-[56px] max-tiny:h-[48px] text-[18px]"
+            style="h-[56px] max-sm:h-[48px] text-[18px]"
           />
         </div>
       </div>

@@ -121,7 +121,7 @@ export default function KitCard({ item, slidesPerView }: any) {
         <div className={`${slidesPerView === 1 ? "w-[280px] max-lg:w-full" : ""}`}>
           <GreenButton
             name="ყიდვა"
-            style="h-[56px] max-tiny:h-[48px] text-[18px]"
+            style="h-[56px] max-sm:h-[48px] text-[18px]"
           />
         </div>
       </div>

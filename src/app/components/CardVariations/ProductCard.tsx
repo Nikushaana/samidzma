@@ -19,7 +19,7 @@ import { UserContext } from "../../../../dataFetchs/UserAxios";
 
 export default function ProductCard({ item, narrow }: any) {
   const router = useRouter();
-  const { setOpenRecomendedPopUp, setAlertShow, setAlertStatus, setAlertText } =
+  const { setOpenProductCardPopUp, setAlertShow, setAlertStatus, setAlertText } =
     useContext(ContextForSharingStates);
   const { user } = useContext(UserContext);
 
@@ -182,7 +182,7 @@ export default function ProductCard({ item, narrow }: any) {
         }
       }
     } else {
-      setOpenRecomendedPopUp(
+      setOpenProductCardPopUp(
         item.ProdAdditionalCode
           ? `${item.ProdAdditionalCode}?${item.ProdCode}`
           : item.ProdCode
@@ -208,7 +208,7 @@ export default function ProductCard({ item, narrow }: any) {
 
   return (
     <div
-      className={`rounded-[12px] bg-white p-[20px] max-tiny:p-[10px] flex flex-col justify-between gap-[12px] h-full`}
+      className={`rounded-[12px] bg-white p-[20px] max-sm:p-[10px] flex flex-col justify-between gap-[12px] h-full`}
     >
       <div className="flex flex-col gap-[12px]">
         <div className="flex flex-wrap items-center justify-end gap-[8px]">
@@ -251,7 +251,7 @@ export default function ProductCard({ item, narrow }: any) {
           </div>
         </div>
 
-        <div className="max-tiny:grid max-tiny:grid-cols-2 gap-[10px]">
+        <div className="max-sm:grid max-sm:grid-cols-2 gap-[10px]">
           <div
             onClick={() => {
               router.push(
@@ -262,7 +262,7 @@ export default function ProductCard({ item, narrow }: any) {
                 }`
               );
             }}
-            className="relative cursor-pointer w-full h-[224px] max-tiny:h-auto max-tiny:aspect-[4/3] flex items-center justify-center rounded-[4px] overflow-hidden"
+            className="relative cursor-pointer w-full h-[224px] max-sm:h-auto max-sm:aspect-[4/3] flex items-center justify-center rounded-[4px] overflow-hidden"
           >
             {prodImagesLoader ? (
               <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
@@ -279,11 +279,11 @@ export default function ProductCard({ item, narrow }: any) {
             ) : (
               <p className="text-center text-[14px]">ფოტო არ არსებობს</p>
             )}
-            <div className="absolute bottom-[20px] max-tiny:bottom-[10px] left-[20px] max-tiny:left-[10px] z-[1] bg-myGreen text-white shrink-0 flex items-center justify-center text-[18px] w-[53px] max-tiny:w-[36px] aspect-square rounded-full">
+            <div className="absolute bottom-[20px] max-sm:bottom-[10px] left-[20px] max-sm:left-[10px] z-[1] bg-myGreen text-white shrink-0 flex items-center justify-center text-[18px] w-[53px] max-sm:w-[36px] aspect-square rounded-full">
               <FaTree />
             </div>
           </div>
-          <div className="hidden max-tiny:flex flex-col justify-between">
+          <div className="hidden max-sm:flex flex-col justify-between">
             <div
               className={`flex items-center gap-[12px] ${
                 narrow ? "justify-center" : "justify-end"
@@ -302,7 +302,7 @@ export default function ProductCard({ item, narrow }: any) {
               </div>
               <div
                 onClick={() => {
-                  setOpenRecomendedPopUp(
+                  setOpenProductCardPopUp(
                     item.ProdAdditionalCode
                       ? `${item.ProdAdditionalCode}?${item.ProdCode}`
                       : item.ProdCode
@@ -315,7 +315,7 @@ export default function ProductCard({ item, narrow }: any) {
             </div>
             <GreenButton
               name="ყიდვა"
-              style="h-[56px] max-tiny:h-[48px] text-[18px]"
+              style="h-[56px] max-sm:h-[48px] text-[18px]"
               action={HandleAddCart}
               loader={addCartloader}
               dissabled={isInCart}
@@ -324,10 +324,10 @@ export default function ProductCard({ item, narrow }: any) {
           </div>
         </div>
 
-        <h1 className="text-[20px] pl-[15px] hidden max-tiny:flex">
+        <h1 className="text-[20px] pl-[15px] hidden max-sm:flex">
           {item.Fasi1}₾
         </h1>
-        <h1 className="text-[22px] pl-[15px] max-2xl:pl-0 h-[70px] max-tiny:h-auto line-clamp-2">
+        <h1 className="text-[22px] pl-[15px] max-2xl:pl-0 h-[70px] max-sm:h-auto line-clamp-2">
           {item.ProductName}
         </h1>
         <p className="text-[14px] pl-[15px] line-clamp-2">
@@ -335,7 +335,7 @@ export default function ProductCard({ item, narrow }: any) {
         </p>
       </div>
 
-      <div className="flex flex-col gap-[12px] max-tiny:hidden">
+      <div className="flex flex-col gap-[12px] max-sm:hidden">
         <div
           className={`flex items-center justify-between ${
             narrow ? "flex-col-reverse gap-y-[12px]" : ""
@@ -362,7 +362,7 @@ export default function ProductCard({ item, narrow }: any) {
           </div>
           <div
             onClick={() => {
-              setOpenRecomendedPopUp(
+              setOpenProductCardPopUp(
                 item.ProdAdditionalCode
                   ? `${item.ProdAdditionalCode}?${item.ProdCode}`
                   : item.ProdCode
@@ -375,7 +375,7 @@ export default function ProductCard({ item, narrow }: any) {
         </div>
         <GreenButton
           name="ყიდვა"
-          style="h-[56px] max-tiny:h-[48px] text-[18px]"
+          style="h-[56px] max-sm:h-[48px] text-[18px]"
           action={HandleAddCart}
           loader={addCartloader}
           dissabled={isInCart}

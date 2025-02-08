@@ -16,7 +16,7 @@ export default function AlertCust() {
         background: `${alertStatus ? "#dcf3dc" : "#fdeded"}`,
         color: `${alertStatus ? "#408944" : "#d94545"}`,
       }}
-      className={`z-[20] p-[20px] fixed flex gap-[20px] min-w-[400px] max-tiny:min-w-0 max-tiny:w-[calc(100%-32px)] items-center rounded-[5px] shadow text-[17px] left-[50%] translate-x-[-50%] duration-100 pointer-events-none ${
+      className={`z-[20] p-[20px] fixed flex gap-[20px] min-w-[400px] max-sm:min-w-0 max-sm:w-[calc(100%-32px)] items-center rounded-[5px] shadow text-[17px] left-[50%] translate-x-[-50%] duration-100 pointer-events-none ${
         alertStatus ? "shadow-[#edf7ed]" : "shadow-[#fdeded]"
       } `}
     >

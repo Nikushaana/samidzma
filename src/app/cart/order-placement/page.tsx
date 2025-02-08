@@ -190,13 +190,13 @@ export default function Page() {
             </div>
             {orderPlacementValues.is_delivery === 1 && (
               <div
-                className={`grid grid-cols-4 max-tiny:grid-cols-1 gap-[20px] px-[15px] max-tiny:px-0 ${
+                className={`grid grid-cols-4 max-sm:grid-cols-1 gap-[20px] px-[15px] max-sm:px-0 ${
                   orderPlacementValues.is_delivery === 1
                     ? ""
                     : "overflow-hidden"
                 }`}
               >
-                <div className="col-span-2 max-tiny:col-span-1">
+                <div className="col-span-2 max-sm:col-span-1">
                   <Input1
                     title="მიტანის თარიღი"
                     placeholder="15.07.2024"
@@ -205,7 +205,7 @@ export default function Page() {
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-2 max-tiny:col-span-1">
+                <div className="col-span-2 max-sm:col-span-1">
                   <Input1
                     title="დრო"
                     placeholder="8:00"
@@ -214,7 +214,7 @@ export default function Page() {
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-2 max-tiny:col-span-1">
+                <div className="col-span-2 max-sm:col-span-1">
                   <Input1
                     title="ქუჩა"
                     placeholder="შეიყვანე ქუჩის სახელი"
@@ -223,7 +223,7 @@ export default function Page() {
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-2 max-tiny:col-span-1">
+                <div className="col-span-2 max-sm:col-span-1">
                   <Input1
                     title="სახლი"
                     placeholder="შეიყვანე ქუჩის/სახლის N"
@@ -232,7 +232,7 @@ export default function Page() {
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-4 max-tiny:col-span-1">
+                <div className="col-span-4 max-sm:col-span-1">
                   <Input1
                     title="ბინა"
                     placeholder="შეიყვანე ბინის N"
@@ -241,14 +241,14 @@ export default function Page() {
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-4 max-tiny:col-span-1">
+                <div className="col-span-4 max-sm:col-span-1">
                   <TextArea1
                     title="დამატებითი ინფორმაცია"
                     name="description"
                     setAllValues={setOrderPlacementValues}
                   />
                 </div>
-                <div className="col-span-4 max-tiny:col-span-1 h-[300px] rounded-[22px] overflow-hidden">
+                <div className="col-span-4 max-sm:col-span-1 h-[300px] rounded-[22px] overflow-hidden">
                   <Map
                     // activeCenter={{
                     //   lat: Number(mainWarehouseData?.latitude),

@@ -94,7 +94,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                     }
                   }
                 }}
-                className={`max-tiny:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%] cursor-pointer ${
+                className={`max-sm:w-full h-full rounded-[8px] relative overflow-hidden w-[65%] max-lg:w-[50%] cursor-pointer ${
                   screenWidth < 470
                     ? item?.mobile_redirect_link
                       ? "cursor-pointer"
@@ -132,7 +132,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                     )}
               </div>
               <div
-                className={`flex flex-col gap-[10px] max-lg:gap-[20px] h-full max-tiny:hidden w-[35%] max-lg:w-[50%]`}
+                className={`flex flex-col gap-[10px] max-lg:gap-[20px] h-full max-sm:hidden w-[35%] max-lg:w-[50%]`}
               >
                 <div
                   onClick={() => {

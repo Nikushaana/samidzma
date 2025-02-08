@@ -121,7 +121,7 @@ export default function CategoriesCard({ item }: any) {
         action={() => {
           router.push(`/category/${item.IdProdSaxeoba}`);
         }}
-        style="h-[56px] max-tiny:h-[48px] text-[18px]"
+        style="h-[56px] max-sm:h-[48px] text-[18px]"
       />
     </div>
   );

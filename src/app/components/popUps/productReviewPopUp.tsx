@@ -85,7 +85,7 @@ export default function ProductReviewPopUp() {
         }`}
       ></div>
       <div
-        className={`bg-white p-[16px] w-[700px] max-tiny:w-[calc(100%-32px)] flex flex-col gap-y-[20px] items-end rounded-[12px] ${
+        className={`bg-white p-[16px] w-[700px] max-sm:w-[calc(100%-32px)] flex flex-col gap-y-[20px] items-end rounded-[12px] ${
           loaderAddReview && "pointer-events-none opacity-[0.8]"
         }`}
       >

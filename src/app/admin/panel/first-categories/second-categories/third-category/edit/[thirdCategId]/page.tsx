@@ -18,7 +18,7 @@ import Toggle2value from "@/app/components/buttons/toggle2value";
 export default function Page({ params }: { params: { thirdCategId: string } }) {
   const router = useRouter();
 
-  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+  const { setAlertShow, setAlertStatus, setAlertText, status } = useContext(
     ContextForSharingStates
   );
 
@@ -44,6 +44,8 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
     tema: 0,
     sqesi: 0,
     raodenoba_shefutvashi: 0,
+
+    status: 0,
   });
 
   const [filters, setFilters] = useState<any>([]);
@@ -159,6 +161,11 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
       editThirdCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
     );
 
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === editThirdCategValues.status)?.id
+    );
+
     axiosAdmin
       .post(`admin/category/productType/${params.thirdCategId}`, formData)
       .then((res) => {
@@ -239,6 +246,19 @@ export default function Page({ params }: { params: { thirdCategId: string } }) {
               />
             </div>
           ))}
+        </div>
+        <div className="w-[200px] pb-[50px]">
+          <DropDown1value
+            title="სტატუსი"
+            data={status}
+            name="status"
+            firstValue={
+              status.find((item: any) => item.id === oneThirdCategValues.status)
+                ?.name
+            }
+            setAllValues={setEditThirdCategValues}
+            error={false}
+          />
         </div>
       </div>
       <div className="w-[200px]">

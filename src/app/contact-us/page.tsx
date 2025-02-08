@@ -65,7 +65,7 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       
-    <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
+    <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
       <WhatUSearch />
 
       <div className="flex flex-col gap-y-[20px]">
@@ -78,7 +78,7 @@ export default function Page() {
 
       <div className="grid grid-cols-2 max-lg:grid-cols-1 gap-[20px]">
         <div
-          className={`rounded-[12px] h-full bg-white p-[30px] max-tiny:p-[20px] flex flex-col gap-y-[20px] duration-100 ${
+          className={`rounded-[12px] h-full bg-white p-[30px] max-sm:p-[20px] flex flex-col gap-y-[20px] duration-100 ${
             sendMessageLoader && "pointer-events-none opacity-[0.5]"
           }`}
         >
@@ -134,7 +134,7 @@ export default function Page() {
             <GreenButton
               name="გაგზავნა"
               loader={sendMessageLoader}
-              style="h-[56px] max-tiny:h-[48px] text-[18px]"
+              style="h-[56px] max-sm:h-[48px] text-[18px]"
               action={HandleSendMessage}
             />
           </div>

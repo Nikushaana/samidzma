@@ -12,6 +12,7 @@ import { ContextForSharingStates } from "../../../../../dataFetchs/sharedStates"
 import useFirstCategories from "../../../../../dataFetchs/firstCategoriesContext";
 import { FaSort } from "react-icons/fa";
 import Image from "next/image";
+import { IoIosRefresh } from "react-icons/io";
 
 export default function Page() {
   const { allFirstCategsData, allFirstCategsLoader, fetchFirstCategories } =
@@ -30,6 +31,25 @@ export default function Page() {
       .delete(`admin/category/saxeobebi/${id}`)
       .then((res) => {
         fetchFirstCategories();
+      })
+      .catch((err) => {})
+      .finally(() => {
+        setFirstCategsDeleteLoader("");
+      });
+  };
+
+  //
+
+  const [FirstCategsSystemRefreshPopUp, setFirstCategsSystemRefreshPopUp] =
+    useState<string>("");
+
+  const HandleSystemRefreshFirstCategs = (id: any) => {
+    setFirstCategsDeleteLoader(id);
+    axiosAdmin
+      .get(`admin/category/updateSaxeobaWithSystem/${id}`)
+      .then((res) => {
+        fetchFirstCategories();
+        setFirstCategsSystemRefreshPopUp("")
       })
       .catch((err) => {})
       .finally(() => {
@@ -77,6 +97,37 @@ export default function Page() {
               </div>
             ) : (
               <div className="flex items-center gap-[10px]">
+                <div className="relative">
+                  <div
+                    onClick={() => {
+                      setFirstCategsSystemRefreshPopUp(item.IdProdSaxeoba);
+                    }}
+                    className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[green] text-[18px] hover:bg-green-200 hover:shadow-md duration-300 cursor-pointer"
+                  >
+                    <IoIosRefresh />
+                  </div>
+                  {FirstCategsSystemRefreshPopUp === item.IdProdSaxeoba && (
+                    <div className="absolute top-[-5px] right-[0px] flex items-center gap-[10px] p-[10px] h-[50px] bg-[#f4f6f9] shadow-md rounded-[8px]">
+                      <div
+                        onClick={() => {
+                          HandleSystemRefreshFirstCategs(item.IdProdSaxeoba);
+                        }}
+                        className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[green] text-[18px] hover:bg-green-200 hover:shadow-md duration-300 cursor-pointer"
+                      >
+                        <IoIosRefresh />
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFirstCategsSystemRefreshPopUp("");
+                        }}
+                        className="w-[40px] h-[40px] rounded-full flex items-center justify-center text-[18px] hover:shadow-md duration-300 cursor-pointer"
+                      >
+                        <BsXLg />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div
                   onClick={() => {
                     router.push(

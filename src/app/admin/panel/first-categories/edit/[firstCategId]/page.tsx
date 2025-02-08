@@ -23,7 +23,7 @@ import Toggle2value from "@/app/components/buttons/toggle2value";
 export default function Page({ params }: { params: { firstCategId: string } }) {
   const router = useRouter();
 
-  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+  const { setAlertShow, setAlertStatus, setAlertText, status } = useContext(
     ContextForSharingStates
   );
 
@@ -50,6 +50,8 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
     tema: 0,
     sqesi: 0,
     raodenoba_shefutvashi: 0,
+
+    status: 0
   });
 
   const [filters, setFilters] = useState<any>([]);
@@ -166,6 +168,11 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
       editFirstCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
     );
 
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === editFirstCategValues.status)?.id
+    );
+
     axiosAdmin
       .post(`admin/category/saxeobebi/${params.firstCategId}`, formData)
       .then((res) => {
@@ -272,6 +279,20 @@ export default function Page({ params }: { params: { firstCategId: string } }) {
                 />
               </div>
             ))}
+          </div>
+          <div className="w-[200px] pb-[50px]">
+            <DropDown1value
+              title="სტატუსი"
+              data={status}
+              name="status"
+              firstValue={
+                status.find(
+                  (item: any) => item.id === oneFirstCategValues.status
+                )?.name
+              }
+              setAllValues={setEditFirstCategValues}
+              error={false}
+            />
           </div>
         </div>
         <div className="w-[200px]">

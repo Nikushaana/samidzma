@@ -12,9 +12,9 @@ const SharingStatesContext = ({ children }: any) => {
   const pathname = usePathname();
 
   const [isCategoriesPopUp, setIsCategoriesPopUp] = useState(false);
-  const [openRecomendedPopUp, setOpenRecomendedPopUp] = useState<number | null>(
-    null
-  );
+  const [openProductCardPopUp, setOpenProductCardPopUp] = useState<
+    number | null
+  >(null);
   const [productReviewPopUp, setProductReviewPopUp] = useState<string>("");
   const [openPromoCodeInfoPopUp, setOpenPromoCodeInfoPopUp] = useState<
     number | null
@@ -47,7 +47,7 @@ const SharingStatesContext = ({ children }: any) => {
 
   useEffect(() => {
     setBurgerMenu(false);
-    setIsCategoriesPopUp(false)
+    setIsCategoriesPopUp(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -137,8 +137,8 @@ const SharingStatesContext = ({ children }: any) => {
       value={{
         isCategoriesPopUp,
         setIsCategoriesPopUp,
-        openRecomendedPopUp,
-        setOpenRecomendedPopUp,
+        openProductCardPopUp,
+        setOpenProductCardPopUp,
         openPromoCodeInfoPopUp,
         setOpenPromoCodeInfoPopUp,
         productReviewPopUp,

@@ -6,7 +6,6 @@ import Footer from "./components/footer/Footer";
 import SharingStatesContext from "../../dataFetchs/sharedStates";
 import AlertCust from "./components/AlertCust";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import RecomendedCardsPopUp from "./components/popUps/RecomendedCardsPopUp";
 import UserAxiosContext from "../../dataFetchs/UserAxios";
 import WishListContext from "../../dataFetchs/wishListContext";
 import CartContext from "../../dataFetchs/cartContext";
@@ -17,6 +16,7 @@ import Image from "next/image";
 import Marquee from "react-fast-marquee";
 import BackgroundDesigns from "./components/decorationColumns/BackgroundDesigns";
 import CategoriesPopUp from "./components/popUps/CategoriesPopUp";
+import ProductCardsPopUp from "./components/popUps/ProductCardsPopUp";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,7 +48,7 @@ export default function RootLayout({
                     <Footer />
                     <BurgerMenu />
                     <CategoriesPopUp />
-                    <RecomendedCardsPopUp />
+                    <ProductCardsPopUp />
                     <PromoCodeInfoPopUp />
                     <ProductReviewPopUp />
                     <AlertCust />

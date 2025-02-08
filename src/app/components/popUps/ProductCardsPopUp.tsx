@@ -18,11 +18,12 @@ import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 import Counter from "../counter/counter";
 import { DontScrollMainBody } from "../DontScrollMainBody";
+import DropDownFilials from "../DropDowns/DropDownFilials";
 
-export default function RecomendedCardsPopUp() {
+export default function ProductCardsPopUp() {
   const {
-    openRecomendedPopUp,
-    setOpenRecomendedPopUp,
+    openProductCardPopUp,
+    setOpenProductCardPopUp,
     setAlertShow,
     setAlertStatus,
     setAlertText,
@@ -32,19 +33,19 @@ export default function RecomendedCardsPopUp() {
 
   const { user } = useContext(UserContext);
 
-  DontScrollMainBody(openRecomendedPopUp);
+  DontScrollMainBody(openProductCardPopUp);
   // used states
   const [mainProdId, setMainProdId] = useState(
-    openRecomendedPopUp?.split("?")[0]
+    openProductCardPopUp?.split("?")[0]
   );
   const [variationProdId, setVariationProdId] = useState(
-    openRecomendedPopUp?.split("?")[1]
+    openProductCardPopUp?.split("?")[1]
   );
-  
+
   useEffect(() => {
-    setMainProdId(openRecomendedPopUp?.split("?")[0]);
-    setVariationProdId(openRecomendedPopUp?.split("?")[1]);
-  }, [openRecomendedPopUp]);
+    setMainProdId(openProductCardPopUp?.split("?")[0]);
+    setVariationProdId(openProductCardPopUp?.split("?")[1]);
+  }, [openProductCardPopUp]);
 
   const [prodStock, setProdStock] = useState<any>();
   const [complect, setComplect] = useState<any>(false);
@@ -65,7 +66,7 @@ export default function RecomendedCardsPopUp() {
   const [oneProductLoader, setOneProductLoader] = useState<boolean>(true);
 
   const [variationImages, setVariationImages] = useState<any>([]);
-  const [variationImagesLoader, setVariationImagesLoader] =
+  const [variationImagesStockLoader, setVariationImagesStockLoader] =
     useState<any>(false);
   const [addCartloader, setAddCartLoader] = useState<boolean>(false);
   // used states
@@ -78,55 +79,43 @@ export default function RecomendedCardsPopUp() {
         setOneProduct(res.data);
         // setOneProductLoader(false);
 
-        if (!variationProdId && res.data?.variation_product_picture?.length > 0) {
-          setVariationProdId(res.data?.variation_product_picture[0]?.ProductCode)
+        if (!variationProdId && res.data?.product_variations?.length > 0) {
+          setVariationProdId(res.data?.product_variations[0]?.ProdCode);
         }
       })
       .catch((err) => {})
       .finally(() => {});
   }, [mainProdId]);
 
-  // get active variation images
-  useEffect(() => {
-    if (oneProduct ) {
-      // && (variationProdId || mainProdId)
-      setVariationImagesLoader(true);
-      axiosUser
-        .get(
-          `front/productPictureAll?ProdCode=${
-            variationProdId ? variationProdId : mainProdId
-          }`
-        )
-        .then((res) => {
-          setVariationImages(res.data);
-          setVariationImagesLoader(false);
-        })
-        .catch((err) => {})
-        .finally(() => {
-          setOneProductLoader(false);
-        });
-    }
-  }, [variationProdId, oneProduct]);
-  // get active variation images
+  // get active variation images  get active variation images
 
-  // get product stock
   useEffect(() => {
-    if (oneProduct) {
-      axiosUser
-        .get(
-          `front/productNashti?ProdCode=${
-            variationProdId ? variationProdId : mainProdId
-          }`
-        )
-        // &StoreCode=20
-        .then((res) => {
-          setProdStock(res.data.StoreProdNashtebi[0].ProdNashtebi[0].Nashti);
-        })
-        .catch((err) => {})
-        .finally(() => {});
-    }
-  }, [oneProduct, variationProdId]);
-  // get product stock
+    const fetchProductData = async () => {
+      if (oneProduct && (mainProdId || variationProdId)) {
+        setVariationImagesStockLoader(true);
+
+        try {
+          const prodCode = variationProdId || mainProdId;
+
+          const [imagesResponse, stockResponse] = await Promise.all([
+            axiosUser.get(`front/productPictureAll?ProdCode=${prodCode}`),
+            axiosUser.get(`front/productNashti?ProdCode=${prodCode}`),
+          ]);
+
+          setVariationImages(imagesResponse.data);
+
+          setProdStock(stockResponse.data?.StoreProdNashtebi);
+        } catch (error) {
+        } finally {
+          setVariationImagesStockLoader(false);
+          setOneProductLoader(false);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [mainProdId, oneProduct, variationProdId]);
+  // get active variation images  get active variation images
 
   // add in cart
   const HandleAddCart = () => {
@@ -139,7 +128,7 @@ export default function RecomendedCardsPopUp() {
           isComplete: complect ? 1 : 0,
         })
         .then((res) => {
-          setOpenRecomendedPopUp(null);
+          setOpenProductCardPopUp(null);
           setAlertShow(true);
           setAlertStatus(true);
           setAlertText("კალათაში წარმატებით დაემატა");
@@ -172,7 +161,7 @@ export default function RecomendedCardsPopUp() {
           "SamiDzma-cart",
           JSON.stringify(CartLocalStorageData)
         );
-        setOpenRecomendedPopUp(null);
+        setOpenProductCardPopUp(null);
         setRenderCart(new Date());
         setIsInCart(true);
 
@@ -210,54 +199,53 @@ export default function RecomendedCardsPopUp() {
 
   return (
     <div
-      className={`fixed top-0 left-0 flex items-center justify-center w-[100vw] h-[100vh] px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-tiny:px-[25px] ${
-        openRecomendedPopUp
+      className={`fixed top-0 left-0 flex items-center justify-center w-[100vw] h-[100vh] px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] ${
+        openProductCardPopUp
           ? "z-[20] opacity-1 duration-100"
           : "z-[-20] opacity-0 duration-150"
       }`}
     >
       <div
         onClick={() => {
-          setOpenRecomendedPopUp(null);
+          setOpenProductCardPopUp(null);
         }}
         className={`bg-[#0000003b] w-full h-full absolute z-[-1] duration-100 ${
-          openRecomendedPopUp ? "backdrop-blur-[5px] " : "backdrop-blur-none"
+          openProductCardPopUp ? "backdrop-blur-[5px] " : "backdrop-blur-none"
         }`}
       ></div>
       <div
-        className={`max-w-[1920px] min-h-[555px] max-h-[90vh] overflow-y-scroll notshowScrollVert overflow-x-hidden w-full bg-[#EAEDEE] p-[16px] flex gap-[26px] max-tiny:flex-col max-lg:gap-[16px] rounded-[12px]`}
+        className={`max-w-[1920px] min-h-[555px] max-h-[90vh] overflow-y-scroll notshowScrollVert overflow-x-hidden w-full bg-[#EAEDEE] p-[16px] flex gap-[26px] max-sm:flex-col max-lg:gap-[16px] rounded-[12px]`}
       >
-        <div className="w-[45%] max-tiny:w-full flex">
+        <div className="w-[45%] max-sm:w-full flex">
           <EachProductSlider
             prodMainImages={variationImages}
             prodVariationImages={
-              oneProduct?.variation_product_picture?.length > 0
-                ? oneProduct?.variation_product_picture
-                : oneProduct?.product_picture
+              oneProduct?.product_variations?.length > 0 &&
+              oneProduct?.product_variations
             }
             variation={variationProdId}
             mainLoader={oneProductLoader}
-            activeImagessLoader={variationImagesLoader}
-            openRecomendedPopUp={openRecomendedPopUp}
+            activeImagessLoader={variationImagesStockLoader}
+            openRecomendedPopUp={openProductCardPopUp}
             setVariationProdId={setVariationProdId}
           />
         </div>
 
-        <div className="w-[55%] max-tiny:w-full">
+        <div className="w-[55%] max-sm:w-full">
           {oneProductLoader ? (
             <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
           ) : (
-            <div className="flex flex-col gap-y-[25px] p-[18px] max-tiny:p-[10px] rounded-[12px] bg-white w-full h-full">
+            <div className="flex flex-col gap-y-[25px] p-[18px] max-sm:p-[10px] rounded-[12px] bg-white w-full h-full">
               <div className="flex items-center gap-[5px] ">
                 <div className="rounded-full text-white bg-myPink flex items-center px-[10px] h-[36px]">
-                  <p className="text-[14px] max-tiny:text-[12px]">Sale -5%</p>
+                  <p className="text-[14px] max-sm:text-[12px]">Sale -5%</p>
                 </div>
                 <div className="rounded-full text-white bg-myGreen flex items-center px-[10px] h-[36px]">
-                  <p className="text-[14px] max-tiny:text-[12px]">მარაგშია</p>
+                  <p className="text-[14px] max-sm:text-[12px]">მარაგშია</p>
                 </div>
                 <div className="rounded-full text-black bg-myYellow flex items-center gap-[10px] px-[10px] h-[36px]">
-                  <BiStar className="text-[20px] max-tiny:text-[15px]" />
-                  <p className="text-[14px] max-tiny:text-[12px]">4-7</p>
+                  <BiStar className="text-[20px] max-sm:text-[15px]" />
+                  <p className="text-[14px] max-sm:text-[12px]">4-7</p>
                 </div>
                 <div className="rounded-full text-white bg-myBlack flex items-center justify-center h-[36px] w-[36px]">
                   <TbTruckDelivery className="text-[20px]" />
@@ -272,7 +260,7 @@ export default function RecomendedCardsPopUp() {
               </h1>
               <div className="flex flex-col gap-y-[10px]">
                 <div className="flex items-center gap-[40px]">
-                  <h1 className="text-[28px] max-tiny:text-[20px]">
+                  <h1 className="text-[28px] max-sm:text-[20px]">
                     {variationProdId
                       ? complect
                         ? oneProduct?.product_variations?.find(
@@ -286,11 +274,13 @@ export default function RecomendedCardsPopUp() {
                       : oneProduct?.product?.Fasi1 * cartProdQuant}
                     ₾
                   </h1>
-                  <div className="border-[1px] rounded-full text-[14px] h-[38px] flex items-center">
+                  <div
+                    onClick={() => {
+                      setComplect((prev: any) => !prev);
+                    }}
+                    className="border-[1px] rounded-full text-[14px] h-[38px] flex items-center"
+                  >
                     <p
-                      onClick={() => {
-                        setComplect(false);
-                      }}
                       className={`rounded-full h-full flex items-center gap-[2px] px-[15px] duration-100 cursor-pointer ${
                         complect ? "" : "bg-myGreen text-white"
                       }`}
@@ -298,14 +288,11 @@ export default function RecomendedCardsPopUp() {
                       <span className="text-[18px]">1</span> ც
                     </p>
                     <div
-                      onClick={() => {
-                        setComplect(true);
-                      }}
                       className={`rounded-full h-full flex items-center px-[20px] duration-100 cursor-pointer ${
                         complect ? "bg-myGreen text-white" : ""
                       }`}
                     >
-                      <p className="max-tiny:text-[10px] flex items-center gap-[2px]">
+                      <p className="max-sm:text-[10px] flex items-center gap-[2px]">
                         შეკვრა /
                         <span className="text-[18px]">
                           {variationProdId
@@ -323,7 +310,7 @@ export default function RecomendedCardsPopUp() {
                   </div>
                 </div>
                 <Counter
-                  prodStock={prodStock}
+                  prodStock={prodStock[0]?.ProdNashtebi[0]?.Nashti}
                   setCounterValue={setCartProdQuant}
                 />
                 <div className="flex items-center gap-[10px]">
@@ -353,10 +340,10 @@ export default function RecomendedCardsPopUp() {
                 </div>
               </div>
               <div className="flex max-lg:flex-col max-lg:gap-0 items-start gap-[20px]">
-                <h1 className="text-[22px] max-tiny:text-[18px]">
+                <h1 className="text-[22px] max-sm:text-[18px]">
                   მიტანის სერვისი
                 </h1>
-                <div className="flex flex-col max-tiny:gap-y-[5px] max-lg:w-full">
+                <div className="flex flex-col max-sm:gap-y-[5px] max-lg:w-full">
                   <div className="bg-[#EAEDEE] h-[38px] px-[20px] flex items-center rounded-full">
                     <p className="text-[10px]">Georgia</p>
                   </div>
@@ -386,7 +373,7 @@ export default function RecomendedCardsPopUp() {
               <div className="grid grid-cols-2 gap-[20px]">
                 <GreenButton
                   name="ყიდვა"
-                  style="h-[56px] max-tiny:h-[48px] text-[18px]"
+                  style="h-[56px] max-sm:h-[48px] text-[18px]"
                   action={HandleAddCart}
                   loader={addCartloader}
                   dissabled={isInCart}
@@ -410,6 +397,7 @@ export default function RecomendedCardsPopUp() {
                   </p>
                 </div>
               </div>
+              <DropDownFilials stock={prodStock} />
             </div>
           )}
         </div>

@@ -9,17 +9,18 @@ import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 export default function DropDownFilials({ stock }: any) {
   const [droped, setDroped] = useState(false);
 
+  
   return (
-    <div className="border-y-[1px] self-start max-lg:w-full px-[10px] max-tiny:px-0">
+    <div className="border-y-[1px] self-start max-lg:w-full px-[10px] max-sm:px-0">
       <div
         onClick={() => {
           setDroped((prev: any) => !prev);
         }}
-        className="flex items-center justify-between gap-[50px] max-tiny:gap-[10px] h-[56px] cursor-pointer"
+        className="flex items-center justify-between gap-[50px] max-sm:gap-[10px] h-[56px] cursor-pointer"
       >
         <div className="flex items-center gap-[10px]">
           <CiLocationOn />
-          <p className="text-[14px] max-tiny:text-[13px]">
+          <p className="text-[14px] max-sm:text-[13px]">
             ხელმისაწვდომია{" "}
             <span className="font-semibold">{stock?.length || 0}</span> ფილიალში
           </p>
@@ -54,7 +55,7 @@ export default function DropDownFilials({ stock }: any) {
           stock?.map((item: any, index: any) => (
             <div
               key={index}
-              className="pr-[10px] text-[14px] max-tiny:text-[13px] flex items-center justify-between h-[20px]"
+              className="pr-[10px] text-[14px] max-sm:text-[13px] flex items-center justify-between h-[20px]"
             >
               <p className="text-myGreen ">{item.StoreName}</p>{" "}
               <p className="text-[12px]">{item.ProdNashtebi[0].Nashti} ცალი</p>

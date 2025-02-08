@@ -26,7 +26,7 @@ export default function Page({
 }) {
   const router = useRouter();
 
-  const { setAlertShow, setAlertStatus, setAlertText } = useContext(
+  const { setAlertShow, setAlertStatus, setAlertText, status } = useContext(
     ContextForSharingStates
   );
   const { allFirstCategsData } = useFirstCategories();
@@ -53,6 +53,8 @@ export default function Page({
     tema: 0,
     sqesi: 0,
     raodenoba_shefutvashi: 0,
+
+    status: 0,
   });
 
   const [filters, setFilters] = useState<any>([]);
@@ -176,6 +178,11 @@ export default function Page({
       editSecondCategValues.raodenoba_shefutvashi == "კი" ? "1" : "0"
     );
 
+    formData.append(
+      "status",
+      status.find((item: any) => item.name === editSecondCategValues.status)?.id
+    );
+
     axiosAdmin
       .post(
         `admin/category/productTypeGroupe/${params.secondCategId}`,
@@ -293,6 +300,20 @@ export default function Page({
                 />
               </div>
             ))}
+          </div>
+          <div className="w-[200px] pb-[50px]">
+            <DropDown1value
+              title="სტატუსი"
+              data={status}
+              name="status"
+              firstValue={
+                status.find(
+                  (item: any) => item.id === oneSecondCategValues.status
+                )?.name
+              }
+              setAllValues={setEditSecondCategValues}
+              error={false}
+            />
           </div>
         </div>
         <div className="w-[200px]">

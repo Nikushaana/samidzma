@@ -45,7 +45,7 @@ export default function CatalogSetCard({ item }: any) {
           </p>
         </div>
 
-        <GreenButton name="Shop now" style="h-[56px] max-tiny:h-[48px] max-w-[280px] text-[18px]" />
+        <GreenButton name="Shop now" style="h-[56px] max-sm:h-[48px] max-w-[280px] text-[18px]" />
       </div>
     </div>
   );
