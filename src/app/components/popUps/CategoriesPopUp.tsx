@@ -31,10 +31,8 @@ export default function CategoriesPopUp() {
 
   return (
     <div
-      className={`fixed top-0 left-0 flex items-center justify-center duration-100 w-[100vw] h-[100vh] px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] ${
-        isCategoriesPopUp
-          ? "z-[20] opacity-1 "
-          : "z-[-20] opacity-0 "
+      className={`fixed top-0 left-0 flex items-center justify-center duration-100 w-[100vw] h-[100vh] px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[10px] ${
+        isCategoriesPopUp ? "z-[20] opacity-1 " : "z-[-20] opacity-0 "
       }`}
     >
       <div
@@ -46,7 +44,7 @@ export default function CategoriesPopUp() {
         }`}
       ></div>
       <div
-        className={`bg-[#EAEDEE] p-[16px] max-w-[1920px] w-full max-h-[80vh] flex flex-col gap-y-[20px] rounded-[12px] duration-100 ${
+        className={`bg-[#EAEDEE] p-[16px] max-w-[1920px] w-full max-h-[80vh] max-sm:max-h-[90vh] flex flex-col gap-y-[20px] rounded-[12px] duration-100 ${
           actFirstCateg?.secCategData?.length > 0 ? "h-full" : ""
         }`}
       >
@@ -209,7 +207,7 @@ export default function CategoriesPopUp() {
                       </div>
                     </div>
                   )}
-                  <div className="absolute p-[10px] max-sm:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
+                  <div className="absolute p-[10px] max-sm:p-[5px] top-0 left-0 w-full h-full flex items-end">
                     <p className="text-white text-[10px] w-full">
                       {item3.ProdSaxeobaName}
                     </p>

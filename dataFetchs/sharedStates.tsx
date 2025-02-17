@@ -12,6 +12,27 @@ const SharingStatesContext = ({ children }: any) => {
   const pathname = usePathname();
 
   const [isCategoriesPopUp, setIsCategoriesPopUp] = useState(false);
+
+  const [filterValues, setFilterValues] = useState<any>({
+    key: "",
+
+    FeriCode: [],
+    FormaCode: [],
+    StyleCode: [],
+    SqesiCode: [],
+    SizeCode: [],
+    IdAttribute1: [],
+    IdAttribute2: [],
+    IdAttribute3: [],
+    IdAttribute4: [],
+    IdAttribute5: [],
+    IdAttribute6: [],
+
+    minPrice: 10,
+    maxPrice: 200000,
+  });
+  const [currentPage, setCurrentPage] = useState<any>(0);
+
   const [openProductCardPopUp, setOpenProductCardPopUp] = useState<
     number | null
   >(null);
@@ -108,7 +129,7 @@ const SharingStatesContext = ({ children }: any) => {
     {
       id: 1,
       name: "ყველა კატეგორია",
-      link: "all-category",
+      link: "category",
     },
     {
       id: 2,
@@ -137,6 +158,12 @@ const SharingStatesContext = ({ children }: any) => {
       value={{
         isCategoriesPopUp,
         setIsCategoriesPopUp,
+
+        filterValues,
+        setFilterValues,
+        currentPage,
+        setCurrentPage,
+
         openProductCardPopUp,
         setOpenProductCardPopUp,
         openPromoCodeInfoPopUp,

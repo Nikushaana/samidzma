@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsTelephoneFill } from "react-icons/bs";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import FooterCategoriesDropDown from "./FooterCategoriesDropDown";
 
 export default function Footer() {
   const router = useRouter();
@@ -47,43 +48,7 @@ export default function Footer() {
       url: "delivery-services-contract",
     },
   ]);
-  const [prodCategs, setProdCategs] = useState([
-    {
-      id: 1,
-      name: "სადღესასწაულო აქსესუარები",
-      url: "products",
-    },
-    {
-      id: 2,
-      name: "ფეიერვერკები",
-      url: "products",
-    },
-    {
-      id: 3,
-      name: "საკონდიტრო აქსესუარები",
-      url: "products",
-    },
-    {
-      id: 4,
-      name: "საკონდიტრო მასალები",
-      url: "products",
-    },
-    {
-      id: 5,
-      name: "საახალწლო აქსესუარები",
-      url: "products",
-    },
-    {
-      id: 6,
-      name: "სააღდგომო აქსესუარები და მასალები",
-      url: "products",
-    },
-    {
-      id: 7,
-      name: "სათამაშოები",
-      url: "products",
-    },
-  ]);
+
   const [termsandconditions, setTermsandConditions] = useState([
     {
       id: 1,
@@ -146,7 +111,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="flex flex-col items-center bg-[#242727] overflow-hidden relative">
-        <div className="max-w-[1920px] w-full pl-[264px] pr-[380px] max-2xl:pl-[160px] max-2xl:pr-[320px] max-lg:px-[90px] max-sm:px-[25px] grid grid-cols-4 max-lg:grid-cols-3 max-sm:grid-cols-2 gap-[20px] text-white py-[60px]">
+        <div className="max-w-[1920px] w-full pl-[264px] pr-[380px] max-2xl:pl-[160px] max-2xl:pr-[320px] max-lg:px-[90px] max-sm:px-[25px] grid grid-cols-4 max-lg:grid-cols-3 max-sm:grid-cols-2 max-tiny:grid-cols-1 gap-[20px] text-white py-[60px]">
           <div className="flex flex-col gap-y-[20px] z-[1]">
             <h1 className="text-[18px] max-sm:text-[14px]">ჩვენ შესახებ</h1>
             <div className="flex flex-col gap-y-[5px]">
@@ -167,19 +132,7 @@ export default function Footer() {
             <h1 className="text-[18px] max-sm:text-[14px]">
               პროდუქტის კატეგორიები
             </h1>
-            <div className="flex flex-col gap-y-[5px]">
-              {prodCategs.map((item, index: number) => (
-                <p
-                  key={item.id}
-                  onClick={() => {
-                    router.push(`/${item.url}`);
-                  }}
-                  className="text-[14px] max-sm:text-[11px] cursor-pointer"
-                >
-                  {item.name}
-                </p>
-              ))}
-            </div>
+            <FooterCategoriesDropDown />
           </div>
           <div className="col-span-2 gap-[20px] max-lg:gap-y-[40px] max-lg:col-span-1 grid grid-cols-2 max-lg:grid-cols-1 z-[1]">
             <div className="flex flex-col gap-y-[20px]">
@@ -264,7 +217,7 @@ export default function Footer() {
       </div>
 
       <div className="bg-myBlack text-[#7E8389] flex justify-center items-center h-[58px] max-sm:text-[12px]">
-        <p>© 2024 samidzma - All Rights Reserved</p>
+        <p>© 2025 samidzma - All Rights Reserved</p>
       </div>
     </div>
   );

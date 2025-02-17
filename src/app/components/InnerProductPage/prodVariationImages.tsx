@@ -28,7 +28,7 @@ export default function ProdVariationImages({ ProdCode }: any) {
   // get image
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center ">
+    <div className="relative h-full w-full flex items-center justify-center ">
       {prodImagesLoader ? (
         <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
       ) : prodImage?.ProductPictureByte ? (

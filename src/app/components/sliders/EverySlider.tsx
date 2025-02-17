@@ -79,7 +79,9 @@ export default function EverySlider({
                       pathname.split("/")[1] == "catalog-for-set" &&
                       card === "KitCard"
                         ? "h-[310px] max-lg:h-[450px]"
-                        : " h-[450px]"
+                        : `${
+                            card === "SmallProdCard" ? "h-[200px]" : "h-[450px]"
+                          }`
                     } rounded-[12px] overflow-hidden`}
                   >
                     <div className="loaderwave"></div>

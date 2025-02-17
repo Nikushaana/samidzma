@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import { PiRowsFill } from "react-icons/pi";
@@ -22,6 +22,8 @@ import { IoIosArrowUp } from "react-icons/io";
 import CheckBox from "../Inputs/CheckBox";
 import useFilter from "../../../../dataFetchs/filtersContext";
 import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
+import WhatUSearch from "../Inputs/WhatUSearch";
+import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 
 export const CategoryContent = ({
   childCategsloader,
@@ -35,6 +37,9 @@ export const CategoryContent = ({
 
   const { blogData, blogLoader } = useBlog();
   const {
+    pathnameItems,
+    setPathnameItems,
+
     forma,
     zoma,
     saxeoba,
@@ -48,7 +53,8 @@ export const CategoryContent = ({
     raodenobaShefutvashi,
   } = useFilter();
   const { FrontCategoriesData } = useFrontCategories();
-
+  const { filterValues, setFilterValues, currentPage, setCurrentPage } =
+    useContext(ContextForSharingStates);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -56,8 +62,6 @@ export const CategoryContent = ({
       scrollRef.current.scrollLeft += e.movementX * -1;
     }
   };
-
-  const [pathnameItems, setPathnameItems] = useState<any>([]);
 
   const [filterStatus, setFilterStatus] = useState(true);
 
@@ -98,10 +102,11 @@ export const CategoryContent = ({
           id: index + 1,
           pathCode: number,
           pathCategName:
-            categoryData.ProdSaxeobaName ||
-            categoryData.ProdTypeGroupName ||
-            categoryData.ProdTypeName ||
-            "",
+            index === 0
+              ? categoryData.ProdSaxeobaName
+              : index === 1
+              ? categoryData.ProdTypeGroupName
+              : categoryData.ProdTypeName,
           pathCategDescr: categoryData.description || "",
         };
       });
@@ -173,84 +178,50 @@ export const CategoryContent = ({
 
   const [dropedFilter, setDropedFilter] = useState<any>("");
 
-  const [currentPage, setCurrentPage] = useState<any>(0);
   const [prodwholenum, setProdwholenum] = useState<any>();
   const [pageCount, setPageCount] = useState(0);
-
-  const [filterValues, setFilterValues] = useState<any>({
-    FormaCode: [],
-    ZomaCode: [],
-    SaxeobaCode: [],
-    MasalaCode: [],
-    MoculobaCode: [],
-    TypeCode: [],
-    FeriCode: [],
-    XangrdzlivobaCode: [],
-    TemaCode: [],
-    SqesiCode: [],
-    RaodenobaShefutvashiCode: [],
-
-    minPrice: 10,
-    maxPrice: 200000,
-  });
 
   const [FilterComponents, setFilterComponents] = useState<any>([]);
 
   // find status
-  const findCategoryStatus = (pathItems: any[], data: any[], key: string) => {
-    const firstLevel = data.find(
-      (item: any) => item.IdProdSaxeoba == pathItems[0].pathCode
-    );
-    if (!firstLevel) return undefined;
-
-    if (pathItems[0].pathCode) return firstLevel[key];
-
-    const secondLevel = firstLevel?.productTypeGroup?.find(
-      (item: any) => item.IdProdTypeGroup == pathItems[1].pathCode
-    );
-    if (!secondLevel) return undefined;
-
-    if (pathItems[1].pathCode) return secondLevel[key];
-
-    const thirdLevel = secondLevel?.productTypes?.find(
-      (item: any) => item.IdProdType == pathItems[2].pathCode
-    );
-    return thirdLevel?.[key];
-  };
 
   useEffect(() => {
     const attributesConfig = [
       {
         id: 1,
-        name: "ფერი",
-        key: "feri",
+        name: "ფორმა",
+        key: "forma",
         data: forma,
         code: "FeriCode",
         nameEng: "FeriName",
+        status: 0,
       },
       {
         id: 2,
-        name: "ხანგრძლივობა",
-        key: "xangrdzlivoba",
+        name: "ზომა",
+        key: "zoma",
         data: zoma,
         code: "FormaCode",
         nameEng: "FormaName",
+        status: 0,
       },
       {
         id: 3,
-        name: "ტიპი",
-        key: "tipi",
+        name: "სახეობა",
+        key: "saxeoba1",
         data: saxeoba,
         code: "StyleCode",
         nameEng: "StyleName",
+        status: 0,
       },
       {
         id: 4,
-        name: "სქესი",
-        key: "sqesi",
+        name: "მასალა",
+        key: "masala",
         data: masala,
         code: "SqesiCode",
         nameEng: "SqesiName",
+        status: 0,
       },
       {
         id: 5,
@@ -259,64 +230,93 @@ export const CategoryContent = ({
         data: moculoba,
         code: "SizeCode",
         nameEng: "SizeName",
+        status: 0,
       },
       {
         id: 6,
-        name: "თემა",
-        key: "tema",
+        name: "ტიპი",
+        key: "tipi",
         data: type,
         code: "IdAttribute1",
         nameEng: "Attribute1Name",
+        status: 0,
       },
       {
         id: 7,
-        name: "მასალა",
-        key: "masala",
+        name: "ფერი",
+        key: "feri",
         data: feri,
         code: "IdAttribute2",
         nameEng: "Attribute2Name",
+        status: 0,
       },
       {
         id: 8,
-        name: "ფორმა",
-        key: "forma",
+        name: "ხანგრძლივობა",
+        key: "xangrdzlivoba",
         data: xangrdzlivoba,
         code: "IdAttribute3",
         nameEng: "Attribute3Name",
+        status: 0,
       },
       {
         id: 9,
-        name: "რაოდენობა შეფუთვაში",
-        key: "raodenoba_shefutvashi",
+        name: "თემა",
+        key: "tema",
         data: tema,
         code: "IdAttribute4",
         nameEng: "Attribute4Name",
+        status: 0,
       },
       {
         id: 10,
-        name: "სახეობა",
-        key: "saxeoba1",
+        name: "სქესი",
+        key: "sqesi",
         data: sqesi,
         code: "IdAttribute5",
         nameEng: "Attribute5Name",
+        status: 0,
       },
       {
         id: 11,
-        name: "ზომა",
-        key: "zoma",
+        name: "რაოდენობა შეფუთვაში",
+        key: "raodenoba_shefutvashi",
         data: raodenobaShefutvashi,
         code: "IdAttribute6",
         nameEng: "Attribute6Name",
+        status: 0,
       },
     ];
 
+    const getStatus = (attrKey: string) => {
+      const firstLevel = FrontCategoriesData.find(
+        (item: any) => item.IdProdSaxeoba === pathnameItems[0]?.pathCode
+      );
+
+      if (!firstLevel) return 0;
+
+      if (pathnameItems.length === 1) {
+        return firstLevel[attrKey] || 0;
+      } else if (pathnameItems.length === 2) {
+        const secondLevel = firstLevel.productTypeGroup.find(
+          (item: any) => item.IdProdTypeGroup === pathnameItems[1]?.pathCode
+        );
+        return secondLevel?.[attrKey] || 0;
+      } else if (pathnameItems.length === 3) {
+        const secondLevel = firstLevel.productTypeGroup.find(
+          (item: any) => item.IdProdTypeGroup === pathnameItems[1]?.pathCode
+        );
+        const thirdLevel = secondLevel?.productTypes.find(
+          (item: any) => item.IdProdType === pathnameItems[2]?.pathCode
+        );
+        return thirdLevel?.[attrKey] || 0;
+      }
+      return 0;
+    };
+
     const updatedComponents = attributesConfig.map((attr) => ({
-      id: attr.id,
-      name: attr.name,
-      data: attr.data,
-      code: attr.code,
-      nameEng: attr.nameEng,
-      status: findCategoryStatus(pathnameItems, FrontCategoriesData, attr.key),
+      ...attr,
+      status: getStatus(attr.key),
     }));
 
     setFilterComponents(updatedComponents);
@@ -357,32 +357,31 @@ export const CategoryContent = ({
 
   useEffect(() => {
     if (!productsPagePreLoader) {
-      window.scrollTo({ top: 600, behavior: "smooth" });
+      window.scrollTo({ top: 200, behavior: "smooth" });
     }
   }, [currentPage]);
 
   // get from params
-
   useEffect(() => {
     if (pagemounted.current) return;
     pagemounted.current = true;
 
     const searchParams = new URLSearchParams(window.location.search);
+    const keyFromParams = searchParams.get("key");
+
     const currentPageFromParams = searchParams.get("currentPage");
 
-    const FormaCodeFromParams = searchParams.get("FormaCode");
-    const ZomaCodeFromParams = searchParams.get("ZomaCode");
-    const SaxeobaCodeFromParams = searchParams.get("SaxeobaCode");
-    const MasalaCodeFromParams = searchParams.get("MasalaCode");
-    const MoculobaCodeFromParams = searchParams.get("MoculobaCode");
-    const TypeCodeFromParams = searchParams.get("TypeCode");
     const FeriCodeFromParams = searchParams.get("FeriCode");
-    const XangrdzlivobaCodeFromParams = searchParams.get("XangrdzlivobaCode");
-    const TemaCodeFromParams = searchParams.get("TemaCode");
+    const FormaCodeFromParams = searchParams.get("FormaCode");
+    const StyleCodeFromParams = searchParams.get("StyleCode");
     const SqesiCodeFromParams = searchParams.get("SqesiCode");
-    const RaodenobaShefutvashiCodeFromParams = searchParams.get(
-      "RaodenobaShefutvashiCode"
-    );
+    const SizeCodeFromParams = searchParams.get("SizeCode");
+    const IdAttribute1FromParams = searchParams.get("IdAttribute1");
+    const IdAttribute2FromParams = searchParams.get("IdAttribute2");
+    const IdAttribute3FromParams = searchParams.get("IdAttribute3");
+    const IdAttribute4FromParams = searchParams.get("IdAttribute4");
+    const IdAttribute5FromParams = searchParams.get("IdAttribute5");
+    const IdAttribute6FromParams = searchParams.get("IdAttribute6");
 
     const minPriceFromParams = searchParams.get("minPrice");
     const maxPriceFromParams = searchParams.get("maxPrice");
@@ -396,48 +395,20 @@ export const CategoryContent = ({
     setFilterValues((prev: any) => ({
       ...prev,
 
-      FormaCode: FormaCodeFromParams
-        ? FormaCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      ZomaCode: ZomaCodeFromParams
-        ? ZomaCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      SaxeobaCode: SaxeobaCodeFromParams
-        ? SaxeobaCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      MasalaCode: MasalaCodeFromParams
-        ? MasalaCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      MoculobaCode: MoculobaCodeFromParams
-        ? MoculobaCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
-      TypeCode: TypeCodeFromParams
-        ? TypeCodeFromParams.split(",")
-            .map(Number)
-            .filter((n) => !isNaN(n))
-        : [],
+      key: keyFromParams ? keyFromParams : "",
+
       FeriCode: FeriCodeFromParams
         ? FeriCodeFromParams.split(",")
             .map(Number)
             .filter((n) => !isNaN(n))
         : [],
-      XangrdzlivobaCode: XangrdzlivobaCodeFromParams
-        ? XangrdzlivobaCodeFromParams.split(",")
+      FormaCode: FormaCodeFromParams
+        ? FormaCodeFromParams.split(",")
             .map(Number)
             .filter((n) => !isNaN(n))
         : [],
-      TemaCode: TemaCodeFromParams
-        ? TemaCodeFromParams.split(",")
+      StyleCode: StyleCodeFromParams
+        ? StyleCodeFromParams.split(",")
             .map(Number)
             .filter((n) => !isNaN(n))
         : [],
@@ -446,8 +417,38 @@ export const CategoryContent = ({
             .map(Number)
             .filter((n) => !isNaN(n))
         : [],
-      RaodenobaShefutvashiCode: RaodenobaShefutvashiCodeFromParams
-        ? RaodenobaShefutvashiCodeFromParams.split(",")
+      SizeCode: SizeCodeFromParams
+        ? SizeCodeFromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute1: IdAttribute1FromParams
+        ? IdAttribute1FromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute2: IdAttribute2FromParams
+        ? IdAttribute2FromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute3: IdAttribute3FromParams
+        ? IdAttribute3FromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute4: IdAttribute4FromParams
+        ? IdAttribute4FromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute5: IdAttribute5FromParams
+        ? IdAttribute5FromParams.split(",")
+            .map(Number)
+            .filter((n) => !isNaN(n))
+        : [],
+      IdAttribute6: IdAttribute6FromParams
+        ? IdAttribute6FromParams.split(",")
             .map(Number)
             .filter((n) => !isNaN(n))
         : [],
@@ -460,7 +461,6 @@ export const CategoryContent = ({
         : parseInt("200000"),
     }));
   }, []);
-
   // get from params
 
   // set to params
@@ -469,23 +469,22 @@ export const CategoryContent = ({
 
     searchParams.set("currentPage", currentPage + 1);
 
-    searchParams.set("FormaCode", filterValues.FormaCode.toString());
-    searchParams.set("ZomaCode", filterValues.ZomaCode.toString());
-    searchParams.set("SaxeobaCode", filterValues.SaxeobaCode.toString());
-    searchParams.set("MasalaCode", filterValues.MasalaCode.toString());
-    searchParams.set("MoculobaCode", filterValues.MoculobaCode.toString());
-    searchParams.set("TypeCode", filterValues.TypeCode.toString());
+    if (pathname.split("/")[1] === "category") {
+      searchParams.set("key", filterValues.key.toString());
+    } else {
+      searchParams.set("key", "");
+    }
     searchParams.set("FeriCode", filterValues.FeriCode.toString());
-    searchParams.set(
-      "XangrdzlivobaCode",
-      filterValues.XangrdzlivobaCode.toString()
-    );
-    searchParams.set("TemaCode", filterValues.TemaCode.toString());
+    searchParams.set("FormaCode", filterValues.FormaCode.toString());
+    searchParams.set("StyleCode", filterValues.StyleCode.toString());
     searchParams.set("SqesiCode", filterValues.SqesiCode.toString());
-    searchParams.set(
-      "RaodenobaShefutvashiCode",
-      filterValues.RaodenobaShefutvashiCode.toString()
-    );
+    searchParams.set("SizeCode", filterValues.SizeCode.toString());
+    searchParams.set("IdAttribute1", filterValues.IdAttribute1.toString());
+    searchParams.set("IdAttribute2", filterValues.IdAttribute2.toString());
+    searchParams.set("IdAttribute3", filterValues.IdAttribute3.toString());
+    searchParams.set("IdAttribute4", filterValues.IdAttribute4.toString());
+    searchParams.set("IdAttribute5", filterValues.IdAttribute5.toString());
+    searchParams.set("IdAttribute6", filterValues.IdAttribute6.toString());
 
     searchParams.set("minPrice", filterValues.minPrice.toString());
     searchParams.set("maxPrice", filterValues.maxPrice.toString());
@@ -509,48 +508,50 @@ export const CategoryContent = ({
     axiosUser
       .get(
         `front/products?pageNumber=${currentPage + 1}&itemsOnPage=12&${
-          filterValues.FormaCode.length > 0
-            ? `FormaCode=${filterValues.FormaCode}`
-            : ""
-        }&${
-          filterValues.ZomaCode.length > 0
-            ? `ZomaCode=${filterValues.ZomaCode}`
-            : ""
-        }&${
-          filterValues.SaxeobaCode.length > 0
-            ? `SaxeobaCode=${filterValues.SaxeobaCode}`
-            : ""
-        }&${
-          filterValues.MasalaCode.length > 0
-            ? `MasalaCode=${filterValues.MasalaCode}`
-            : ""
-        }&${
-          filterValues.MoculobaCode.length > 0
-            ? `MoculobaCode=${filterValues.MoculobaCode}`
-            : ""
-        }&${
-          filterValues.TypeCode.length > 0
-            ? `TypeCode=${filterValues.TypeCode}`
-            : ""
+          filterValues.key ? `key=${filterValues.key}` : ""
         }&${
           filterValues.FeriCode.length > 0
             ? `FeriCode=${filterValues.FeriCode}`
             : ""
         }&${
-          filterValues.XangrdzlivobaCode.length > 0
-            ? `XangrdzlivobaCode=${filterValues.XangrdzlivobaCode}`
+          filterValues.FormaCode.length > 0
+            ? `FormaCode=${filterValues.FormaCode}`
             : ""
         }&${
-          filterValues.TemaCode.length > 0
-            ? `TemaCode=${filterValues.TemaCode}`
+          filterValues.StyleCode.length > 0
+            ? `StyleCode=${filterValues.StyleCode}`
             : ""
         }&${
           filterValues.SqesiCode.length > 0
             ? `SqesiCode=${filterValues.SqesiCode}`
             : ""
         }&${
-          filterValues.RaodenobaShefutvashiCode.length > 0
-            ? `RaodenobaShefutvashiCode=${filterValues.RaodenobaShefutvashiCode}`
+          filterValues.SizeCode.length > 0
+            ? `SizeCode=${filterValues.SizeCode}`
+            : ""
+        }&${
+          filterValues.IdAttribute1.length > 0
+            ? `IdAttribute1=${filterValues.IdAttribute1}`
+            : ""
+        }&${
+          filterValues.IdAttribute2.length > 0
+            ? `IdAttribute2=${filterValues.IdAttribute2}`
+            : ""
+        }&${
+          filterValues.IdAttribute3.length > 0
+            ? `IdAttribute3=${filterValues.IdAttribute3}`
+            : ""
+        }&${
+          filterValues.IdAttribute4.length > 0
+            ? `IdAttribute4=${filterValues.IdAttribute4}`
+            : ""
+        }&${
+          filterValues.IdAttribute5.length > 0
+            ? `IdAttribute5=${filterValues.IdAttribute5}`
+            : ""
+        }&${
+          filterValues.IdAttribute6.length > 0
+            ? `IdAttribute6=${filterValues.IdAttribute6}`
             : ""
         }&${
           pathnameItems[0]?.pathCode
@@ -585,30 +586,68 @@ export const CategoryContent = ({
     currentPage,
     filterValues.FeriCode,
     filterValues.FormaCode,
-    filterValues.MasalaCode,
-    filterValues.MoculobaCode,
-    filterValues.RaodenobaShefutvashiCode,
-    filterValues.SaxeobaCode,
+    filterValues.IdAttribute1,
+    filterValues.IdAttribute2,
+    filterValues.IdAttribute3,
+    filterValues.IdAttribute4,
+    filterValues.IdAttribute5,
+    filterValues.IdAttribute6,
+    filterValues.SizeCode,
     filterValues.SqesiCode,
-    filterValues.TemaCode,
-    filterValues.TypeCode,
-    filterValues.XangrdzlivobaCode,
-    filterValues.ZomaCode,
+    filterValues.StyleCode,
+    filterValues.key,
     filterValues.maxPrice,
     filterValues.minPrice,
     pathnameItems,
   ]);
 
+  // key categs
+  const [allChildCategsData, setAllChildCategsData] = useState<any>([]);
+
+  useEffect(() => {
+    if (filterValues.key) {
+      axiosUser
+        .get(
+          `filter/getProdTypeGroupsKey?${
+            filterValues.key ? `key=${filterValues.key}` : ""
+          }`
+        )
+        .then((res) => {
+          setAllChildCategsData(res.data);
+        })
+        .catch((err) => {})
+        .finally(() => {});
+    } else {
+      setAllChildCategsData(childCategsData);
+    }
+  }, [filterValues.key, childCategsData]);
+
   // product filter
+
+  const HandleRouteFromKeyCateg = (id: any) => {
+    axiosUser
+      .get(`front/secondLevelCategories/${id}`)
+      .then((res) => {
+        window.history.replaceState(
+          null,
+          "/category",
+          `${pathname}/${res.data.IdProdSaxeoba}/${id}?${
+            filterValues.key ? `key=${filterValues.key}` : ""
+          }`
+        );
+      })
+      .catch((err) => {})
+      .finally(() => {});
+  };
 
   return (
     <div className="flex flex-col gap-y-[20px] items-center min-h-[calc(100vh-748px)] relative">
       <div className="bg-white w-full flex flex-col items-center">
-        <div className="max-w-[1920px] px-[264px] max-2xl:px-[90px] max-lg:px-0 py-[20px] w-full ">
+        <div className="max-w-[1920px] py-[20px] w-full ">
           <div
             ref={scrollRef}
             onMouseMove={handleDrag}
-            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[50px] max-lg:px-[90px] max-sm:px-[25px]"
+            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[50px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px]"
           >
             {firstCategsLoader
               ? Array.from({ length: 6 }, (_, i) => (
@@ -623,7 +662,14 @@ export const CategoryContent = ({
                   <div
                     key={item?.IdProdSaxeoba}
                     onClick={() => {
-                      router.push(`/category/${item?.IdProdSaxeoba}`);
+                      setFilterValues((prev: any) => ({
+                        ...prev,
+                        key: "",
+                      }));
+
+                      setTimeout(() => {
+                        router.push(`/category/${item?.IdProdSaxeoba}?key=`);
+                      }, 0);
                     }}
                     className={`flex h-full cursor-pointer items-center text-[14px] shrink-0 bg-[#f7f7f7] rounded-[8px] shadow relative overflow-hidden`}
                   >
@@ -663,46 +709,55 @@ export const CategoryContent = ({
 
       <div className="max-w-[1920px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px] w-full pb-[100px] flex flex-col gap-y-[48px]">
         <div className="flex flex-col gap-y-[20px]">
-          <div className="flex flex-wrap items-center gap-[5px]">
-            <p
-              onClick={() => {
-                router.push("/");
-              }}
-              className="text-[14px] cursor-pointer"
-            >
-              მთავარი
-            </p>
-            <IoChevronForward className="text-[13px]" />
-            {pathnameItems.map((item: any, index: number) => (
-              <div
-                key={item.id}
-                onClick={() =>
-                  router.push(
-                    `/category/${pathnameItems
-                      .slice(0, index + 1)
-                      .map((i: any) => i.pathCode)
-                      .join("/")}`
-                  )
-                }
+          {pathname.split("/")[2] && (
+            <div className="flex flex-wrap items-center gap-[5px]">
+              <p
+                onClick={() => {
+                  router.push("/");
+                }}
+                className="text-[14px] cursor-pointer"
               >
-                {index + 1 === pathnameItems.length && item.pathCategName ? (
-                  <p
-                    key={index}
-                    className="text-[14px] cursor-pointer font-semibold"
-                  >
-                    {item.pathCategName}
-                  </p>
-                ) : (
-                  <div key={index} className="flex items-center gap-[5px]">
-                    <p className="text-[14px] cursor-pointer">
+                მთავარი
+              </p>
+              <IoChevronForward className="text-[13px]" />
+              {pathnameItems.map((item: any, index: number) => (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    setFilterValues((prev: any) => ({
+                      ...prev,
+                      key: "",
+                    }));
+
+                    setTimeout(() => {
+                      router.push(
+                        `/category/${pathnameItems
+                          .slice(0, index + 1)
+                          .map((i: any) => i.pathCode)
+                          .join("/")}?key=`
+                      );
+                    }, 0);
+                  }}
+                >
+                  {index + 1 === pathnameItems.length && item.pathCategName ? (
+                    <p
+                      key={index}
+                      className="text-[14px] cursor-pointer font-semibold"
+                    >
                       {item.pathCategName}
-                    </p>{" "}
-                    <IoChevronForward className="text-[13px]" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+                    </p>
+                  ) : (
+                    <div key={index} className="flex items-center gap-[5px]">
+                      <p className="text-[14px] cursor-pointer">
+                        {item.pathCategName}
+                      </p>{" "}
+                      <IoChevronForward className="text-[13px]" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="flex max-lg:flex-col gap-[20px] ">
             <div ref={filterRef} className="max-lg:relative max-lg:w-full">
@@ -719,86 +774,8 @@ export const CategoryContent = ({
                   filterStatus ? "ml-0" : "ml-[-700px]"
                 } duration-200 max-lg:z-[2] max-lg:shadow rounded-[12px] self-start bg-white p-[20px] flex flex-col gap-y-[10px] sticky top-[20px]`}
               >
-                <h1 className="text-[17px]">
-                  {pathnameItems[pathnameItems.length - 1]?.pathCategName}
-                </h1>
-
                 {FilterComponents.find((item: any) => item.status === 1) ? (
                   <div>
-                    {FilterComponents.map((filter: any) => (
-                      <div
-                        key={filter.id}
-                        className={`flex-col gap-y-[10px] duration-100 ${
-                          filter.status ? "flex" : "hidden"
-                        } ${
-                          dropedFilter === filter.name ? "pb-[20px]" : " pb-0"
-                        }`}
-                      >
-                        <div
-                          onClick={() => {
-                            setDropedFilter((prev: any) =>
-                              prev === filter.name ? "" : filter.name
-                            );
-                          }}
-                          className="flex items-center justify-between cursor-pointer"
-                        >
-                          <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
-                            {filter.name}
-                          </h1>
-                          <IoIosArrowUp
-                            className={`duration-200 shrink-0 ${
-                              dropedFilter === filter.name
-                                ? "rotate-[180deg]"
-                                : ""
-                            }`}
-                          />
-                        </div>
-
-                        <div
-                          className={`flex flex-col gap-y-[10px] duration-200 ${
-                            dropedFilter === filter.name
-                              ? "h-auto opacity-1"
-                              : "h-0 overflow-hidden opacity-0"
-                          }`}
-                        >
-                          {filter.data.map((item: any, index: any) => (
-                            <div
-                              key={item[filter.code]}
-                              onClick={() => {
-                                setFilterValues((prev: any) => ({
-                                  ...prev,
-                                  [filter.code]: prev[filter.code]?.find(
-                                    (item1: any) =>
-                                      item1 == parseInt(item[filter.code])
-                                  )
-                                    ? prev[filter.code].filter(
-                                        (item2: any) =>
-                                          item2 != item[filter.code]
-                                      )
-                                    : [
-                                        ...(prev[filter.code] || []),
-                                        parseInt(item[filter.code]),
-                                      ],
-                                }));
-                                setCurrentPage(0);
-                              }}
-                              className="flex items-center gap-[5px] cursor-pointer"
-                            >
-                              <CheckBox
-                                active={filterValues[filter.code]?.find(
-                                  (filteredItem: any) =>
-                                    filteredItem == item[filter.code]
-                                )}
-                              />
-                              <p className="text-[14px]">
-                                {item[filter.nameEng]}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-
                     <div
                       className={`flex flex-col gap-y-[10px]  duration-100  ${
                         dropedFilter === "price" ? "pb-[20px]" : " pb-0"
@@ -894,27 +871,105 @@ export const CategoryContent = ({
                         </div>
                       </div>
                     </div>
+                    {FilterComponents.map((filter: any) => (
+                      <div
+                        key={filter.id}
+                        className={`flex-col gap-y-[10px] duration-100 ${
+                          filter.status ? "flex" : "hidden"
+                        } ${
+                          dropedFilter === filter.name ? "pb-[20px]" : " pb-0"
+                        }`}
+                      >
+                        <div
+                          onClick={() => {
+                            setDropedFilter((prev: any) =>
+                              prev === filter.name ? "" : filter.name
+                            );
+                          }}
+                          className="flex items-center justify-between cursor-pointer"
+                        >
+                          <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
+                            {filter.name}
+                          </h1>
+                          <IoIosArrowUp
+                            className={`duration-200 shrink-0 ${
+                              dropedFilter === filter.name
+                                ? "rotate-[180deg]"
+                                : ""
+                            }`}
+                          />
+                        </div>
+
+                        <div
+                          className={`flex flex-col gap-y-[10px] duration-200 ${
+                            dropedFilter === filter.name
+                              ? "h-auto opacity-1"
+                              : "h-0 overflow-hidden opacity-0"
+                          }`}
+                        >
+                          {filter?.data?.length > 0 &&
+                            filter?.data?.map((item: any, index: any) => (
+                              <div
+                                key={item[filter.code]}
+                                onClick={() => {
+                                  setFilterValues((prev: any) => ({
+                                    ...prev,
+                                    [filter.code]: prev[filter.code]?.find(
+                                      (item1: any) =>
+                                        item1 == parseInt(item[filter.code])
+                                    )
+                                      ? prev[filter.code].filter(
+                                          (item2: any) =>
+                                            item2 != item[filter.code]
+                                        )
+                                      : [
+                                          ...(prev[filter.code] || []),
+                                          parseInt(item[filter.code]),
+                                        ],
+                                  }));
+                                  setCurrentPage(0);
+                                }}
+                                className="flex items-center gap-[5px] cursor-pointer"
+                              >
+                                <CheckBox
+                                  active={filterValues[filter.code]?.find(
+                                    (filteredItem: any) =>
+                                      filteredItem == item[filter.code]
+                                  )}
+                                />
+                                <p className="text-[14px]">
+                                  {item[filter.nameEng]}
+                                </p>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  childCategsData?.map((item: any) => (
+                  allChildCategsData?.map((item: any) => (
                     <p
                       key={
-                        pathnameItems.length === 1
+                        pathnameItems.length <= 1
                           ? item.IdProdTypeGroup
                           : pathnameItems.length === 2 && item.IdProdType
                       }
-                      onClick={() =>
-                        router.push(
-                          `${pathname}/${
-                            pathnameItems.length === 1
-                              ? item.IdProdTypeGroup
-                              : pathnameItems.length === 2 && item.IdProdType
-                          }`
-                        )
-                      }
+                      onClick={() => {
+                        if (pathnameItems.length >= 1) {
+                          router.push(
+                            `${pathname}/${
+                              pathnameItems.length === 1
+                                ? item.IdProdTypeGroup
+                                : pathnameItems.length === 2 && item.IdProdType
+                            }`
+                          );
+                        } else {
+                          HandleRouteFromKeyCateg(item.IdProdTypeGroup);
+                        }
+                      }}
                       className="text-[15px] cursor-pointer"
                     >
-                      {pathnameItems.length === 1
+                      {pathnameItems.length <= 1
                         ? item.ProdTypeGroupName
                         : pathnameItems.length === 2 && item.ProdTypeName}
                     </p>
@@ -923,7 +978,9 @@ export const CategoryContent = ({
               </div>
             </div>
 
-            <div className="w-[calc(100%-350px)] max-2xl:w-[calc(100%-320px)] max-lg:w-full flex flex-col gap-y-[48px]">
+            <div
+              className={`flex flex-col gap-y-[48px] w-[calc(100%-350px)] max-2xl:w-[calc(100%-320px)] max-lg:w-full`}
+            >
               <div
                 className={`w-full grid grid-cols-5 max-xl:grid-cols-4 max-lg:grid-cols-4 max-sm:grid-cols-3 gap-[30px] gap-y-[20px] max-sm:gap-[15px] ${
                   !childCategsloader && childCategsData.length === 0
@@ -995,19 +1052,27 @@ export const CategoryContent = ({
                     ))}
               </div>
 
-              {FilterComponents.find((item: any) => item.status === 1) && (
+              {!pathname.split("/")[2] && <WhatUSearch />}
+
+              {(FilterComponents.find((item: any) => item.status === 1) ||
+                !pathname.split("/")[2]) && (
                 <div className="flex flex-col gap-y-[20px]">
                   <div className="flex justify-between gap-[20px] max-sm:flex-col">
                     <div className="flex flex-col gap-y-[10px] w-[40%]">
                       <h1 className="text-[28px]">
-                        {pathnameItems[pathnameItems.length - 1]?.pathCategName}
+                        {!pathname.split("/")[2]
+                          ? filterValues.key
+                          : pathnameItems[pathnameItems.length - 1]
+                              ?.pathCategName}
                       </h1>
-                      <p className="text-[14px]">
-                        {
-                          pathnameItems[pathnameItems.length - 1]
-                            ?.pathCategDescr
-                        }
-                      </p>
+                      {pathname.split("/")[2] && (
+                        <p className="text-[14px]">
+                          {
+                            pathnameItems[pathnameItems.length - 1]
+                              ?.pathCategDescr
+                          }
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col max-sm:flex-col-reverse gap-y-[20px] w-[40%]  max-lg:w-[50%] max-sm:w-full items-end">
                       <div className="flex max-lg:flex-col-reverse max-sm:flex-row max-lg:items-end items-center gap-[20px] w-full">
@@ -1036,14 +1101,16 @@ export const CategoryContent = ({
                           ))}
                         </div>
                       </div>
-                      <ul className="grid grid-cols-2 max-lg:grid-cols-1 max-sm:grid-cols-2 w-full gap-[10px] text-[14px] max-sm:text-[13px] list-inside list-disc">
-                        <li>დაფქული დარიჩნი</li>
-                        <li>დაფქული დარიჩნი</li>
-                        <li>დაფქული დარიჩნი</li>
-                        <li>დაფქული დარიჩნი</li>
-                        <li>დაფქული დარიჩნი</li>
-                        <li>დაფქული დარიჩნი</li>
-                      </ul>
+                      {pathname.split("/")[2] && (
+                        <ul className="grid grid-cols-2 max-lg:grid-cols-1 max-sm:grid-cols-2 w-full gap-[10px] text-[14px] max-sm:text-[13px] list-inside list-disc">
+                          <li>დაფქული დარიჩნი</li>
+                          <li>დაფქული დარიჩნი</li>
+                          <li>დაფქული დარიჩნი</li>
+                          <li>დაფქული დარიჩნი</li>
+                          <li>დაფქული დარიჩნი</li>
+                          <li>დაფქული დარიჩნი</li>
+                        </ul>
+                      )}
                     </div>
                   </div>
 

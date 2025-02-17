@@ -11,15 +11,13 @@ import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import { GoPerson } from "react-icons/go";
 import { ImInsertTemplate } from "react-icons/im";
+import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 
 export default function BurgerMenu() {
-  const {
-    burgerMenu,
-    setBurgerMenu,
-    menuRoutes,
-    isCategoriesPopUp,
-    setIsCategoriesPopUp,
-  } = useContext(ContextForSharingStates);
+  const { burgerMenu, setBurgerMenu, menuRoutes } = useContext(
+    ContextForSharingStates
+  );
+  const { FrontCategoriesData } = useFrontCategories();
   const { user } = useContext(UserContext);
 
   const router = useRouter();
@@ -136,9 +134,10 @@ export default function BurgerMenu() {
           <div
             key={item.id}
             onClick={() => {
-              if (item.link == "all-category") {
-                setIsCategoriesPopUp(true);
-                setBurgerMenu(false);
+              if (item.link == "category") {
+                router.push(
+                  `/category/${FrontCategoriesData[0].IdProdSaxeoba}`
+                );
               } else {
                 router.push(
                   item.link === "favorites"
@@ -148,11 +147,7 @@ export default function BurgerMenu() {
               }
             }}
             className={`flex items-center gap-[10px] cursor-pointer ${
-              item.link === "all-category"
-                ? isCategoriesPopUp
-                  ? "text-white"
-                  : "gap-[30px]  text-[#C6FB94]"
-                : item.link === "favorites"
+              item.link === "favorites"
                 ? pathname.split("/")[2] === item.link
                   ? "text-white"
                   : "gap-[30px]  text-[#C6FB94]"

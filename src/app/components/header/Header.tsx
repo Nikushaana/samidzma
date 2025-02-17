@@ -13,12 +13,14 @@ import { FaPlus } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { WishListAxiosContext } from "../../../../dataFetchs/wishListContext";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
+import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 
 export default function Header() {
   const { user } = useContext(UserContext);
 
   const { setBurgerMenu, menuRoutes, isCategoriesPopUp, setIsCategoriesPopUp } =
     useContext(ContextForSharingStates);
+  const { FrontCategoriesData } = useFrontCategories();
   const { WishListCounter, WishListLocalStorageData } =
     useContext(WishListAxiosContext);
 
@@ -59,8 +61,10 @@ export default function Header() {
                 <li
                   key={item.id}
                   onClick={() => {
-                    if (item.link == "all-category") {
-                      setIsCategoriesPopUp(true);
+                    if (item.link == "category") {
+                      router.push(
+                        `/category/${FrontCategoriesData[0].IdProdSaxeoba}`
+                      );
                     } else {
                       router.push(
                         item.link === "favorites"
@@ -72,9 +76,7 @@ export default function Header() {
                   className={`h-full rounded-full text-[14px] cursor-pointer flex items-center px-[25px] ${
                     item.name === "FAQ" && "max-1.5xl:hidden"
                   } ${
-                    item.link === "all-category"
-                      ? isCategoriesPopUp && "bg-myGreen"
-                      : item.link === "favorites"
+                    item.link === "favorites"
                       ? pathname.split("/")[2] === item.link
                         ? "bg-myGreen"
                         : ""

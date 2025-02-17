@@ -1,7 +1,6 @@
 "use client";
 
 import ProductCard from "@/app/components/CardVariations/ProductCard";
-import EachProductSlider from "@/app/components/eachProduct/eachproductSlider";
 import WhatUSearch from "@/app/components/Inputs/WhatUSearch";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
@@ -16,13 +15,15 @@ import GreenButton from "@/app/components/buttons/greenButton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import ProductReview from "@/app/components/productPage/productReview";
 import Counter from "@/app/components/counter/counter";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import { CiLocationOn } from "react-icons/ci";
 import { FiChevronDown } from "react-icons/fi";
 import DropDownFilials from "@/app/components/DropDowns/DropDownFilials";
 import useProducts from "../../../../dataFetchs/productsContext";
+import ProductReview from "@/app/components/InnerProductPage/productReview";
+import InnerProductMainImgSlider from "@/app/components/InnerProductPage/InnerProductMainImgSlider";
+import InnerProductVariationImgsSlider from "@/app/components/InnerProductPage/InnerProductVariationImgsSlider";
 
 export default function Page({ params }: { params: { productId: string } }) {
   const myParams = useSearchParams();
@@ -241,61 +242,53 @@ export default function Page({ params }: { params: { productId: string } }) {
   ]);
   // yt video key
 
-  console.log(mainVariationImages);
-
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
-      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
+      <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px]  max-lg:px-[90px] max-md:px-[25px] pb-[100px] flex flex-col gap-y-[90px] relative">
         <div className="flex flex-col gap-y-[20px]">
           <WhatUSearch />
-          <div className="flex gap-[26px] max-lg:p-[5px] max-sm:flex-col max-lg:gap-[16px] h-full  max-lg:bg-white max-lg:rounded-[12px] ">
-            <div className="hidden max-sm:flex items-center justify-center gap-[5px]">
+          <div className="flex gap-[26px] max-lg:p-[5px] max-md:flex-col max-lg:gap-[16px] h-full  max-lg:bg-white max-lg:rounded-[12px] ">
+            <div className="hidden max-md:flex items-center justify-center gap-[5px]">
               <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
-                <p className="text-[14px] max-sm:text-[12px]">Sale -5%</p>
+                <p className="text-[14px] max-md:text-[12px]">Sale -5%</p>
               </div>
               <div className="rounded-full text-white bg-myGreen flex items-center px-[15px] h-[36px]">
-                <p className="text-[14px] max-sm:text-[12px]">მარაგშია</p>
+                <p className="text-[14px] max-md:text-[12px]">მარაგშია</p>
               </div>
               <div className="rounded-full text-black bg-myYellow flex items-center gap-[10px] px-[15px] h-[36px]">
-                <BiStar className="text-[20px] max-sm:text-[15px]" />
-                <p className="text-[14px] max-sm:text-[12px]">4-7</p>
+                <BiStar className="text-[20px] max-md:text-[15px]" />
+                <p className="text-[14px] max-md:text-[12px]">4-7</p>
               </div>
               <div className="rounded-full text-white bg-myBlack flex items-center justify-center h-[36px] w-[36px]">
                 <TbTruckDelivery className="text-[20px]" />
               </div>
             </div>
-            <div className="w-[45%] max-sm:w-full flex">
-              <EachProductSlider
-                prodMainImages={mainVariationImages}
-                // prodMainImages={
-                //   oneProduct?.product_picture?.length > 0 &&
-                //   oneProduct?.product_picture
-                // }
-                prodVariationImages={
-                  oneProduct?.product_variations?.length > 0 &&
-                  oneProduct?.product_variations
-                }
-                variation={variation}
-                mainId={params.productId}
+            <div
+              className={`w-[45%] max-md:w-full flex max-md:h-[400px] ${
+                oneProductLoader && "h-[500px]"
+              }`}
+            >
+              <InnerProductMainImgSlider
                 mainLoader={oneProductLoader}
+                prodMainImages={mainVariationImages}
                 activeImagessLoader={variationImagesStockLoader}
               />
             </div>
-            <div className="w-[55%] max-sm:w-full">
+            <div className="w-[55%] max-md:w-full">
               {oneProductLoader ? (
                 <div className="w-full h-full rounded-[12px] overflow-hidden loaderwave"></div>
               ) : (
                 <div className="flex flex-col gap-y-[25px] p-[18px] rounded-[12px] bg-white w-full h-full">
-                  <div className="flex items-center gap-[5px] max-sm:hidden">
+                  <div className="flex items-center gap-[5px] max-md:hidden">
                     <div className="rounded-full text-white bg-myPink flex items-center px-[15px] h-[36px]">
-                      <p className="text-[14px] max-sm:text-[12px]">Sale -5%</p>
+                      <p className="text-[14px] max-md:text-[12px]">Sale -5%</p>
                     </div>
                     <div className="rounded-full text-white bg-myGreen flex items-center px-[15px] h-[36px]">
-                      <p className="text-[14px] max-sm:text-[12px]">მარაგშია</p>
+                      <p className="text-[14px] max-md:text-[12px]">მარაგშია</p>
                     </div>
                     <div className="rounded-full text-black bg-myYellow flex items-center gap-[10px] px-[15px] h-[36px]">
-                      <BiStar className="text-[20px] max-sm:text-[15px]" />
-                      <p className="text-[14px] max-sm:text-[12px]">4-7</p>
+                      <BiStar className="text-[20px] max-md:text-[15px]" />
+                      <p className="text-[14px] max-md:text-[12px]">4-7</p>
                     </div>
                     <div className="rounded-full text-white bg-myBlack flex items-center justify-center h-[36px] w-[36px]">
                       <TbTruckDelivery className="text-[20px]" />
@@ -309,8 +302,8 @@ export default function Page({ params }: { params: { productId: string } }) {
                       : oneProduct?.product?.ProductName}
                   </h1>
                   <div className="flex flex-col gap-y-[10px]">
-                    <div className="flex items-center max-sm:justify-between gap-[40px]">
-                      <h1 className="text-[28px] max-sm:text-[20px]">
+                    <div className="flex items-center max-md:justify-between gap-[40px]">
+                      <h1 className="text-[28px] max-md:text-[20px]">
                         {variation
                           ? complect
                             ? (
@@ -350,7 +343,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                             complect ? "bg-myGreen text-white" : ""
                           }`}
                         >
-                          <p className="max-sm:text-[10px] flex items-center gap-[2px]">
+                          <p className="max-md:text-[10px] flex items-center gap-[2px]">
                             შეკვრა /
                             <span className="text-[18px]">
                               {variation
@@ -396,43 +389,19 @@ export default function Page({ params }: { params: { productId: string } }) {
                       <p className="text-[14px]">ქულა ბონუსად</p>
                     </div>
                   </div>
-                  <div className="flex max-lg:flex-col max-lg:gap-0 items-start gap-[20px]">
-                    <h1 className="text-[22px] max-sm:text-[18px]">
-                      მიტანის სერვისი
-                    </h1>
-                    <div className="flex flex-col max-sm:gap-y-[5px] max-lg:w-full">
-                      <div className="bg-[#EAEDEE] h-[38px] px-[20px] flex items-center rounded-full">
-                        <p className="text-[10px]">Georgia</p>
-                      </div>
-                      <p className="text-[10px]">
-                        შეიყვანე მისამართი და გაიგე მიტანის ღირებულება
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex max-lg:flex-col items-center gap-[50px] max-lg:gap-[5px]">
-                    <div className="flex flex-col max-lg:flex-row gap-y-[5px] max-lg:w-full max-lg:justify-between">
-                      <div className="flex items-center gap-[5px]">
-                        <FaCheck className="text-myGreen" />
-                        <p className="text-[14px]">თვითგატანა</p>
-                      </div>
-                      <div className="flex items-center gap-[5px]">
-                        <FaCheck className="text-myGreen" />
-                        <p className="text-[14px]">სახლამდე მიტანა</p>
-                      </div>
-                    </div>
-                    <div className="border-l-[1px] border-[#D3D3D3] max-lg:border-0 pl-[20px] max-lg:w-full max-lg:pl-0">
-                      <div className="bg-[#F7F7F7] h-[41px] flex items-center justify-between w-[200px] max-lg:w-full px-[10px] rounded-[10px]">
-                        <p className="text-[12px]">
-                          სახლამდე მიტანის ღირებულება
-                        </p>
-                        <h1 className="text-[14px]">24.00₾</h1>
-                      </div>
-                    </div>
-                  </div>
+                  <InnerProductVariationImgsSlider
+                    mainLoader={oneProductLoader}
+                    mainId={params.productId}
+                    prodVariationImages={
+                      oneProduct?.product_variations?.length > 0 &&
+                      oneProduct?.product_variations
+                    }
+                    variation={variation}
+                  />
                   <div className="grid grid-cols-2 gap-[20px] max-lg:grid-cols-1">
                     <GreenButton
                       name="ყიდვა"
-                      style="h-[56px] max-sm:h-[48px] text-[18px]"
+                      style="h-[56px] max-md:h-[48px] text-[18px]"
                       action={HandleAddCart}
                       loader={addCartloader}
                       dissabled={isInCart}
@@ -463,7 +432,7 @@ export default function Page({ params }: { params: { productId: string } }) {
             </div>
           </div>
           <div className="flex flex-col gap-y-[30px]">
-            <div className="w-full grid grid-cols-3 max-sm:grid-cols-7 border-b-[2px]">
+            <div className="w-full grid grid-cols-3 max-md:grid-cols-7 border-b-[2px]">
               {prodInfos.map((item: any, index: any) => (
                 <div
                   key={item.id}
@@ -472,14 +441,14 @@ export default function Page({ params }: { params: { productId: string } }) {
                   }}
                   className={`${
                     index == 0
-                      ? "max-sm:col-span-2"
+                      ? "max-md:col-span-2"
                       : index == 1
-                      ? "max-sm:col-span-3"
-                      : index == 2 && "max-sm:col-span-2"
+                      ? "max-md:col-span-3"
+                      : index == 2 && "max-md:col-span-2"
                   }`}
                 >
                   <h1
-                    className={`text-[28px] max-sm:text-[14px] select-none max-sm:h-[25px] cursor-pointer text-center duration-100  ${
+                    className={`text-[28px] max-md:text-[14px] select-none max-md:h-[25px] cursor-pointer text-center duration-100  ${
                       productDetiles === item.id ? "text-myGreen" : ""
                     }`}
                   >
@@ -512,7 +481,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                           : oneProduct?.product?.DescriptionName}
                       </p>
                     )}
-                    <ul className="grid grid-cols-2 max-sm:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
+                    <ul className="grid grid-cols-2 max-md:text-[11px] text-[14px] gap-[10px] marker:text-myYellow list-disc list-inside w-[40%]  max-lg:w-full">
                       <li>Aromatic ground cinnamon</li>
                       <li>Aromatic ground cinnamon</li>
                       <li>Aromatic ground cinnamon</li>
@@ -555,7 +524,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                   data={productsData}
                   loader={productsLoader}
                   title={
-                    <h1 className="text-[28px] max-sm:text-[24px]">
+                    <h1 className="text-[28px] max-md:text-[24px]">
                       რეკომენდებული ნაკრებები
                     </h1>
                   }
@@ -571,7 +540,7 @@ export default function Page({ params }: { params: { productId: string } }) {
                   <EverySlider
                     data={prodReviewData?.data}
                     title={
-                      <h1 className="text-[28px] max-sm:text-[24px]">
+                      <h1 className="text-[28px] max-md:text-[24px]">
                         შეფასებები
                       </h1>
                     }
@@ -584,10 +553,10 @@ export default function Page({ params }: { params: { productId: string } }) {
               )}
 
               <div className="flex flex-col gap-y-[20px]">
-                <h1 className="text-[28px] max-sm:text-[24px]">
+                <h1 className="text-[28px] max-md:text-[24px]">
                   შეიძლება ასევე მოგეწონოს
                 </h1>
-                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[17px]">
+                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1 gap-[17px]">
                   {productsLoader
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div
@@ -606,10 +575,10 @@ export default function Page({ params }: { params: { productId: string } }) {
               </div>
 
               <div className="flex flex-col gap-y-[20px]">
-                <h1 className="text-[28px] max-sm:text-[24px]">
+                <h1 className="text-[28px] max-md:text-[24px]">
                   შენთვის რეკომენდებული
                 </h1>
-                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[17px]">
+                <div className="grid grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1 gap-[17px]">
                   {productsLoader
                     ? [1, 2, 3, 4].map((index: any) => (
                         <div
@@ -632,4 +601,42 @@ export default function Page({ params }: { params: { productId: string } }) {
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="flex max-lg:flex-col max-lg:gap-0 items-start gap-[20px]">
+                    <h1 className="text-[22px] max-sm:text-[18px]">
+                      მიტანის სერვისი
+                    </h1>
+                    <div className="flex flex-col max-sm:gap-y-[5px] max-lg:w-full">
+                      <div className="bg-[#EAEDEE] h-[38px] px-[20px] flex items-center rounded-full">
+                        <p className="text-[10px]">Georgia</p>
+                      </div>
+                      <p className="text-[10px]">
+                        შეიყვანე მისამართი და გაიგე მიტანის ღირებულება
+                      </p>
+                    </div>
+                  </div> */
+}
+{
+  /* <div className="flex max-lg:flex-col items-center gap-[50px] max-lg:gap-[5px]">
+                    <div className="flex flex-col max-lg:flex-row gap-y-[5px] max-lg:w-full max-lg:justify-between">
+                      <div className="flex items-center gap-[5px]">
+                        <FaCheck className="text-myGreen" />
+                        <p className="text-[14px]">თვითგატანა</p>
+                      </div>
+                      <div className="flex items-center gap-[5px]">
+                        <FaCheck className="text-myGreen" />
+                        <p className="text-[14px]">სახლამდე მიტანა</p>
+                      </div>
+                    </div>
+                    <div className="border-l-[1px] border-[#D3D3D3] max-lg:border-0 pl-[20px] max-lg:w-full max-lg:pl-0">
+                      <div className="bg-[#F7F7F7] h-[41px] flex items-center justify-between w-[200px] max-lg:w-full px-[10px] rounded-[10px]">
+                        <p className="text-[12px]">
+                          სახლამდე მიტანის ღირებულება
+                        </p>
+                        <h1 className="text-[14px]">24.00₾</h1>
+                      </div>
+                    </div>
+                  </div> */
 }

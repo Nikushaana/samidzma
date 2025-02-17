@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { axiosUser } from "./AxiosToken";
 
 const useFilter = () => {
+  const [pathnameItems, setPathnameItems] = useState<any>([]);
+
   const [forma, setForma] = useState([]);
   const [zoma, setZoma] = useState([]);
   const [saxeoba, setSaxeoba] = useState([]);
@@ -33,17 +35,127 @@ const useFilter = () => {
         sqesiResponse,
         raodenobaShefutvashiResponse,
       ] = await Promise.all([
-        axiosUser.get("front/forma"),
-        axiosUser.get("front/zoma"),
-        axiosUser.get("front/saxeoba"),
-        axiosUser.get("front/masala"),
-        axiosUser.get("front/moculoba"),
-        axiosUser.get("front/type"),
-        axiosUser.get("front/feri"),
-        axiosUser.get("front/xangrdzlivoba"),
-        axiosUser.get("front/tema"),
-        axiosUser.get("front/sqesi"),
-        axiosUser.get("front/raodenobaShefutvashi"),
+        axiosUser.get(
+          `filter/forma?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/zoma?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/saxeoba?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/masala?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/moculoba?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/type?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/feri?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/xangrdzlivoba?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/tema?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/sqesi?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
+        axiosUser.get(
+          `filter/raodenobaShefutvashi?${
+            pathnameItems[1]?.pathCode
+              ? `IdProdGroupType=${pathnameItems[1]?.pathCode}`
+              : ""
+          }&${
+            pathnameItems[2]?.pathCode
+              ? `IdProdType=${pathnameItems[2]?.pathCode}`
+              : ""
+          }`
+        ),
       ]);
 
       setForma(formaResponse.data);
@@ -64,9 +176,12 @@ const useFilter = () => {
 
   useEffect(() => {
     fetchFilter();
-  }, []);
+  }, [pathnameItems]);
 
   return {
+    pathnameItems,
+    setPathnameItems,
+
     forma,
     zoma,
     saxeoba,
