@@ -642,18 +642,18 @@ export const CategoryContent = ({
 
   return (
     <div className="flex flex-col gap-y-[20px] items-center min-h-[calc(100vh-748px)] relative">
-      <div className="bg-white w-full flex flex-col items-center">
+      <div className="bg-[#eaedee] w-full flex flex-col items-center">
         <div className="max-w-[1920px] py-[20px] w-full ">
           <div
             ref={scrollRef}
             onMouseMove={handleDrag}
-            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[100px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px]"
+            className="flex gap-[15px] overflow-x-scroll notShowScrollHor w-full px-[264px] max-2xl:px-[90px] max-sm:px-[25px]"
           >
             {firstCategsLoader
               ? Array.from({ length: 6 }, (_, i) => (
                   <div
                     key={i}
-                    className="h-full w-[250px] rounded-[8px] overflow-hidden shrink-0"
+                    className="h-[100px] w-[250px] rounded-[8px] overflow-hidden shrink-0"
                   >
                     <div className="loaderwave"></div>
                   </div>
@@ -671,36 +671,38 @@ export const CategoryContent = ({
                         router.push(`/category/${item?.IdProdSaxeoba}?key=`);
                       }, 0);
                     }}
-                    className={`flex h-full cursor-pointer items-center text-[14px] shrink-0 bg-[#f7f7f7] rounded-[8px] shadow relative overflow-hidden`}
+                    className={`flex flex-col w-[250px] cursor-pointer shrink-0 bg-[#f7f7f7] rounded-[8px] shadow overflow-hidden mb-[5px]`}
                   >
-                    {item?.image ? (
-                      <Image
-                        src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
-                        alt={""}
-                        sizes="500px"
-                        fill
-                        style={{
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center w-full h-full relative">
-                        <div className="w-[90%] h-[90%] relative">
-                          <Image
-                            src="/images/siteLogo.png"
-                            alt={""}
-                            sizes="500px"
-                            fill
-                            style={{
-                              objectFit: "contain",
-                            }}
-                          />
+                    <div className="relative w-full h-[100px]">
+                      {item?.image ? (
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
+                          alt={""}
+                          sizes="500px"
+                          fill
+                          style={{
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full relative">
+                          <div className="w-[90%] h-[90%] relative">
+                            <Image
+                              src="/images/siteLogo.png"
+                              alt={""}
+                              sizes="500px"
+                              fill
+                              style={{
+                                objectFit: "contain",
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    <p className="z-[1] text-white bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-[170px] h-full flex items-center text-center justify-center">
+                      )}
+                    </div>
+                    <h1 className="w-full flex items-center justify-center text-center p-[10px] max-sm:p-[5px] ">
                       {item.ProdSaxeobaName}
-                    </p>
+                    </h1>
                   </div>
                 ))}
           </div>
