@@ -54,7 +54,9 @@ export default function InnerProductVariationImgsSlider({
           <div className="relative w-full">
             <Swiper
               modules={[Grid, Pagination]}
-              slidesPerView={screenWidth >= 600 ? 4 : screenWidth >= 500 ? 3 : 2}
+              slidesPerView={
+                screenWidth >= 600 ? 4 : screenWidth >= 500 ? 3 : 2
+              }
               grid={{
                 rows: screenWidth >= 500 ? 2 : 1,
               }}

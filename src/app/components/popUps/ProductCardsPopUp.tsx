@@ -218,7 +218,7 @@ export default function ProductCardsPopUp() {
         className={`max-w-[1920px] min-h-[555px] max-h-[90vh] overflow-y-scroll notshowScrollVert overflow-x-hidden w-full bg-[#EAEDEE] p-[16px] flex gap-[26px] max-md:flex-col max-lg:gap-[16px] rounded-[12px]`}
       >
         <div
-          className={`w-[45%] max-md:w-full flex max-md:h-[400px] shrink-0 ${
+          className={`w-[calc((100%-26px)/2)] aspect-square self-start max-md:w-full shrink-0 ${
             oneProductLoader && "h-[500px]"
           }`}
         >
@@ -229,7 +229,9 @@ export default function ProductCardsPopUp() {
           />
         </div>
 
-        <div className="w-[55%] max-md:w-full">
+        <div className={`w-[calc((100%-26px)/2)] max-md:w-full self-start ${
+                oneProductLoader ? "aspect-square" : ""
+              }`}>
           {oneProductLoader ? (
             <div className="w-full h-full rounded-[12px] loaderwave overflow-hidden"></div>
           ) : (

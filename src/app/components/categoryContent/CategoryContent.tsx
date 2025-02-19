@@ -647,7 +647,7 @@ export const CategoryContent = ({
           <div
             ref={scrollRef}
             onMouseMove={handleDrag}
-            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[50px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px]"
+            className="flex items-center gap-[15px] overflow-x-scroll notShowScrollHor w-full h-[100px] px-[264px] max-2xl:px-[90px] max-sm:px-[25px]"
           >
             {firstCategsLoader
               ? Array.from({ length: 6 }, (_, i) => (
@@ -698,7 +698,7 @@ export const CategoryContent = ({
                         </div>
                       </div>
                     )}
-                    <p className="z-[1] text-white bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-center px-[30px]">
+                    <p className="z-[1] text-white bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-[170px] h-full flex items-center text-center justify-center">
                       {item.ProdSaxeobaName}
                     </p>
                   </div>

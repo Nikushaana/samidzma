@@ -264,9 +264,7 @@ export default function Page({ params }: { params: { productId: string } }) {
               </div>
             </div>
             <div
-              className={`w-[45%] max-md:w-full flex max-md:h-[400px] ${
-                oneProductLoader && "h-[500px]"
-              }`}
+              className={`w-[calc((100%-26px)/2)] aspect-square self-start max-md:w-full `}
             >
               <InnerProductMainImgSlider
                 mainLoader={oneProductLoader}
@@ -274,7 +272,11 @@ export default function Page({ params }: { params: { productId: string } }) {
                 activeImagessLoader={variationImagesStockLoader}
               />
             </div>
-            <div className="w-[55%] max-md:w-full">
+            <div
+              className={`w-[calc((100%-26px)/2)] max-md:w-full self-start ${
+                oneProductLoader ? "aspect-square" : ""
+              }`}
+            >
               {oneProductLoader ? (
                 <div className="w-full h-full rounded-[12px] overflow-hidden loaderwave"></div>
               ) : (
@@ -601,42 +603,4 @@ export default function Page({ params }: { params: { productId: string } }) {
       </div>
     </div>
   );
-}
-
-{
-  /* <div className="flex max-lg:flex-col max-lg:gap-0 items-start gap-[20px]">
-                    <h1 className="text-[22px] max-sm:text-[18px]">
-                      მიტანის სერვისი
-                    </h1>
-                    <div className="flex flex-col max-sm:gap-y-[5px] max-lg:w-full">
-                      <div className="bg-[#EAEDEE] h-[38px] px-[20px] flex items-center rounded-full">
-                        <p className="text-[10px]">Georgia</p>
-                      </div>
-                      <p className="text-[10px]">
-                        შეიყვანე მისამართი და გაიგე მიტანის ღირებულება
-                      </p>
-                    </div>
-                  </div> */
-}
-{
-  /* <div className="flex max-lg:flex-col items-center gap-[50px] max-lg:gap-[5px]">
-                    <div className="flex flex-col max-lg:flex-row gap-y-[5px] max-lg:w-full max-lg:justify-between">
-                      <div className="flex items-center gap-[5px]">
-                        <FaCheck className="text-myGreen" />
-                        <p className="text-[14px]">თვითგატანა</p>
-                      </div>
-                      <div className="flex items-center gap-[5px]">
-                        <FaCheck className="text-myGreen" />
-                        <p className="text-[14px]">სახლამდე მიტანა</p>
-                      </div>
-                    </div>
-                    <div className="border-l-[1px] border-[#D3D3D3] max-lg:border-0 pl-[20px] max-lg:w-full max-lg:pl-0">
-                      <div className="bg-[#F7F7F7] h-[41px] flex items-center justify-between w-[200px] max-lg:w-full px-[10px] rounded-[10px]">
-                        <p className="text-[12px]">
-                          სახლამდე მიტანის ღირებულება
-                        </p>
-                        <h1 className="text-[14px]">24.00₾</h1>
-                      </div>
-                    </div>
-                  </div> */
 }
