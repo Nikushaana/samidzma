@@ -673,7 +673,7 @@ export const CategoryContent = ({
                     }}
                     className={`flex flex-col w-[250px] cursor-pointer shrink-0 bg-[#f7f7f7] rounded-[8px] shadow overflow-hidden mb-[5px]`}
                   >
-                    <div className="relative w-full h-[100px]">
+                    <div className="relative w-full h-[100px] shrink-0">
                       {item?.image ? (
                         <Image
                           src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
@@ -700,7 +700,7 @@ export const CategoryContent = ({
                         </div>
                       )}
                     </div>
-                    <h1 className="w-full flex items-center justify-center text-center p-[10px] max-sm:p-[5px] ">
+                    <h1 className="w-full h-full flex items-center justify-center text-center p-[10px] max-sm:p-[5px]">
                       {item.ProdSaxeobaName}
                     </h1>
                   </div>
@@ -1015,41 +1015,41 @@ export const CategoryContent = ({
                             }`
                           )
                         }
-                        className={`relative flex flex-col w-full aspect-square cursor-pointer items-center gap-y-[10px] bg-white p-[10px] rounded-[4px] overflow-hidden border-white `}
+                        className={` flex flex-col w-full cursor-pointer items-center gap-y-[10px] bg-white rounded-[4px] overflow-hidden border-white `}
                       >
-                        {item1?.image ? (
-                          <Image
-                            src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}
-                            alt={""}
-                            sizes="500px"
-                            fill
-                            style={{
-                              objectFit: "cover",
-                            }}
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center w-full h-full relative">
-                            <div className="w-[90%] h-[90%] relative">
-                              <Image
-                                src="/images/siteLogo.png"
-                                alt={""}
-                                sizes="500px"
-                                fill
-                                style={{
-                                  objectFit: "contain",
-                                }}
-                              />
+                        <div className="relative w-full aspect-square shrink-0 rounded-[4px] overflow-hidden">
+                          {item1?.image ? (
+                            <Image
+                              src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}
+                              alt={""}
+                              sizes="500px"
+                              fill
+                              style={{
+                                objectFit: "cover",
+                              }}
+                            />
+                          ) : (
+                            <div className="flex items-center justify-center w-full h-full relative">
+                              <div className="w-[90%] h-[90%] relative">
+                                <Image
+                                  src="/images/siteLogo.png"
+                                  alt={""}
+                                  sizes="500px"
+                                  fill
+                                  style={{
+                                    objectFit: "contain",
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        )}
-                        <div className="absolute p-[10px] max-sm:p-[5px] top-0 left-0 bg-gradient-to-t from-[#1D1F1FD6] from-[14%] to-[#32343424] to-[84%] w-full h-full flex items-end">
-                          <p className="text-white text-[11px]">
-                            {pathnameItems.length === 1
-                              ? item1.ProdTypeGroupName
-                              : pathnameItems.length === 2 &&
-                                item1.ProdTypeName}
-                          </p>
+                          )}
                         </div>
+
+                        <p className="text-[11px] p-[10px] max-sm:p-[5px] w-full h-full flex items-center justify-center text-center">
+                          {pathnameItems.length === 1
+                            ? item1.ProdTypeGroupName
+                            : pathnameItems.length === 2 && item1.ProdTypeName}
+                        </p>
                       </div>
                     ))}
               </div>
