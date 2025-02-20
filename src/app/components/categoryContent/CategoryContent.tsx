@@ -1015,7 +1015,7 @@ export const CategoryContent = ({
                             }`
                           )
                         }
-                        className={` flex flex-col w-full cursor-pointer items-center gap-y-[10px] bg-white rounded-[4px] overflow-hidden border-white `}
+                        className={` flex flex-col w-full cursor-pointer items-center bg-white rounded-[4px] overflow-hidden border-white `}
                       >
                         <div className="relative w-full aspect-square shrink-0 rounded-[4px] overflow-hidden">
                           {item1?.image ? (
@@ -1045,11 +1045,11 @@ export const CategoryContent = ({
                           )}
                         </div>
 
-                        <p className="text-[11px] p-[10px] max-sm:p-[5px] w-full h-full flex items-center justify-center text-center">
+                        <h1 className="text-[14px] p-[10px] max-sm:p-[5px] w-full h-full flex items-center justify-center text-center">
                           {pathnameItems.length === 1
                             ? item1.ProdTypeGroupName
                             : pathnameItems.length === 2 && item1.ProdTypeName}
-                        </p>
+                        </h1>
                       </div>
                     ))}
               </div>
