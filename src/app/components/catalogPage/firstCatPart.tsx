@@ -42,13 +42,13 @@ export default function FirstCatPart({
       </div>
 
       <div className="w-full flex flex-col gap-y-[10px]">
-        <div className="h-[250px] max-sm:h-[180px] max-lg:mx-[90px] max-sm:mx-[25px] overflow-hidden">
+        <div className="max-lg:mx-[90px] max-sm:mx-[25px] overflow-hidden">
           {FrontCategoriesLoader ? (
             <div
               style={{
                 gridTemplateColumns: `repeat(${sldsPerView}, minmax(0, 1fr))`,
               }}
-              className={`grid  gap-[20px] max-lg:gap-[12px] w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)]  h-full`}
+              className={`grid  gap-[20px] max-lg:gap-[12px] w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)] h-[250px] max-sm:h-[180px] `}
             >
               {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
                 (item: any, index: number) => (
@@ -85,13 +85,13 @@ export default function FirstCatPart({
                     setCurrentPage(0);
                   }}
                   key={item?.IdProdSaxeoba}
-                  className={`flex flex-col items-center gap-y-[10px] h-full p-[10px] max-lg:p-[8px] duration-200 cursor-pointer rounded-[12px] ${
+                  className={`flex flex-col items-center duration-200 cursor-pointer rounded-[12px] overflow-hidden ${
                     filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                       ? "bg-myGreen "
                       : " bg-white"
                   }`}
                 >
-                  <div className="relative aspect-square w-full overflow-hidden rounded-[4px]">
+                  <div className="relative w-full aspect-square shrink-0 overflow-hidden">
                     <div className="absolute z-[1] top-[10px] overflow-hidden right-[10px] bg-myGreen text-white text-[27px] max-lg:text-[22px] w-[45px] max-lg:w-[36px] aspect-square rounded-full flex items-center justify-center">
                       <FaTree />
                     </div>
@@ -122,7 +122,7 @@ export default function FirstCatPart({
                     )}
                   </div>
                   <h1
-                    className={`text-center text-[18px] max-sm:text-[15px] line-clamp-3 ${
+                    className={`w-full h-[100px] max-tiny:h-[80px] flex items-center justify-center text-center p-[10px] max-sm:p-[5px] max-tiny:text-[14px] ${
                       filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                         ? "text-white"
                         : ""

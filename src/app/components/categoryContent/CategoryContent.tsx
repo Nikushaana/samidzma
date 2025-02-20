@@ -1017,7 +1017,7 @@ export const CategoryContent = ({
                         }
                         className={` flex flex-col w-full cursor-pointer items-center bg-white rounded-[4px] overflow-hidden border-white `}
                       >
-                        <div className="relative w-full aspect-square shrink-0 rounded-[4px] overflow-hidden">
+                        <div className="relative w-full aspect-square shrink-0 overflow-hidden">
                           {item1?.image ? (
                             <Image
                               src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}

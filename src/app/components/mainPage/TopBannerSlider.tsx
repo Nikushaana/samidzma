@@ -117,14 +117,16 @@ export default function TopBannerSlider({ BannersData }: any) {
                 />
                 {screenWidth < 470
                   ? item?.mobile_title && (
-                      <div className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]">
+                      <div className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px] bg-gradient-to-t from-[#1d1f1f9e] from-0% to-transparent to-4%">
                         <p className="text-white w-[60%] max-xl:w-[80%] max-lg:w-full text-[36px] max-lg:text-[32px] line-clamp-4 ">
                           {item?.mobile_title}
                         </p>
                       </div>
+
+                      
                     )
                   : item?.large_title && (
-                      <div className="absolute w-full h-full flex items-center z-[1] p-[50px] max-lg:p-[28px]">
+                      <div className="absolute w-full h-full flex items-end z-[1] p-[50px] max-lg:p-[28px] bg-gradient-to-t from-[#1d1f1f9e] from-0% to-transparent to-4%">
                         <p className="text-white w-[60%] max-xl:w-[80%] max-lg:w-full text-[36px] max-lg:text-[32px] line-clamp-4 ">
                           {item?.large_title}
                         </p>
@@ -160,7 +162,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                     }}
                   />
                   {item?.medium_title && (
-                    <div className="absolute w-full h-full flex items-center z-[1] p-[30px]">
+                    <div className="absolute w-full h-full flex items-end z-[1] p-[30px] bg-gradient-to-t from-[#1d1f1f9e] from-0% to-transparent to-4%">
                       <p className="text-white text-[22px] w-[50%] max-xl:w-[80%] max-md:w-full line-clamp-3 ">
                         {item?.medium_title}
                       </p>
@@ -196,7 +198,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                       }}
                     />
                     {item?.small1_title && (
-                      <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
+                      <div className="absolute w-full h-full flex items-end z-[1] p-[20px] bg-gradient-to-t from-[#1d1f1f9e] from-0% to-transparent to-4%">
                         <p className="text-white text-[18px] line-clamp-3">
                           {item?.small1_title}
                         </p>
@@ -229,7 +231,7 @@ export default function TopBannerSlider({ BannersData }: any) {
                       }}
                     />
                     {item?.small2_title && (
-                      <div className="absolute w-full h-full flex items-center z-[1] p-[20px]">
+                      <div className="absolute w-full h-full flex items-end z-[1] p-[20px] bg-gradient-to-t from-[#1d1f1f9e] from-0% to-transparent to-4%">
                         <p className="text-white text-[18px] line-clamp-3 ">
                           {item?.small2_title}
                         </p>
