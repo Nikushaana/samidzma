@@ -143,13 +143,13 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-0 max-lg:order-last max-sm:order-none">
-            <div className="rounded-[12px] max-lg:rounded-none p-[30px] bg-myBlack  max-lg:px-[90px] max-sm:px-[25px]">
+          <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-0 max-lg:order-last max-md:order-none">
+            <div className="rounded-[12px] max-lg:rounded-none p-[30px] bg-myBlack  max-lg:px-[90px] max-md:px-[25px]">
               <EverySlider
                 data={productsCatalogPageData}
                 loader={productsCatalogPageLoader}
                 title={
-                  <h1 className="hidden max-lg:flex text-[28px] max-sm:text-[22px] text-white">
+                  <h1 className="hidden max-lg:flex text-[28px] max-md:text-[22px] text-white">
                     რეკომენდებული ნაკრებები
                   </h1>
                 }
@@ -163,10 +163,10 @@ export default function Page() {
         </div>
 
         <div className="flex flex-col items-center">
-          <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-[90px] max-sm:px-[25px]">
-            <div className="w-full flex max-sm:flex-col max-sm:gap-y-[10px] items-center justify-between">
-              <div className="flex flex-col gap-y-[10px] w-[40%] max-sm:w-full">
-                <h1 className="text-[22px] max-sm:text-[20px]">
+          <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-[90px] max-md:px-[25px]">
+            <div className="w-full flex max-md:flex-col max-md:gap-y-[10px] items-center justify-between">
+              <div className="flex flex-col gap-y-[10px] w-[40%] max-md:w-full">
+                <h1 className="text-[22px] max-md:text-[20px]">
                   {
                     FrontCategoriesData.find(
                       (item: any) =>
@@ -183,7 +183,7 @@ export default function Page() {
                   }
                 </p>
               </div>
-              <div className="flex flex-col gap-y-[10px] w-[40%] max-sm:w-full items-end">
+              <div className="flex flex-col gap-y-[10px] w-[40%] max-md:w-full items-end">
                 <ul className="grid grid-cols-2 max-lg:text-[12px] gap-[10px] w-full text-[14px] marker:text-myYellow list-inside list-disc">
                   <li>დაფქული დარიჩინი</li>
                   <li>დაფქული დარიჩინი</li>
@@ -200,13 +200,13 @@ export default function Page() {
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-[90px] max-sm:px-[25px] flex flex-col gap-y-[50px]">
+        <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[90px] max-lg:px-[90px] max-md:px-[25px] flex flex-col gap-y-[50px]">
           <div className="flex flex-col gap-y-[20px]">
-            <h1 className="text-[28px] max-sm:text-[22px]">
+            <h1 className="text-[28px] max-md:text-[22px]">
               The Holiday accessories set includes products:
             </h1>
             {productsCatalogPagePreLoader && (
-              <div className="w-full grid grid-cols-4 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-[24px]">
+              <div className="w-full grid grid-cols-4 max-lg:grid-cols-2 max-md:grid-cols-1 gap-[24px]">
                 {Array.from({ length: 15 }, (_, i) => i + 1).map(
                   (item: any, index: number) => (
                     <div
@@ -233,7 +233,7 @@ export default function Page() {
                     </div>
                   ))
                 : !productsCatalogPagePreLoader && (
-                    <p className="col-span-4 max-lg:col-span-2 max-sm:col-span-1">
+                    <p className="col-span-4 max-lg:col-span-2 max-md:col-span-1">
                       პროდუქტები არ არსებობს
                     </p>
                   )}
@@ -269,7 +269,7 @@ export default function Page() {
             data={productsCatalogPageData}
             loader={productsCatalogPageLoader}
             title={
-              <h1 className="text-[28px] max-sm:text-[22px]">
+              <h1 className="text-[28px] max-md:text-[22px]">
                 იყიდე ამ პროდუქტთან
               </h1>
             }
@@ -284,7 +284,7 @@ export default function Page() {
               data={blogData}
               loader={blogLoader}
               title={
-                <h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>
+                <h1 className="text-[28px] max-md:text-[22px]">ბლოგი</h1>
               }
               card="BlogCard"
               slidesPerView={4}

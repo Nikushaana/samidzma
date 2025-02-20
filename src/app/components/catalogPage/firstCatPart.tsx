@@ -27,7 +27,7 @@ export default function FirstCatPart({
 
   useEffect(() => {
     if (screenWidth > 1025) {
-      setSldsPerView(7);
+      setSldsPerView(5);
     } else if (screenWidth <= 1025 && screenWidth > 500) {
       setSldsPerView(4);
     } else if (screenWidth <= 500 && screenWidth > 0) {
@@ -37,18 +37,18 @@ export default function FirstCatPart({
 
   return (
     <div className="mx-[264px] max-2xl:mx-[90px] max-lg:mx-[0px] rounded-[12px] bg-[#EAEDEE] p-[30px] max-lg:px-[0px] max-lg:py-[10px] flex flex-col gap-y-[10px]">
-      <div className="max-lg:mx-[90px] max-sm:mx-[25px]">
+      <div className="max-lg:mx-[90px] max-md:mx-[25px]">
         <WhatUSearch />
       </div>
 
       <div className="w-full flex flex-col gap-y-[10px]">
-        <div className="max-lg:mx-[90px] max-sm:mx-[25px] overflow-hidden">
+        <div className="max-lg:mx-[90px] max-md:mx-[25px] overflow-hidden">
           {FrontCategoriesLoader ? (
             <div
               style={{
                 gridTemplateColumns: `repeat(${sldsPerView}, minmax(0, 1fr))`,
               }}
-              className={`grid  gap-[20px] max-lg:gap-[12px] w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)] h-[250px] max-sm:h-[180px] `}
+              className={`grid  gap-[20px] max-lg:gap-[12px] w-[calc(100%+5vw)] max-md:w-[calc(100%+20vw)] h-[250px] max-md:h-[180px] `}
             >
               {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
                 (item: any, index: number) => (
@@ -66,7 +66,7 @@ export default function FirstCatPart({
               spaceBetween={screenWidth <= 1025 ? 12 : 20}
               loop={true}
               pagination={false}
-              className="h-full w-[calc(100%+5vw)] max-sm:w-[calc(100%+20vw)] "
+              className="h-full w-[calc(100%+5vw)] max-md:w-[calc(100%+20vw)] "
               speed={1200}
             >
               {FrontCategoriesData.map((item: any, index: any) => (
@@ -91,10 +91,10 @@ export default function FirstCatPart({
                       : " bg-white"
                   }`}
                 >
-                  <div className="relative w-full aspect-square shrink-0 overflow-hidden">
-                    <div className="absolute z-[1] top-[10px] overflow-hidden right-[10px] bg-myGreen text-white text-[27px] max-lg:text-[22px] w-[45px] max-lg:w-[36px] aspect-square rounded-full flex items-center justify-center">
+                  <div className="relative w-full h-[100px] shrink-0 overflow-hidden">
+                    {/* <div className="absolute z-[1] top-[10px] overflow-hidden right-[10px] bg-myGreen text-white text-[27px] max-lg:text-[22px] w-[45px] max-lg:w-[36px] aspect-square rounded-full flex items-center justify-center">
                       <FaTree />
-                    </div>
+                    </div> */}
                     {item?.image ? (
                       <Image
                         src={`${process.env.NEXT_PUBLIC_API_URL}/${item?.image}`}
@@ -122,7 +122,7 @@ export default function FirstCatPart({
                     )}
                   </div>
                   <h1
-                    className={`w-full h-[100px] max-tiny:h-[80px] flex items-center justify-center text-center p-[10px] max-sm:p-[5px] max-tiny:text-[14px] ${
+                    className={`w-full h-[80px] flex items-center justify-center text-center p-[10px] max-md:p-[5px] max-tiny:text-[14px] ${
                       filterValues?.IdProdSaxeoba == item?.IdProdSaxeoba
                         ? "text-white"
                         : ""
