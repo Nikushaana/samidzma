@@ -23,7 +23,6 @@ export default function TestInnerProductMainInfo({
   variation,
   oneProduct,
   oneProductLoader,
-  setOneProductLoader,
   realProductId,
 }: any) {
   const { user } = useContext(UserContext);

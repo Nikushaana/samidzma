@@ -81,7 +81,6 @@ export default function ProductDetailsClient({
             variation={variation}
             realProductId={realProductId} 
             oneProduct={oneProduct}
-            oneProductLoader={oneProductLoader}
             setOneProductLoader={setOneProductLoader} 
           />
           {/* <InnerProductMainInfo 

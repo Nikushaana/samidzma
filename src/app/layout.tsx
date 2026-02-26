@@ -19,6 +19,7 @@ import DeiveryInfoAxiosContext from "../../dataFetchs/deliveryInfoContext";
 import CreateCartPopUp from "./components/popUps/CreateCartPopUp";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import ReactQueryProvider from "./providers";
+import TestProductCardsPopUp from "./components/popUps/testProductCardsPopUp";
 
 export const metadata: Metadata = {
   title: "სამი ძმა",
@@ -70,7 +71,8 @@ export default function RootLayout({
                         <Footer />
                         <BurgerMenu />
                         <CreateCartPopUp />
-                        <ProductCardsPopUp />
+                        {/* <ProductCardsPopUp /> */}
+                        <TestProductCardsPopUp />
                         <PromoCodeInfoPopUp />
                         <ProductReviewPopUp />
                         <AlertCust />

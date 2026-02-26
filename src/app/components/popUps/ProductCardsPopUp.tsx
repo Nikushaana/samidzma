@@ -57,6 +57,7 @@ export default function ProductCardsPopUp() {
     setVariationProdId(openProductCardPopUp?.split("?")[1]);
   }, [openProductCardPopUp]);
 
+  
   const [prodStock, setProdStock] = useState<any>();
   const [myProdAllStock, setMyProdAllStock] = useState<any>();
   const [complect, setComplect] = useState<any>(false);
