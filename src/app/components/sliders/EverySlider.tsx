@@ -1,0 +1,179 @@
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperClass, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+import { BiChevronLeft } from "react-icons/bi";
+import { BiChevronRight } from "react-icons/bi";
+import ProductCard from "../CardVariations/ProductCard";
+import CategoriesCard from "../CardVariations/CategoriesCard";
+import SmallProdCard from "../CardVariations/SmallProdCard";
+import BlogCard from "../CardVariations/BlogCard";
+import KitCard from "../CardVariations/KitCard";
+import CatalogSetCard from "../CardVariations/CatalogSetCard";
+import BuySameCard from "../CardVariations/BuySameCard";
+import useScreenWidth from "../ScreenWidth";
+import CommentsCard from "../CardVariations/CommentsCard";
+import { usePathname } from "next/navigation";
+import FirstCategoriesCard from "../CardVariations/FirstCategoriesCard";
+
+export default function EverySlider({
+  data,
+  title,
+  card,
+  slidesPerView,
+  spaceBetween,
+  showButtons,
+  loader,
+}: any) {
+  let swiperRef = useRef<SwiperClass>(null!);
+  const screenWidth = useScreenWidth();
+  const pathname = usePathname();
+
+  const [sldsPerView, setSldsPerView] = useState<number>(slidesPerView);
+
+  useEffect(() => {
+    if (screenWidth > 1900) {
+      setSldsPerView(slidesPerView);
+    } else if (screenWidth <= 1550 && screenWidth > 1025) {
+      setSldsPerView(card === "SmallProdCard" ? 6 : slidesPerView);
+    } else if (screenWidth <= 1025 && screenWidth > 600) {
+      setSldsPerView(
+        card === "SmallProdCard" || card === "FirstCategoriesCard"
+          ? 4
+          : card === "buySameCardFour"
+          ? 1
+          : 2
+      );
+    } else if (screenWidth <= 600 && screenWidth > 500) {
+      setSldsPerView(
+        card === "SmallProdCard" ? 3 : card === "buySameCardFour" ? 1 : 2
+      );
+    } else if (screenWidth <= 500 && screenWidth > 0) {
+      setSldsPerView(
+        card === "SmallProdCard"
+          ? 2
+          : card === "buySameCardThree" || card === "buySameCardFour"
+          ? 1
+          : card === "FirstCategoriesCard"
+          ? 3
+          : 2
+      );
+    }
+  }, [screenWidth, card, slidesPerView]);
+
+  return (
+    <div className="flex flex-col gap-y-[20px]">
+      {title && title}
+      <div className="h-full flex flex-col justify-between  relative">
+        <div className={`w-full ${card === "FirstCategoriesCard" && "overflow-hidden"}`}>
+          {loader ? (
+            <div
+              style={{
+                gridTemplateColumns: `repeat(${sldsPerView}, minmax(0, 1fr))`,
+              }}
+              className={`grid grid-row-1 overflow-hidden gap-[16px] w-full ${
+                card === "buySameCardThree" || card === "buySameCardFour"
+                  ? ""
+                  : card === "FirstCategoriesCard" ? "w-[170vw]" : "max-[500px]:w-[170vw]"
+              } h-full`}
+            >
+              {Array.from({ length: sldsPerView }, (_, i) => i + 1).map(
+                (index: any) => (
+                  <div
+                    key={index}
+                    className={`w-full ${
+                      pathname.split("/")[1] == "category-for-set" &&
+                      card === "KitCard"
+                        ? "h-[310px] max-lg:h-[450px]"
+                        : `${
+                            card === "SmallProdCard" ||
+                            card === "FirstCategoriesCard"
+                              ? "h-[200px]"
+                              : "h-[450px]"
+                          }`
+                    } rounded-[12px] overflow-hidden`}
+                  >
+                    <div className="loaderwave"></div>
+                  </div>
+                )
+              )}
+            </div>
+          ) : (
+            <Swiper
+              modules={[Autoplay, EffectFade, Pagination]}
+              slidesPerView={sldsPerView}
+              spaceBetween={spaceBetween}
+              pagination={false}
+              className={`${
+                card === "buySameCardThree" || card === "buySameCardFour"
+                  ? "w-full"
+                  : card === "FirstCategoriesCard" ? "w-[calc(100%+100px)]" : "w-full max-[500px]:w-[170vw]"
+              } h-full flex items-stretch BannerSlider`}
+              autoplay={{
+                delay: 8000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              speed={1200}
+            >
+              {data?.map((item: any, index: any) => (
+                <SwiperSlide
+                  key={item.id || item.ProdCode || item.IdProdSaxeoba || index}
+                  className={`h-full  ${
+                    card !== "SmallProdCard" &&
+                    card !== "FirstCategoriesCard" &&
+                    "max-lg:pb-[57px]"
+                  }`}
+                >
+                  {card === "ProductCard" && <ProductCard item={item} />}
+                  {card === "CategoriesCard" && <CategoriesCard item={item} />}
+                  {card === "FirstCategoriesCard" && (
+                    <FirstCategoriesCard item={item} />
+                  )}
+                  {card === "SmallProdCard" && <SmallProdCard item={item} />}
+                  {card === "BlogCard" && <BlogCard item={item} />}
+                  {card === "KitCard" && (
+                    <KitCard slidesPerView={slidesPerView} item={item} />
+                  )}
+                  {card === "CatalogSetCard" && <CatalogSetCard />}
+                  {card === "CommentsCard" && <CommentsCard item={item} />}
+                  {card === "buySameCardThree" && (
+                    <BuySameCard FourCol={false} title="დაასრულე ყიდვა" />
+                  )}
+                  {card === "buySameCardFour" && (
+                    <BuySameCard FourCol={true} title="ისევ იყიდე" />
+                  )}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
+        </div>
+
+        {showButtons && (
+          <button
+            className={`absolute top-[50%] max-lg:top-[calc(100%-20px)] translate-y-[-50%] left-[-50px] max-lg:left-0 z-[2] w-[37px] h-[37px] flex items-center justify-center text-[30px] bg-white active:bg-myGreen active:text-white duration-100 rounded-full`}
+            onClick={() => swiperRef.current?.slidePrev()}
+          >
+            <BiChevronLeft className="" />
+          </button>
+        )}
+        {showButtons && (
+          <button
+            className={`absolute top-[50%] max-lg:top-[calc(100%-20px)] translate-y-[-50%] right-[-50px] max-lg:right-0 z-[2] w-[37px] h-[37px] flex items-center justify-center text-[30px] bg-white active:bg-myGreen active:text-white duration-100 rounded-full`}
+            onClick={() => swiperRef.current?.slideNext()}
+          >
+            <BiChevronRight className="" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}

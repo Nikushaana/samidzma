@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: forh;
+  src: url(../app/fonts/bpg-arial-webfont.ttf);
+}
+
+@font-face {
+  font-family: forp;
+  src: url(../app/fonts/bpg-arial-webfont.ttf);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: forh;
+  font-weight: 700;
+  /* text-transform: uppercase;
+    font-feature-settings: "case" */
+}
+
+p,
+a,
+li,
+::placeholder,
+button {
+  font-family: forp;
+}
+
+/* swiper */
+.BannerSlider .swiper-pagination-bullet-active {
+  background-color: #80c342 !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin-bottom: -3px !important;
+}
+
+.BannerSlider .swiper-pagination-bullet {
+  height: 6px;
+  width: 6px;
+  opacity: 1;
+  border-radius: 22px;
+  background-color: #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+/* swiper */
+
+.showScrollVert::-webkit-scrollbar {
+  width: 5px;
+}
+.showScrollHor::-webkit-scrollbar {
+  height: 5px;
+}
+.notshowScrollVert::-webkit-scrollbar {
+  width: 0px;
+}
+.notShowScrollHor::-webkit-scrollbar {
+  height: 0px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #80c342;
+  border-radius: 10px;
+}
+
+.horizontal-slider .example-track {
+  height: 5px;
+  border-radius: 8px;
+}
+
+.example-track.example-track-0 {
+  background: #d4e1f6;
+}
+
+.example-track.example-track-1 {
+  background: #3e7c7f;
+}
+
+.example-track.example-track-2 {
+  background: #d4e1f6;
+}
+
+/* text editor edit */
+
+.quill > * {
+  border-radius: 8px;
+}
+.quill > .ql-toolbar {
+  /* border radius of the toolbar */
+  background-color: #80c342;
+  margin-bottom: 10px;
+  color: white;
+}
+.quill > .ql-container {
+  /* border radius of the container and for font size*/
+  background-color: #f0f5f7;
+}
+.ql-toolbar.ql-snow .ql-picker-label {
+  color: black !important;
+}
+.ql-snow .ql-picker {
+  color: black !important;
+}
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  /* for placeholder */
+  color: black;
+}
+.ql-snow.ql-toolbar button svg {
+  color: black;
+}
+.ql-snow .ql-stroke {
+  /* for the border of the editor */
+  stroke: black !important;
+}
+.ql-picker-item {
+  /* for dropdown */
+  color: black !important;
+}
+
+.ql-size-small {
+  font-size: 12px;
+}
+.ql-size-normal {
+  font-size: 16px;
+}
+.ql-size-large {
+  font-size: 22px;
+}
+.ql-size-huge {
+  font-size: 28px;
+}
+
+.ql-editor ul {
+  list-style-type: disc; /* Ensures bullets are visible for unordered lists */
+  padding-left: 10px; /* Adds indentation */
+}
+
+.ql-editor ol {
+  list-style-type: decimal; /* Ensures numbering is visible for ordered lists */
+  padding-left: 10px;
+}
+
+/* text editor edit */
+
+.loaderwave {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #f5f7fc, #e7e7e7, #f5f7fc);
+  background-size: 200% 100%;
+  animation: wave 3s linear infinite;
+}
+
+body.popup-open {
+  overflow: hidden;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.adminCalendar .react-calendar {
+  background-color: white;
+  box-shadow: 0px 0px 5px #80c342;
+  border-radius: 12px;
+  border: none !important;
+  overflow: hidden;
+  padding: 10px !important;
+}
+
+@media (max-width: 500px) {
+  .adminCalendar .react-calendar {
+    padding: 0px !important;
+  }
+}
+
+.inputCalendar .react-calendar {
+  background-color: white !important;
+  border: none !important;
+}
+
+.react-calendar__month-view__weekdays abbr[title] {
+  text-decoration: none !important;
+}
+
+.react-calendar__tile {
+  height: 45px !important;
+  width: 45px !important;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 470px) {
+  .react-calendar__tile {
+    height: 30px !important;
+    width: 30px !important;
+  }
+}
+
+.react-calendar__tile--now {
+  background-color: #80c34277 !important;
+  color: white !important;
+}
+.react-calendar__tile:hover {
+  background-color: #96b876 !important;
+}
+.react-calendar__tile--active {
+  background-color: #80c342 !important;
+  color: white !important;
+}
+
+.react-calendar__tile.holiday {
+  background: rgb(255, 76, 76) !important;
+  color: white !important;
+}
+
+.react-calendar__tile.holidayNone {
+  background: rgb(255, 76, 76) !important;
+  color: white !important;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+
+.react-calendar__tile.pastDate {
+  background-color: #e0e0e0 !important;
+  color: #999 !important;
+}
