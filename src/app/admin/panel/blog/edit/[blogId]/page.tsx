@@ -13,6 +13,7 @@ import useBlogCategory from "../../../../../../../dataFetchs/blogCategoryGetFetc
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import Image from "next/image";
 import * as Yup from "yup";
+import TextEditor2 from "@/app/components/Inputs/TextEditor2";
 
 export default function Page({ params }: { params: { blogId: string } }) {
   const router = useRouter();
@@ -117,12 +118,15 @@ export default function Page({ params }: { params: { blogId: string } }) {
     formData.append(
       "blogs_category_id",
       allBlogCategData?.find(
-        (item: any) => item.name == editBlogValues.blogs_category_id
-      )?.id
+        (item: any) => item.name == editBlogValues.blogs_category_id,
+      )?.id,
     );
+
+    formData.append("description2", editBlogValues.description2);
+
     formData.append(
       "status",
-      status.find((item: any) => item.name === editBlogValues.status)?.id
+      status.find((item: any) => item.name === editBlogValues.status)?.id,
     );
 
     axiosAdmin
@@ -177,7 +181,7 @@ export default function Page({ params }: { params: { blogId: string } }) {
           name="blogs_category_id"
           firstValue={
             allBlogCategData.find(
-              (item: any) => item.id === oneBlogValues.blogs_category_id
+              (item: any) => item.id === oneBlogValues.blogs_category_id,
             )?.name
           }
           setAllValues={setEditBlogValues}
@@ -217,7 +221,14 @@ export default function Page({ params }: { params: { blogId: string } }) {
           setAllValues={setEditBlogValues}
           error={false}
         />
-        <TextEditor
+        <TextEditor2
+          title="ბლოგი"
+          name="description2"
+          firstValue={oneBlogValues.description2}
+          setAllValues={setEditBlogValues}
+          error={false}
+        />
+        {/* <TextEditor
           title="ბლოგი"
           name="description2"
           firstValue={oneBlogValues.description2}
@@ -269,7 +280,7 @@ export default function Page({ params }: { params: { blogId: string } }) {
           firstValue={oneBlogValues.description2_rus}
           setAllValues={setEditBlogValues}
           error={false}
-        />
+        /> */}
       </div>
       <hr className="h-[1px] w-full" />
       <div className="w-full">

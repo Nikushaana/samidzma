@@ -5,7 +5,6 @@ import Image from "next/image";
 import { BsXLg } from "react-icons/bs";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
-import { BiStar } from "react-icons/bi";
 import { TbTruckDelivery } from "react-icons/tb";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import GreenButton from "../buttons/greenButton";
@@ -16,10 +15,11 @@ import { DontScrollMainBody } from "../DontScrollMainBody";
 import DropDownFilials from "../DropDowns/DropDownFilials";
 import InnerProductVariationImgsSlider from "../InnerProductPage/InnerProductVariationImgsSlider";
 import InnerProductMainImgSlider from "../InnerProductPage/InnerProductMainImgSlider";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
 import useIsInCart from "../../../../dataFetchs/isInCartHook";
 import useIsInFavorite from "../../../../dataFetchs/isInFavoriteHook";
 import { WishListAxiosContext } from "../../../../dataFetchs/wishListContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
 
 export default function ProductCardsPopUp() {
   const {
@@ -36,7 +36,12 @@ export default function ProductCardsPopUp() {
     CartCounter,
     orderPlacementValues,
   } = useContext(CartAxiosContext);
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const { setRenderWishList, WishListLocalStorageData } =
     useContext(WishListAxiosContext);
@@ -57,7 +62,6 @@ export default function ProductCardsPopUp() {
     setVariationProdId(openProductCardPopUp?.split("?")[1]);
   }, [openProductCardPopUp]);
 
-  
   const [prodStock, setProdStock] = useState<any>();
   const [myProdAllStock, setMyProdAllStock] = useState<any>();
   const [complect, setComplect] = useState<any>(false);

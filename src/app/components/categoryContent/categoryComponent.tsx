@@ -14,7 +14,6 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import { IoIosArrowUp } from "react-icons/io";
 import ReactSlider from "react-slider";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 import useFilter from "../../../../dataFetchs/filtersContext";
 import ReactPaginate from "react-paginate";
 import HorizontalCard from "../CardVariations/HorizontalCard";
@@ -25,6 +24,8 @@ import WhatUSearch from "../Inputs/WhatUSearch";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import { PiRowsFill } from "react-icons/pi";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCategories } from "@/api/category.api";
 
 export default function CategoryComponent({
   passedCategories,
@@ -62,7 +63,13 @@ export default function CategoryComponent({
     sqesi,
     raodenobaShefutvashi,
   } = useFilter();
-  const { FrontCategoriesData } = useFrontCategories();
+  
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const [filterStatus, setFilterStatus] = useState(true);
   const [FilterComponents, setFilterComponents] = useState<any>([]);
   const [dropedFilter, setDropedFilter] = useState<any>("");
@@ -534,67 +541,55 @@ export default function CategoryComponent({
 
     axiosUser
       .get(
-        `front/ourProduct?pageNumber=${currentPage + 1}&itemsOnPage=12&${
-          filterValues.key ? `key=${filterValues.key}` : ""
-        }&${
-          filterValues.FeriCode.length > 0
+        `front/ourProduct?
+        pageNumber=${currentPage + 1}&
+        itemsOnPage=12&${  filterValues.key ? `key=${filterValues.key}` : ""}&
+        ${filterValues.FeriCode.length > 0
             ? `FeriCode=${JSON.stringify(filterValues.FeriCode)}`
-            : ""
-        }&${
-          filterValues.FormaCode.length > 0
+            : ""}&
+            ${filterValues.FormaCode.length > 0
             ? `FormaCode=${JSON.stringify(filterValues.FormaCode)}`
-            : ""
-        }&${
-          filterValues.StyleCode.length > 0
+            : ""}&
+            ${filterValues.StyleCode.length > 0
             ? `StyleCode=${JSON.stringify(filterValues.StyleCode)}`
-            : ""
-        }&${
-          filterValues.SqesiCode.length > 0
+            : ""}&
+            ${filterValues.SqesiCode.length > 0
             ? `SqesiCode=${JSON.stringify(filterValues.SqesiCode)}`
-            : ""
-        }&${
-          filterValues.SizeCode.length > 0
+            : ""}&
+            ${filterValues.SizeCode.length > 0
             ? `SizeCode=${JSON.stringify(filterValues.SizeCode)}`
-            : ""
-        }&${
-          filterValues.IdAttribute1.length > 0
+            : ""}&
+            ${filterValues.IdAttribute1.length > 0
             ? `IdAttribute1=${JSON.stringify(filterValues.IdAttribute1)}`
-            : ""
-        }&${
-          filterValues.IdAttribute2.length > 0
+            : ""}&
+            ${filterValues.IdAttribute2.length > 0
             ? `IdAttribute2=${JSON.stringify(filterValues.IdAttribute2)}`
-            : ""
-        }&${
-          filterValues.IdAttribute3.length > 0
+            : ""}&
+            ${filterValues.IdAttribute3.length > 0
             ? `IdAttribute3=${JSON.stringify(filterValues.IdAttribute3)}`
-            : ""
-        }&${
-          filterValues.IdAttribute4.length > 0
+            : ""}&
+            ${filterValues.IdAttribute4.length > 0
             ? `IdAttribute4=${JSON.stringify(filterValues.IdAttribute4)}`
-            : ""
-        }&${
-          filterValues.IdAttribute5.length > 0
+            : ""}&
+            ${filterValues.IdAttribute5.length > 0
             ? `IdAttribute5=${JSON.stringify(filterValues.IdAttribute5)}`
-            : ""
-        }&${
-          filterValues.IdAttribute6.length > 0
+            : ""}&
+            ${filterValues.IdAttribute6.length > 0
             ? `IdAttribute6=${JSON.stringify(filterValues.IdAttribute6)}`
-            : ""
-        }&${
-          pathnameItems[0]?.pathCode
+            : ""}&
+            ${pathnameItems[0]?.pathCode
             ? `IdProdSaxeoba=${pathnameItems[0]?.pathCode?.split("_").pop()}`
-            : ""
-        }&${
-          pathnameItems[1]?.pathCode
+            : ""}&
+            ${pathnameItems[1]?.pathCode
             ? `IdProdTypeGroup=${pathnameItems[1]?.pathCode?.split("_").pop()}`
-            : ""
-        }&${
-          pathnameItems[2]?.pathCode
+            : ""}&
+            ${pathnameItems[2]?.pathCode
             ? `IdProdType=${pathnameItems[2]?.pathCode?.split("_").pop()}`
-            : ""
-        }&${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&${
-          filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
-        }&sale=${filterValues.sale}&aqcia=${filterValues.aqcia}
+            : ""}&
+            ${filterValues.minPrice ? `minPrice=${filterValues.minPrice}` : ""}&
+            ${filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""}&
+            sale=${filterValues.sale}&
+            aqcia=${filterValues.aqcia}
           `,
         { signal }
       )
@@ -1358,3 +1353,691 @@ export default function CategoryComponent({
     </div>
   );
 }
+
+
+
+
+// //////////////////////////////////////////////////////////
+
+{/* <div className="flex max-lg:flex-col gap-[20px] ">
+            <div ref={filterRef} className="max-lg:relative max-lg:w-full">
+              <div
+                onClick={() => {
+                  setFilterStatus((pre: any) => !pre);
+                }}
+                className="w-[53px] aspect-square hidden max-lg:flex items-center text-[25px] justify-center bg-myGreen text-white rounded-[12px] cursor-pointer"
+              >
+                <RiFilter2Fill />
+              </div>
+              <div
+                className={`w-[330px] max-2xl:w-[300px] max-sm:w-full max-lg:absolute max-lg:top-[45px] flex flex-col gap-y-[10px] ${
+                  filterStatus ? "ml-0" : "ml-[-700px]"
+                } duration-200 max-lg:z-[2] max-lg:shadow rounded-[12px] self-start bg-white p-[20px] flex flex-col gap-y-[10px] sticky top-[20px]`}
+              >
+                {firstLevelCategoriesLoader ? (
+                  Array.from({ length: 5 }, (_, i) => i + 1).map(
+                    (item: any, index: number) => (
+                      <div
+                        key={item}
+                        className={`w-full rounded-[8px] overflow-hidden h-[30px]`}
+                      >
+                        <div className="loaderwave"></div>
+                      </div>
+                    ),
+                  )
+                ) : // !key &&
+                FilterComponents.find((item: any) => item.status == 1) ? (
+                  <div>
+                    <div
+                      onClick={() => {
+                        setFilterValues((prev: any) => ({
+                          ...prev,
+                          sale: filterValues.sale ? 0 : 1,
+                        }));
+                      }}
+                      className="flex items-center justify-between cursor-pointer mb-[10px]"
+                    >
+                      <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
+                        ფასდაკლება
+                      </h1>
+                      <CheckBox active={filterValues.sale ? true : false} />
+                    </div>
+                    <div
+                      onClick={() => {
+                        setFilterValues((prev: any) => ({
+                          ...prev,
+                          aqcia: filterValues.aqcia ? 0 : 1,
+                        }));
+                      }}
+                      className="flex items-center justify-between cursor-pointer mb-[10px]"
+                    >
+                      <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
+                        აქცია
+                      </h1>
+                      <CheckBox active={filterValues.aqcia ? true : false} />
+                    </div>
+
+                    <div
+                      className={`flex flex-col gap-y-[10px]  duration-100  ${
+                        dropedFilter === "price" ? "pb-[20px]" : " pb-0"
+                      }`}
+                    >
+                      <div
+                        onClick={() => {
+                          setDropedFilter((prev: any) =>
+                            prev === "price" ? "" : "price",
+                          );
+                        }}
+                        className="flex items-center justify-between cursor-pointer"
+                      >
+                        <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
+                          ფასი
+                        </h1>
+                        <IoIosArrowUp
+                          className={`duration-200 ${
+                            dropedFilter === "price" ? "rotate-[180deg]" : ""
+                          }`}
+                        />
+                      </div>
+
+                      <div
+                        className={`flex flex-col gap-y-[20px] duration-200 ${
+                          dropedFilter === "price"
+                            ? "h-auto opacity-1"
+                            : "h-0 overflow-hidden opacity-0"
+                        }`}
+                      >
+                        <div className="flex flex-col gap-[10px]">
+                          <div className="flex items-center justify-between gap-[5px]">
+                            <div
+                              className={`rounded-full w-[50%] h-[52px] max-sm:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                            >
+                              <input
+                                onChange={handleInputChange}
+                                value={filterValues.minPrice}
+                                type="text"
+                                name="minPrice"
+                                placeholder="დან"
+                                className={`select-none outline-none rounded-[4px] px-[5px] text-[14px] h-full w-full bg-transparent`}
+                              />
+                              ₾
+                            </div>
+                            <p>-</p>
+                            <div
+                              className={`rounded-full w-[50%] h-[52px] max-sm:h-[42px] outline-none py-[6px] px-[15px] flex items-center duration-100 border-[1px] bg-[#EEEEEE] border-[#E2E2E2]`}
+                            >
+                              <input
+                                onChange={handleInputChange}
+                                value={filterValues.maxPrice}
+                                type="text"
+                                name="maxPrice"
+                                placeholder="მდე"
+                                className={`select-none outline-none rounded-[4px] px-[5px] text-[14px] h-full w-full bg-transparent`}
+                              />
+                              ₾
+                            </div>
+                          </div>
+                          <div className="w-full flex flex-col items-center">
+                            <ReactSlider
+                              className="horizontal-slider w-full h-[22px] flex items-center  "
+                              thumbClassName="w-[22px] h-[22px] bg-myGreen rounded-full outline-none text-[0px] text-myGreen flex items-center justify-center cursor-pointer"
+                              trackClassName="example-track bg-myGreen"
+                              value={[
+                                filterValues.minPrice,
+                                filterValues.maxPrice,
+                              ]}
+                              max={10000}
+                              min={0}
+                              ariaLabel={["Lower thumb", "Upper thumb"]}
+                              ariaValuetext={(state: any) =>
+                                `Thumb value ${state.valueNow}`
+                              }
+                              renderThumb={(props: any, state: any) => (
+                                <div {...props} key={state.index}>
+                                  {state.valueNow}
+                                </div>
+                              )}
+                              onChange={(value: [number, number]) => {
+                                setFilterValues((prev: any) => ({
+                                  ...prev,
+                                  minPrice: value[0],
+                                  maxPrice: value[1],
+                                }));
+                                setCurrentPage(0);
+                              }}
+                              pearling
+                              minDistance={2}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {FilterComponents.map((filter: any) => (
+                      <div
+                        key={filter.id}
+                        className={`flex-col gap-y-[10px] duration-100 ${
+                          filter.status ? "flex" : "hidden"
+                        } ${
+                          dropedFilter === filter.name ? "pb-[20px]" : " pb-0"
+                        }`}
+                      >
+                        <div
+                          onClick={() => {
+                            setDropedFilter((prev: any) =>
+                              prev === filter.name ? "" : filter.name,
+                            );
+                          }}
+                          className="flex items-center justify-between cursor-pointer"
+                        >
+                          <h1 className="text-[28px] max-lg:text-[24px] max-sm:text-[22px]">
+                            {filter.name}
+                          </h1>
+                          <IoIosArrowUp
+                            className={`duration-200 shrink-0 ${
+                              dropedFilter === filter.name
+                                ? "rotate-[180deg]"
+                                : ""
+                            }`}
+                          />
+                        </div>
+
+                        <div
+                          className={`flex flex-col gap-y-[10px] duration-200 ${
+                            dropedFilter === filter.name
+                              ? "h-auto opacity-1"
+                              : "h-0 overflow-hidden opacity-0"
+                          }`}
+                        >
+                          {filter?.data?.length > 0 &&
+                            filter?.data?.map((item: any, index: any) => (
+                              <div
+                                key={`${item[filter.code]}-${index}`}
+                                onClick={() => {
+                                  setFilterValues((prev: any) => ({
+                                    ...prev,
+                                    [filter.code]: prev[filter.code]?.find(
+                                      (item1: any) =>
+                                        item1 == parseInt(item[filter.code]),
+                                    )
+                                      ? prev[filter.code].filter(
+                                          (item2: any) =>
+                                            item2 != item[filter.code],
+                                        )
+                                      : [
+                                          ...(prev[filter.code] || []),
+                                          parseInt(item[filter.code]),
+                                        ],
+                                  }));
+                                  setCurrentPage(0);
+                                }}
+                                className="flex items-center gap-[5px] cursor-pointer"
+                              >
+                                <div className="select-none">
+                                  <CheckBox
+                                    active={filterValues[filter.code]?.find(
+                                      (filteredItem: any) =>
+                                        filteredItem == item[filter.code],
+                                    )}
+                                  />
+                                </div>
+                                <p className="text-[14px]">
+                                  {item[filter.nameEng]}
+                                </p>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    {((pathname.split("/").length !== 5 && filterValues.key) ||
+                      !filterValues.key) &&
+                      childCategoriesData?.map((item: any, index: number) => (
+                        <p
+                          key={`group-${item.IdProdTypeGroup || ""}-type-${
+                            item.IdProdType || ""
+                          }`}
+                          onClick={() => {
+                            if (pathname.split("/").length >= 3) {
+                              router.push(
+                                `${pathname}/${
+                                  pathname.split("/").length === 3
+                                    ? slugify(item.ProdTypeGroupName) +
+                                      "_" +
+                                      item.IdProdTypeGroup
+                                    : pathname.split("/").length === 4 &&
+                                      slugify(item.ProdTypeName) +
+                                        "_" +
+                                        item.IdProdType
+                                }?${
+                                  filterValues.key && `key=${filterValues.key}`
+                                }`,
+                              );
+                            } else {
+                              router.push(
+                                `/category/${
+                                  slugify(item.saxeoba.ProdSaxeobaName) +
+                                  "_" +
+                                  item.IdProdSaxeoba
+                                }/${
+                                  slugify(item.ProdTypeGroupName) +
+                                  "_" +
+                                  item.IdProdTypeGroup
+                                }?key=${filterValues.key}`,
+                              );
+                            }
+                          }}
+                          className="text-[15px] cursor-pointer"
+                        >
+                          {pathname.split("/").length <= 3
+                            ? item.ProdTypeGroupName
+                            : pathname.split("/").length === 4 &&
+                              item.ProdTypeName}
+                        </p>
+                      ))}
+                    {pathname.split("/").length >= 3 &&
+                      !filterValues.key &&
+                      moreCategoriesData?.map((item2: any) => (
+                        <p
+                          key={item2.id}
+                          onClick={() =>
+                            router.push(
+                              `/category/${
+                                item2.level === 2
+                                  ? slugify(
+                                      item2?.product_type_groupe?.saxeoba
+                                        ?.ProdSaxeobaName,
+                                    ) +
+                                    "_" +
+                                    item2.product_type_groupe?.IdProdSaxeoba +
+                                    "/" +
+                                    slugify(
+                                      item2?.product_type_groupe
+                                        ?.ProdTypeGroupName,
+                                    ) +
+                                    "_" +
+                                    item2.product_type_groupe_id
+                                  : item2.level === 3 &&
+                                    slugify(
+                                      item2?.product_type?.productTypeGroup
+                                        ?.saxeoba?.ProdSaxeobaName,
+                                    ) +
+                                      "_" +
+                                      item2?.product_type?.productTypeGroup
+                                        ?.IdProdSaxeoba +
+                                      "/" +
+                                      slugify(
+                                        item2?.product_type?.ProdTypeGroupName,
+                                      ) +
+                                      "_" +
+                                      item2?.product_type?.IdProdTypeGroup +
+                                      "/" +
+                                      slugify(
+                                        item2?.product_type?.ProdTypeName,
+                                      ) +
+                                      "_" +
+                                      item2?.product_type_id
+                              }`,
+                            )
+                          }
+                          className="text-[15px] cursor-pointer"
+                        >
+                          {item2.level === 2
+                            ? item2.product_type_groupe?.ProdTypeGroupName
+                            : item2.level === 3 &&
+                              item2.product_type?.ProdTypeName}
+                        </p>
+                      ))}
+                  </>
+                )}
+              </div>
+              {FilterComponents.find((item: any) => item.status == 1) && (
+                <div
+                  className={`fixed hidden z-[4] left-0 w-full max-lg:flex px-[25px] py-[10px] backdrop-blur-[2px] duration-300 ${
+                    filterStatus ? "bottom-0 " : "bottom-[-200px]"
+                  }`}
+                >
+                  <GreenButton
+                    name="ძიების დასრულება"
+                    loader={productsPageLoader}
+                    style="h-[56px] max-sm:h-[48px] text-[18px]"
+                    action={() => {
+                      setFilterStatus((pre: any) => !pre);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div
+              className={`flex flex-col gap-y-[48px] w-[calc(100%-350px)] max-2xl:w-[calc(100%-320px)] max-lg:w-full`}
+            >
+              <WhatUSearch />
+
+              {((pathname.split("/").length !== 5 && filterValues.key) ||
+                !filterValues.key) && (
+                <div
+                  className={`w-full grid grid-cols-5 max-xl:grid-cols-4 max-lg:grid-cols-4 max-sm:grid-cols-3 max-tiny:grid-cols-2 gap-[30px] gap-y-[20px] max-sm:gap-[15px] ${
+                    !passedCategoriesLoader && childCategoriesData?.length === 0
+                      ? "hidden"
+                      : ""
+                  }`}
+                >
+                  {passedCategoriesLoader ? (
+                    Array.from({ length: 10 }, (_, i) => (
+                      <div
+                        key={i}
+                        className="w-full aspect-square rounded-[4px] overflow-hidden"
+                      >
+                        <div className="loaderwave"></div>
+                      </div>
+                    ))
+                  ) : (
+                    <>
+                      {childCategoriesData?.map((item1: any) => (
+                        <div
+                          key={`group-${item1.IdProdTypeGroup || ""}-type-${
+                            item1.IdProdType || ""
+                          }`}
+                          onClick={() => {
+                            if (pathname.split("/").length >= 3) {
+                              router.push(
+                                `${pathname}/${
+                                  pathname.split("/").length === 3
+                                    ? slugify(item1.ProdTypeGroupName) +
+                                      "_" +
+                                      item1.IdProdTypeGroup
+                                    : pathname.split("/").length === 4 &&
+                                      slugify(item1.ProdTypeName) +
+                                        "_" +
+                                        item1.IdProdType
+                                }?${
+                                  filterValues.key && `key=${filterValues.key}`
+                                }`,
+                              );
+                            } else {
+                              router.push(
+                                `/category/${
+                                  slugify(item1.saxeoba.ProdSaxeobaName) +
+                                  "_" +
+                                  item1.IdProdSaxeoba
+                                }/${
+                                  slugify(item1.ProdTypeGroupName) +
+                                  "_" +
+                                  item1.IdProdTypeGroup
+                                }?key=${filterValues.key}`,
+                              );
+                            }
+                          }}
+                          className={` flex flex-col w-full cursor-pointer items-center bg-white rounded-[4px] overflow-hidden border-white `}
+                        >
+                          <div className="relative w-full aspect-square shrink-0 overflow-hidden">
+                            {item1?.image ? (
+                              <Image
+                                src={`${process.env.NEXT_PUBLIC_API_URL}/${item1?.image}`}
+                                alt={""}
+                                sizes="500px"
+                                fill
+                                style={{
+                                  objectFit: "cover",
+                                }}
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center w-full h-full relative">
+                                <div className="w-[90%] h-[90%] relative">
+                                  <Image
+                                    src="/images/siteLogo.png"
+                                    alt={""}
+                                    sizes="500px"
+                                    fill
+                                    style={{
+                                      objectFit: "contain",
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <h1 className="text-[14px] p-[10px] max-sm:p-[5px] w-full h-full flex items-center justify-center text-center">
+                            {pathname.split("/").length <= 3
+                              ? item1.ProdTypeGroupName
+                              : pathname.split("/").length === 4 &&
+                                item1.ProdTypeName}
+                          </h1>
+                        </div>
+                      ))}
+                      {pathname.split("/").length >= 3 &&
+                        !filterValues.key &&
+                        moreCategoriesData?.map((item2: any) => (
+                          <div
+                            key={item2.id}
+                            onClick={() =>
+                              router.push(
+                                `/category/${
+                                  item2.level === 2
+                                    ? slugify(
+                                        item2?.product_type_groupe?.saxeoba
+                                          ?.ProdSaxeobaName,
+                                      ) +
+                                      "_" +
+                                      item2.product_type_groupe?.IdProdSaxeoba +
+                                      "/" +
+                                      slugify(
+                                        item2?.product_type_groupe
+                                          ?.ProdTypeGroupName,
+                                      ) +
+                                      "_" +
+                                      item2.product_type_groupe_id
+                                    : item2.level === 3 &&
+                                      slugify(
+                                        item2?.product_type?.productTypeGroup
+                                          ?.saxeoba?.ProdSaxeobaName,
+                                      ) +
+                                        "_" +
+                                        item2?.product_type?.productTypeGroup
+                                          ?.IdProdSaxeoba +
+                                        "/" +
+                                        slugify(
+                                          item2?.product_type
+                                            ?.ProdTypeGroupName,
+                                        ) +
+                                        "_" +
+                                        item2?.product_type?.IdProdTypeGroup +
+                                        "/" +
+                                        slugify(
+                                          item2?.product_type?.ProdTypeName,
+                                        ) +
+                                        "_" +
+                                        item2?.product_type_id
+                                }`,
+                              )
+                            }
+                            className={` flex flex-col w-full cursor-pointer items-center bg-white rounded-[4px] overflow-hidden border-white `}
+                          >
+                            <div className="relative w-full aspect-square shrink-0 overflow-hidden">
+                              {(
+                                item2.level === 2
+                                  ? item2?.product_type_groupe?.image
+                                  : item2?.product_type?.image
+                              ) ? (
+                                <Image
+                                  src={`${process.env.NEXT_PUBLIC_API_URL}/${
+                                    item2.level === 2
+                                      ? item2?.product_type_groupe?.image
+                                      : item2?.product_type?.image
+                                  }`}
+                                  alt={""}
+                                  sizes="500px"
+                                  fill
+                                  style={{
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              ) : (
+                                <div className="flex items-center justify-center w-full h-full relative">
+                                  <div className="w-[90%] h-[90%] relative">
+                                    <Image
+                                      src="/images/siteLogo.png"
+                                      alt={""}
+                                      sizes="500px"
+                                      fill
+                                      style={{
+                                        objectFit: "contain",
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <h1 className="text-[14px] p-[10px] max-sm:p-[5px] w-full h-full flex items-center justify-center text-center">
+                              {item2.level === 2
+                                ? item2.product_type_groupe?.ProdTypeGroupName
+                                : item2.level === 3 &&
+                                  item2.product_type?.ProdTypeName}
+                            </h1>
+                          </div>
+                        ))}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {(FilterComponents.find((item: any) => item.status === 1) ||
+                !pathname.split("/")[2]) && (
+                <div className="flex flex-col gap-y-[20px]">
+                  <div className="flex justify-between gap-[20px] max-sm:flex-col">
+                    <div className="flex flex-col gap-y-[10px] w-[40%] max-sm:w-full">
+                      <h1 className="text-[28px]">
+                        {!pathname.split("/")[2]
+                          ? filterValues.key
+                          : pathnameItems[pathnameItems.length - 1]
+                              ?.pathCategName}
+                      </h1>
+                      {pathname.split("/")[2] && (
+                        <p className="text-[14px]">
+                          {
+                            pathnameItems[pathnameItems.length - 1]
+                              ?.pathCategDescr
+                          }
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex max-lg:flex-col-reverse max-sm:flex-row max-lg:items-end items-center gap-[20px] w-[40%]  max-lg:w-[50%] max-sm:w-full">
+                      <div className=" w-[calc(100%-146px)] max-lg:w-full">
+                        <DropDown1value
+                          placeholder="დალაგება ფასით"
+                          notInputStyle={true}
+                        />
+                      </div>
+                      {screenWidth >= 600 && (
+                        <div className="flex items-center rounded-[12px] bg-white overflow-hidden ">
+                          {displayVar.map((item: any, index: number) => (
+                            <div
+                              key={item.id}
+                              onClick={() => {
+                                setActiveVar(item.id);
+                              }}
+                              className={`h-[42px] w-[42px] text-[20px] flex items-center justify-center cursor-pointer duration-200 ${
+                                activeVar === item.id
+                                  ? "bg-myGreen text-white"
+                                  : "text-myGreen"
+                              }`}
+                            >
+                              {item.icon}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="w-full flex flex-col gap-y-[100px]">
+                    {productsPagePreLoader && (
+                      <div className="w-full grid gap-[20px] grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1">
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map(
+                          (item: any, index: number) => (
+                            <div
+                              key={item}
+                              className={`w-full rounded-[12px] overflow-hidden ${
+                                activeVar === 1 ? "h-[618px]" : "h-[227px] "
+                              }`}
+                            >
+                              <div className="loaderwave"></div>
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    )}
+                    {productsPageData?.length > 0 ? (
+                      <div
+                        className={`w-full grid gap-[20px] duration-100  ${
+                          activeVar === 1
+                            ? "grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1"
+                            : activeVar === 2
+                              ? "grid-cols-4 max-xl:grid-cols-2 max-sm:grid-cols-1"
+                              : activeVar === 3 && "grid-cols-1"
+                        }`}
+                      >
+                        {productsPageData.map((item: any, index: number) => (
+                          <div
+                            key={item.ProdCode}
+                            className={`${
+                              productsPageLoader &&
+                              "opacity-[0.5] pointer-events-none"
+                            }`}
+                          >
+                            {(activeVar === 1 || activeVar === 2) && (
+                              <ProductCard
+                                item={item}
+                                narrow={activeVar === 2}
+                              />
+                            )}
+                            {activeVar === 3 && <HorizontalCard item={item} />}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      !productsPagePreLoader && (
+                        <p className="text-gray-500 text-center">
+                          პროდუქტი არ მოიძებნა
+                        </p>
+                      )
+                    )}
+                    <div className="pt-[20px] flex justify-center">
+                      <ReactPaginate
+                        breakLabel="..."
+                        nextLabel="next >"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="< previous"
+                        renderOnZeroPageCount={null}
+                        breakLinkClassName={""}
+                        breakClassName={
+                          "w-8 h-8 flex items-center justify-center"
+                        }
+                        //main container
+                        containerClassName={`flex items-center gap-1`}
+                        //single page number
+                        pageLinkClassName={`w-[40px] h-[40px] text-md bg-white font-forh
+               flex items-center justify-center rounded-full`}
+                        //previous page number
+                        previousLinkClassName={`hidden`}
+                        //next page number
+                        nextLinkClassName={`hidden`}
+                        //active page
+                        activeLinkClassName={
+                          "!important text-[#CACACA] font-forh"
+                        }
+                        forcePage={currentPage}
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              )}
+            </div>
+          </div> */}

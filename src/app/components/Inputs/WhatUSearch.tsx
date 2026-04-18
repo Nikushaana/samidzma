@@ -12,7 +12,7 @@ export default function WhatUSearch({ isProductNakrebi }: any) {
   const searchParams = useSearchParams();
 
   const { setFilterValues, setCurrentPage } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
 
   const [keySearchValue, setKeySearchValue] = useState("");
@@ -20,41 +20,30 @@ export default function WhatUSearch({ isProductNakrebi }: any) {
   useEffect(() => {
     const keyFromParams = searchParams.get("key");
     if (keyFromParams) {
+      setKeySearchValue(keyFromParams);
       setFilterValues((prev: any) => ({ ...prev, key: keyFromParams }));
     }
-  }, [searchParams]);
+  }, [searchParams, setFilterValues]);
 
-  const handleInputKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleSearchByKey();
-    }
+  const getBaseRoute = () => {
+    if (pathname.startsWith("/category-for-set")) return "/category-for-set";
+    if (pathname.startsWith("/category")) return "/category";
+    return isProductNakrebi ? "/category-for-set" : "/category";
   };
 
-  const handleSearchByKey = () => {
-    if (keySearchValue) {
-      if (pathname.split("/")[1] === "category") {
-        window.history.replaceState(
-          null,
-          "/category",
-          `${pathname}?key=${keySearchValue}`
-        );
-        setCurrentPage(0);
-      } else if (pathname.split("/")[1] === "category-for-set") {
-        window.history.replaceState(
-          null,
-          "/category-for-set",
-          `${pathname}?key=${keySearchValue}`
-        );
-        setCurrentPage(0);
-      } else if (isProductNakrebi) {
-        router.push(`/category-for-set?key=${keySearchValue}`);
-      } else {
-        router.push(`/category?key=${keySearchValue}`);
-      }
-      setKeySearchValue("");
+  const handleSearch = () => {
+    if (!keySearchValue.trim()) return;
+
+    const baseRoute = getBaseRoute();
+
+    router.push(`${baseRoute}?key=${keySearchValue}`);
+    setCurrentPage(0);
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearch();
     }
   };
 
@@ -65,16 +54,16 @@ export default function WhatUSearch({ isProductNakrebi }: any) {
         "rounded-[12px] max-lg:rounded-0 bg-[#EAEDEE] p-[30px] max-2xl:p-[10px] max-lg:p-0 relative"
       }`}
     >
-      {pathname.split("/")[1] !== "category-for-set" && pathname !== "/" && (
+      {pathname !== "/" && !pathname.startsWith("/category-for-set") && (
         <BlogsBackgroundDesigns />
       )}
+
       <div className="rounded-full bg-white overflow-hidden flex justify-between shrink-0 z-[1] relative">
         <div className="flex items-center px-[20px] w-full">
           <input
             type="text"
-            name=""
             value={keySearchValue}
-            onKeyPress={handleInputKeyPress}
+            onKeyDown={handleKeyPress}
             onChange={(event) => {
               setKeySearchValue(event.target.value);
             }}
@@ -84,7 +73,7 @@ export default function WhatUSearch({ isProductNakrebi }: any) {
         </div>
         <div
           onClick={() => {
-            handleSearchByKey();
+            handleSearch();
           }}
           className="bg-myGreen text-white cursor-pointer flex items-center justify-center text-[18px] w-[50px] h-[50px] shrink-0 rounded-full"
         >

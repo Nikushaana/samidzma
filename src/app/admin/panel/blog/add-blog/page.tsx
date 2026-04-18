@@ -12,6 +12,7 @@ import useBlogCategory from "../../../../../../dataFetchs/blogCategoryGetFetch";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import * as Yup from "yup";
+import TextEditor2 from "@/app/components/Inputs/TextEditor2";
 
 export default function Page() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function Page() {
 
   const [addBlogValues, setAddBlogValues] = useState({
     blogs_category_id: "",
-    name: "", 
+    name: "",
     name_eng: "",
     name_rus: "",
     description: "",
@@ -83,17 +84,20 @@ export default function Page() {
     const formData = new FormData(form);
 
     allBlogCategData?.find(
-      (item: any) => item.name == addBlogValues.blogs_category_id
+      (item: any) => item.name == addBlogValues.blogs_category_id,
     )?.id &&
       formData.append(
         "blogs_category_id",
         allBlogCategData?.find(
-          (item: any) => item.name == addBlogValues.blogs_category_id
-        )?.id
+          (item: any) => item.name == addBlogValues.blogs_category_id,
+        )?.id,
       );
+
+    formData.append("description2", addBlogValues.description2);
+
     formData.append(
       "status",
-      status.find((item: any) => item.name === addBlogValues.status)?.id
+      status.find((item: any) => item.name === addBlogValues.status)?.id,
     );
 
     axiosAdmin
@@ -166,13 +170,19 @@ export default function Page() {
           setAllValues={setAddBlogValues}
           error={false}
         />
-        <TextEditor
+        <TextEditor2
           title="ბლოგი"
           name="description2"
           setAllValues={setAddBlogValues}
           error={false}
         />
-        <hr className="h-[1px] w-full" />
+        {/* <TextEditor
+          title="ბლოგი"
+          name="description2"
+          setAllValues={setAddBlogValues}
+          error={false}
+        /> */}
+        {/* <hr className="h-[1px] w-full" />
         <Input1
           title="სათაური EN"
           name="name_eng"
@@ -211,7 +221,7 @@ export default function Page() {
           name="description2_rus"
           setAllValues={setAddBlogValues}
           error={false}
-        />
+        /> */}
       </div>
       <hr className="h-[1px] w-full" />
       <div className="w-full">

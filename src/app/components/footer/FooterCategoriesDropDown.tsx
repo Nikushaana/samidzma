@@ -1,14 +1,21 @@
 "use client";
 
 import React, { useContext, useState } from "react";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 import { useRouter } from "next/navigation";
 import { BsChevronDown } from "react-icons/bs";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
+import { fetchCategories } from "@/api/category.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function FooterCategoriesDropDown() {
   const router = useRouter();
-  const { FrontCategoriesData } = useFrontCategories();
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const { slugify } = useContext(ContextForSharingStates);
 
   const [dropDowns, setDropDowns] = useState({
@@ -23,10 +30,15 @@ export default function FooterCategoriesDropDown() {
           <div className="flex items-center justify-between">
             <p
               onClick={() => {
+                const basePath =
+                  item.ProdSaxeobaName === "ნაკრებები"
+                    ? "category-for-set"
+                    : "category";
+
                 router.push(
-                  `/category/${
+                  `/${basePath}/${
                     slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba
-                  }`
+                  }`,
                 );
               }}
               className="text-[14px] max-sm:text-[11px] self-start cursor-pointer"
@@ -69,8 +81,13 @@ export default function FooterCategoriesDropDown() {
                 <div className="flex items-center justify-between text-gray-400 hover:text-white">
                   <p
                     onClick={() => {
+                      const basePath =
+                        item.ProdSaxeobaName === "ნაკრებები"
+                          ? "category-for-set"
+                          : "category";
+
                       router.push(
-                        `/category/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}`
+                        `/${basePath}/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}`,
                       );
                     }}
                     className="text-[13px] max-sm:text-[11px] self-start cursor-pointer"
@@ -111,8 +128,13 @@ export default function FooterCategoriesDropDown() {
                     <p
                       key={item3.IdProdType || index}
                       onClick={() => {
+                        const basePath =
+                          item.ProdSaxeobaName === "ნაკრებები"
+                            ? "category-for-set"
+                            : "category";
+
                         router.push(
-                          `/category/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}/${slugify(item3.ProdTypeName) + "_" + item3.IdProdType}`
+                          `/${basePath}/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}/${slugify(item3.ProdTypeName) + "_" + item3.IdProdType}`,
                         );
                       }}
                       className="text-[14px] max-sm:text-[11px] self-start text-gray-500 hover:text-gray-400 cursor-pointer"

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useContext, useEffect, useState } from "react";
-import { BiStar } from "react-icons/bi";
 import { TbTruckDelivery } from "react-icons/tb";
 import InnerProductMainImgSlider from "./InnerProductMainImgSlider";
 import useIsInFavorite from "../../../../dataFetchs/isInFavoriteHook";
@@ -17,7 +16,8 @@ import Image from "next/image";
 import InnerProductVariationImgsSlider from "./InnerProductVariationImgsSlider";
 import GreenButton from "../buttons/greenButton";
 import DropDownFilials from "../DropDowns/DropDownFilials";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function InnerProductMainInfo({
   variation,
@@ -26,7 +26,12 @@ export default function InnerProductMainInfo({
   setOneProductLoader,
   realProductId,
 }: any) {
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const { user } = useContext(UserContext);
   const { setAlertShow, setAlertStatus, setAlertText, setCreateCartPopUp } =
     useContext(ContextForSharingStates);
@@ -267,7 +272,7 @@ export default function InnerProductMainInfo({
   useEffect(() => {
     if (oneProduct && (realProductId || variation)) {
       setMainVariationStockLoader(true);
-      
+
       const prodCode = variation ? variation : realProductId;
 
       axiosUser

@@ -9,7 +9,8 @@ import Image from "next/image";
 import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import ProductGifts from "../CardVariations/ProductGifts";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
 
 export default function CartCalculator() {
   const router = useRouter();
@@ -30,7 +31,11 @@ export default function CartCalculator() {
     CartLocalStorageData,
   } = useContext(CartAxiosContext);
 
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const { user } = useContext(UserContext);
   const { setAlertShow, setAlertStatus, setAlertText, setCreateCartPopUp } =

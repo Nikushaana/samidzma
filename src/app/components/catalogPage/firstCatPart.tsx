@@ -10,14 +10,20 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import useScreenWidth from "../ScreenWidth";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCategories } from "@/api/category.api";
 
 export default function FirstCatPart({
   filterValues,
   setFilterValues,
   setCurrentPage,
 }: any) {
-  const { FrontCategoriesData, FrontCategoriesLoader } = useFrontCategories();
+
+  const { data: FrontCategoriesData = [], isLoading: FrontCategoriesLoader } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const [sldsPerView, setSldsPerView] = useState<number>(7);
 

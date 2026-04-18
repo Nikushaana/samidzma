@@ -10,8 +10,9 @@ import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import UserOrderProdCard from "@/app/components/CardVariations/UserOrderProdCard";
 import usePaymethods from "../../../../../../../dataFetchs/payMethodsContext";
 import useSamidzmaBranches from "../../../../../../../dataFetchs/samidzmaBranchesContext";
-import { DeiveryInfoContext } from "../../../../../../../dataFetchs/deliveryInfoContext";
 import dynamic from "next/dynamic";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
+import { useQuery } from "@tanstack/react-query";
 
 const NewMap = dynamic(() => import("@/app/components/map/newMap"), {
   ssr: false,
@@ -28,7 +29,12 @@ export default function Page({ params }: { params: { orderId: string } }) {
     setAllAdminUserOrderRender,
   } = useContext(ContextForSharingStates);
   const { allSamidzmaBranchesData } = useSamidzmaBranches();
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+  
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const { payMethodData } = usePaymethods();
   const [loaderEditAdminUserOrder, setLoaderEditAdminUserOrder] =

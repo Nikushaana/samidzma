@@ -8,9 +8,10 @@ import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import useIsInCart from "../../../../dataFetchs/isInCartHook";
 import GreenButton from "../buttons/greenButton";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
 import { WishListAxiosContext } from "../../../../dataFetchs/wishListContext";
 import { BsXLg } from "react-icons/bs";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CreateCartPopUp() {
   const {
@@ -29,7 +30,12 @@ export default function CreateCartPopUp() {
   } = useContext(CartAxiosContext);
   const { setRenderWishList, WishListLocalStorageData } =
     useContext(WishListAxiosContext);
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const { user } = useContext(UserContext);
 
@@ -82,7 +88,7 @@ export default function CreateCartPopUp() {
             createCartValues.is_delivery == 1
               ? deiveryInfoData?.system_id
               : createCartValues.store?.StoreCode
-          }`
+          }`,
         )
         .then((res) => {
           setProdStock(res.data.StoreProdNashtebi[0].ProdNashtebi[0].Nashti);
@@ -143,13 +149,13 @@ export default function CreateCartPopUp() {
             ...orderPlacementValues.order_details
               .map((item: any) => item.product_id)
               .filter(
-                (item1: any) => !WishListLocalStorageData.includes(item1)
+                (item1: any) => !WishListLocalStorageData.includes(item1),
               ),
           ];
 
           localStorage.setItem(
             "SamiDzma-favorites",
-            JSON.stringify(updatedFavorites)
+            JSON.stringify(updatedFavorites),
           );
           setRenderWishList(new Date());
 
@@ -225,7 +231,7 @@ export default function CreateCartPopUp() {
             if (
               !CartLocalStorageData.some(
                 (cartData: any) =>
-                  cartData.product_id === createCartPopUp.prodCode
+                  cartData.product_id === createCartPopUp.prodCode,
               )
             ) {
               CartLocalStorageData.push({
@@ -240,7 +246,7 @@ export default function CreateCartPopUp() {
               });
               localStorage.setItem(
                 "Cart-SamiDzma",
-                JSON.stringify(CartLocalStorageData)
+                JSON.stringify(CartLocalStorageData),
               );
               setOpenProductCardPopUp(null);
               setRenderCart(new Date());

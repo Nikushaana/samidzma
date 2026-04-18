@@ -4,14 +4,20 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useContext, useEffect } from "react";
 import { IoChevronForward } from "react-icons/io5";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
+import { fetchCategories } from "@/api/category.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function PathRouterCategoryComponent() {
   const pathname = usePathname();
   const router = useRouter();
-  const { setFilterValues, slugify, pathnameItems, setPathnameItems } =
+  const { pathnameItems, setPathnameItems } =
     useContext(ContextForSharingStates);
-  const { FrontCategoriesData } = useFrontCategories();
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   useEffect(() => {
     if (!pathname) return;
@@ -20,54 +26,52 @@ export default function PathRouterCategoryComponent() {
       .split("/")
       .filter((segment) => segment.includes("_"));
 
-    if (segments.length === 0) {
-      setPathnameItems([]); // 👈 clear when no category id is in the path
+    if (!segments.length || !FrontCategoriesData.length) {
+      setPathnameItems([]);
       return;
     }
 
-    if (FrontCategoriesData.length > 0) {
-      const extractedNumbers = segments.map((segment) =>
-        Number(segment.split("_").pop())
-      );
+    const ids = segments.map((segment) => Number(segment.split("_").pop()));
 
-      // Extract category data as before ...
-      const firstCategory = FrontCategoriesData.find(
-        (item: any) => Number(item.IdProdSaxeoba) === extractedNumbers[0]
-      );
+    // Extract category data as before ...
+    const first = FrontCategoriesData.find(
+      (item: any) => Number(item.IdProdSaxeoba) === ids[0],
+    );
 
-      const secondCategory = firstCategory?.productTypeGroup?.find(
-        (item: any) => Number(item.IdProdTypeGroup) === extractedNumbers[1]
-      );
+    const second = first?.productTypeGroup?.find(
+      (item: any) => Number(item.IdProdTypeGroup) === ids[1],
+    );
 
-      const thirdCategory = secondCategory?.productTypes?.find(
-        (item: any) => Number(item.IdProdType) === extractedNumbers[2]
-      );
+    const third = second?.productTypes?.find(
+      (item: any) => Number(item.IdProdType) === ids[2],
+    );
 
-      const updatedItems = extractedNumbers.map((number, index) => {
-        const categoryData =
-          index === 0
-            ? firstCategory
-            : index === 1
-            ? secondCategory
-            : thirdCategory;
+    const build = [
+      {
+        id: 1,
+        name: first?.ProdSaxeobaName,
+        data: first,
+      },
+      {
+        id: 2,
+        name: second?.ProdTypeGroupName,
+        data: second,
+      },
+      {
+        id: 3,
+        name: third?.ProdTypeName,
+        data: third,
+      },
+    ]
+      .filter((i, idx) => ids[idx])
+      .map((item, index) => ({
+        id: index + 1,
+        pathCode: `${item.name}_${ids[index]}`,
+        pathCategName: item.name || "",
+        pathCategDescr: item.data?.description || "",
+      }));
 
-        const name =
-          index === 0
-            ? categoryData?.ProdSaxeobaName
-            : index === 1
-            ? categoryData?.ProdTypeGroupName
-            : categoryData?.ProdTypeName;
-
-        return {
-          id: index + 1,
-          pathCode: slugify(name || "") + "_" + number,
-          pathCategName: name || "",
-          pathCategDescr: categoryData?.description || "",
-        };
-      });
-
-      setPathnameItems(updatedItems);
-    }
+    setPathnameItems(build);
   }, [pathname, FrontCategoriesData]);
 
   if (!pathname.split("/")[2]) return;
@@ -87,19 +91,12 @@ export default function PathRouterCategoryComponent() {
           <div
             key={item.id}
             onClick={() => {
-              setFilterValues((prev: any) => ({
-                ...prev,
-                key: "",
-              }));
-
-              setTimeout(() => {
-                router.push(
-                  `/category/${pathnameItems
-                    .slice(0, index + 1)
-                    .map((i: any) => i.pathCode)
-                    .join("/")}?key=`
-                );
-              }, 0);
+              router.push(
+                `/category/${pathnameItems
+                  .slice(0, index + 1)
+                  .map((i: any) => i.pathCode)
+                  .join("/")}`,
+              );
             }}
           >
             {index + 1 === pathnameItems.length && item.pathCategName ? (

@@ -5,26 +5,30 @@ import Link from "next/link";
 import React, { useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import { GoPerson } from "react-icons/go";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
+import { fetchCategories } from "@/api/category.api";
+import { useQuery } from "@tanstack/react-query";
+import { buildCategoryRoute } from "@/utils/routes/buildCategoryRoute";
 
 export default function BurgerMenu() {
-  const {
-    burgerMenu,
-    setBurgerMenu,
-    menuRoutes,
-    filterValues,
-    setFilterValues,
-    slugify,
-  } = useContext(ContextForSharingStates);
-  const { FrontCategoriesData } = useFrontCategories();
+  const { burgerMenu, setBurgerMenu, menuRoutes, filterValues, slugify } =
+    useContext(ContextForSharingStates);
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const { user } = useContext(UserContext);
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const saleParam = searchParams.get("sale");
 
   return (
     <div
@@ -138,76 +142,38 @@ export default function BurgerMenu() {
             key={item.id}
             onClick={() => {
               if (item.link == "category" || item.link == "category-for-set") {
-                setFilterValues((prev: any) => ({
-                  ...prev,
-                  key: "",
-                  sale: 0,
-                }));
-
-                setTimeout(() => {
-                  router.push(
-                    `/${
-                      item.link == "category"
-                        ? "category"
-                        : item.link == "category-for-set" && "category-for-set"
-                    }/${
-                      item.link == "category"
-                        ? slugify(
-                            FrontCategoriesData.filter(
-                              (item: any) =>
-                                item.ProdSaxeobaName !== "ნაკრებები"
-                            )[0]?.ProdSaxeobaName
-                          ) +
-                          "_" +
-                          FrontCategoriesData.filter(
-                            (item: any) => item.ProdSaxeobaName !== "ნაკრებები"
-                          )[0]?.IdProdSaxeoba
-                        : item.link == "category-for-set" &&
-                          slugify(
-                            FrontCategoriesData.find(
-                              (item: any) => item.ProdSaxeobaName == "ნაკრებები"
-                            ).ProdSaxeobaName
-                          ) +
-                            "_" +
-                            FrontCategoriesData.find(
-                              (item: any) => item.ProdSaxeobaName == "ნაკრებები"
-                            ).IdProdSaxeoba
-                    }?key=&sale=0`
-                  );
-                }, 0);
-              } else if (item.link == "sale") {
-                setFilterValues((prev: any) => ({
-                  ...prev,
-                  key: "",
-                  sale: 1,
-                }));
-
-                setTimeout(() => {
-                  router.push(`/category?key=&sale=1`);
-                }, 0);
-              } else {
-                router.push(`/${item.link}`);
+                router.push(
+                  buildCategoryRoute(item.link, FrontCategoriesData, slugify),
+                );
+                return;
               }
+
+              if (item.link == "sale") {
+                router.push(`/category?sale=1`);
+                return;
+              }
+
+              router.push(`/${item.link}`);
             }}
             className={`flex items-center gap-[10px] cursor-pointer ${
-              filterValues.sale == 1 &&
-              item.link == "sale" &&
-              pathname.split("/")[1] == "category"
-                ? "text-white "
+              saleParam === "1"
+                ? item.link === "sale"
+                  ? "text-white"
+                  : "gap-[30px] text-[#C6FB94]"
                 : pathname.split("/")[1] === item.link
-                ? "text-white"
-                : "gap-[30px] text-[#C6FB94]"
+                  ? "text-white"
+                  : "gap-[30px] text-[#C6FB94]"
             }`}
           >
             <MdArrowForwardIos
               className={`duration-200 ${
-                filterValues.sale == 1 &&
-                item.link == "sale" &&
-                pathname.split("/")[1] == "category"
-                  ? "ml-[50px]"
+                saleParam === "1"
+                  ? item.link === "sale"
+                    ? "ml-[50px]"
+                    : ""
                   : pathname.split("/")[1] === item.link
-                  ? "ml-[50px]"
-                  : ""
+                    ? "ml-[50px]"
+                    : ""
               }`}
             />
             <p className="text-[22px] max-sm:text-[20px] select-none">

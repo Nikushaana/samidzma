@@ -1,6 +1,7 @@
 import React from "react";
 import CategoryComponent from "@/app/components/categoryContent/categoryComponent";
 import { Metadata } from "next";
+import CategoryComponentTest from "@/app/components/categoryContent/categoryComponentTest";
 
 type Props = {
   params: { secCategId: string; thirdCategId: string };
@@ -12,13 +13,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/front/threeLevelCategories?IdProdTypeGroup=${secId}`,
-    { cache: "no-store" }
+    { cache: "no-store" },
   );
 
   const categories = await res.json();
 
   const category = categories.data.find(
-    (categ: any) => categ.IdProdType == thirdId
+    (categ: any) => categ.IdProdType == thirdId,
   );
 
   const title = category.meta_title || category.ProdTypeName;
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = category.image
     ? category?.image
     : "/public/images/mainLogo.png";
-  
+
   return {
     title,
     description,
@@ -51,5 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function Page({ params }: { params: { thirdCategId: string } }) {
-  return <CategoryComponent />;
+  return (
+    // <CategoryComponent />
+    <CategoryComponentTest />
+  );
 }

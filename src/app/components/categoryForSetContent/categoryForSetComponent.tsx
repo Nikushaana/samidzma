@@ -13,7 +13,6 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import { IoIosArrowUp } from "react-icons/io";
 import ReactSlider from "react-slider";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useFrontCategories from "../../../../dataFetchs/frontCategoriesContext";
 import useFilter from "../../../../dataFetchs/filtersContext";
 import ReactPaginate from "react-paginate";
 import HorizontalCard from "../CardVariations/HorizontalCard";
@@ -25,6 +24,9 @@ import { TfiLayoutGrid4Alt } from "react-icons/tfi";
 import { PiRowsFill } from "react-icons/pi";
 import PathRouterCategoryForSetComponent from "./PathRouterCategoryForSetComponent";
 import Image from "next/image";
+import { fetchCategories } from "@/api/category.api";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSecondLevelCategories } from "@/api/secondLevelCategory.api";
 
 export default function CategoryForSetComponent({
   passedCategories,
@@ -62,7 +64,13 @@ export default function CategoryForSetComponent({
     sqesi,
     raodenobaShefutvashi,
   } = useFilter();
-  const { FrontCategoriesData } = useFrontCategories();
+  
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const [filterStatus, setFilterStatus] = useState(true);
   const [FilterComponents, setFilterComponents] = useState<any>([]);
   const [dropedFilter, setDropedFilter] = useState<any>("");
@@ -286,25 +294,17 @@ export default function CategoryForSetComponent({
   const { blogData, blogLoader } = useBlog();
 
   // second level categories data
-  const [secondLevelCategoriesData, setSecondLevelCategoriesData] =
-    useState<any>([]);
-  const [secondLevelCategoriesLoader, setSecondLevelCategoriesLoader] =
-    useState(true);
-
-  useEffect(() => {
-    setSecondLevelCategoriesLoader(true);
-    axiosUser
-      .get(
-        `front/secondLevelCategories?IdProdSaxeoba=${
-          pathnameItems[0]?.pathCode.split("_")[1]
-        }`
-      )
-      .then((res) => {
-        setSecondLevelCategoriesData(res.data.data);
-        setSecondLevelCategoriesLoader(false);
-      })
-      .finally(() => {});
-  }, [pathnameItems[0]?.pathCode.split("_")[1]]);
+  const id = pathnameItems[0]?.pathCode.split("_")[1];
+  
+    const {
+      data: secondLevelCategoriesData = [],
+      isLoading: secondLevelCategoriesLoader,
+    } = useQuery({
+      queryKey: ["secondLevelCategories", id],
+      queryFn: () => fetchSecondLevelCategories(id),
+      staleTime: 1000 * 60 * 5,
+      enabled: !!id,
+    });
 
   // fetch correct categories in categories boxes and sidebar
   useEffect(() => {

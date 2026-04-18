@@ -65,8 +65,6 @@ const WishListContext = ({ children }: any) => {
     }
   }, [renderWishList, user, currentPage]);
 
-  
-
   return (
     <WishListAxiosContext.Provider
       value={{

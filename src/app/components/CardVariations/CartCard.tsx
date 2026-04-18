@@ -7,11 +7,12 @@ import { BsXLg } from "react-icons/bs";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CartCard({ item }: any) {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
   const { user } = useContext(UserContext);
   const {
@@ -21,7 +22,12 @@ export default function CartCard({ item }: any) {
     orderPlacementValues,
     setOrderPlacementValues,
   } = useContext(CartAxiosContext);
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   // used states
   const [deleteCartloader, setDeleteCartLoader] = useState<boolean>(false);
@@ -84,11 +90,11 @@ export default function CartCard({ item }: any) {
     } else {
       if (
         CartLocalStorageData.some(
-          (cart: any) => cart.product_id == item.ProdCode
+          (cart: any) => cart.product_id == item.ProdCode,
         )
       ) {
         const updatedCart = CartLocalStorageData.filter(
-          (cart1: any) => cart1.product_id !== item.ProdCode
+          (cart1: any) => cart1.product_id !== item.ProdCode,
         );
         localStorage.setItem("Cart-SamiDzma", JSON.stringify(updatedCart));
         setRenderCart(new Date());
@@ -146,23 +152,23 @@ export default function CartCard({ item }: any) {
                     store.StoreCode ==
                     (orderPlacementValues.is_delivery == 1
                       ? deiveryInfoData?.system_id
-                      : orderPlacementValues.store?.StoreCode)
-                )?.ProdNashtebi[0].Nashti / item.product.CountInComplect
+                      : orderPlacementValues.store?.StoreCode),
+                )?.ProdNashtebi[0].Nashti / item.product.CountInComplect,
               )
             : res.data.StoreProdNashtebi?.find(
                 (store: any) =>
                   store.StoreCode ==
                   (orderPlacementValues.is_delivery == 1
                     ? deiveryInfoData?.system_id
-                    : orderPlacementValues.store?.StoreCode)
+                    : orderPlacementValues.store?.StoreCode),
               )?.ProdNashtebi &&
                 res.data.StoreProdNashtebi?.find(
                   (store: any) =>
                     store.StoreCode ==
                     (orderPlacementValues.is_delivery == 1
                       ? deiveryInfoData?.system_id
-                      : orderPlacementValues.store?.StoreCode)
-                )?.ProdNashtebi[0].Nashti
+                      : orderPlacementValues.store?.StoreCode),
+                )?.ProdNashtebi[0].Nashti,
         );
       })
       .catch((err) => {})
@@ -244,15 +250,15 @@ export default function CartCard({ item }: any) {
                   ? item.isComplete
                     ? item.product.ComplectPrice.toFixed(2)
                     : item.product.Fasi_dic !== item.product.Fasi18
-                    ? item.product.Fasi_dic.toFixed(2)
-                    : item.product_price.toFixed(2)
+                      ? item.product.Fasi_dic.toFixed(2)
+                      : item.product_price.toFixed(2)
                   : CartLocalStorageData.find(
-                      (cart: any) => cart.product_id === item.ProdCode
-                    )?.isComplete
-                  ? item.ComplectPrice.toFixed(2)
-                  : item.Fasi_dic !== item.Fasi18
-                  ? item.Fasi_dic.toFixed(2)
-                  : item.Fasi18.toFixed(2)}
+                        (cart: any) => cart.product_id === item.ProdCode,
+                      )?.isComplete
+                    ? item.ComplectPrice.toFixed(2)
+                    : item.Fasi_dic !== item.Fasi18
+                      ? item.Fasi_dic.toFixed(2)
+                      : item.Fasi18.toFixed(2)}
                 ₾
               </h1>
               {user.id
@@ -263,7 +269,7 @@ export default function CartCard({ item }: any) {
                     </p>
                   )
                 : !CartLocalStorageData.find(
-                    (cart: any) => cart.product_id === item.ProdCode
+                    (cart: any) => cart.product_id === item.ProdCode,
                   )?.isComplete &&
                   item.Fasi_dic !== item.Fasi18 && (
                     <p className="text-[14px] text-gray-400 line-through pl-[5px]">
@@ -277,10 +283,10 @@ export default function CartCard({ item }: any) {
                   ? "კომპლექტი"
                   : "ცალი"
                 : CartLocalStorageData.find(
-                    (cart: any) => cart.product_id === item.ProdCode
-                  )?.isComplete
-                ? "კომპლექტი"
-                : "ცალი"}
+                      (cart: any) => cart.product_id === item.ProdCode,
+                    )?.isComplete
+                  ? "კომპლექტი"
+                  : "ცალი"}
             </h1>
           </div>
 
@@ -290,14 +296,14 @@ export default function CartCard({ item }: any) {
                 user?.id
                   ? item.product.IntegerQuantity
                   : CartLocalStorageData.find(
-                      (cart: any) => cart.product_id === item.ProdCode
+                      (cart: any) => cart.product_id === item.ProdCode,
                     )?.IntegerQuantity
               }
               minValue={
                 (user?.id
                   ? item.product.min_value
                   : CartLocalStorageData.find(
-                      (cart: any) => cart.product_id === item.ProdCode
+                      (cart: any) => cart.product_id === item.ProdCode,
                     )?.min_value) || 1
               }
               prodStock={prodStock}
@@ -305,7 +311,7 @@ export default function CartCard({ item }: any) {
                 user?.id
                   ? item
                   : CartLocalStorageData.find(
-                      (cart: any) => cart.product_id === item.ProdCode
+                      (cart: any) => cart.product_id === item.ProdCode,
                     )
               }
             />
@@ -318,14 +324,14 @@ export default function CartCard({ item }: any) {
             user?.id
               ? item.product.IntegerQuantity
               : CartLocalStorageData.find(
-                  (cart: any) => cart.product_id === item.ProdCode
+                  (cart: any) => cart.product_id === item.ProdCode,
                 )?.IntegerQuantity
           }
           minValue={
             (user?.id
               ? item.product.min_value
               : CartLocalStorageData.find(
-                  (cart: any) => cart.product_id === item.ProdCode
+                  (cart: any) => cart.product_id === item.ProdCode,
                 )?.min_value) || 1
           }
           prodStock={prodStock}
@@ -333,7 +339,7 @@ export default function CartCard({ item }: any) {
             user?.id
               ? item
               : CartLocalStorageData.find(
-                  (cart: any) => cart.product_id === item.ProdCode
+                  (cart: any) => cart.product_id === item.ProdCode,
                 )
           }
         />

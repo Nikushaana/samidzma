@@ -5,19 +5,25 @@ import { axiosAdmin } from "../../../../../dataFetchs/AxiosToken";
 import DotsLoader from "@/app/components/loaders/DotsLoader";
 import { ContextForSharingStates } from "../../../../../dataFetchs/sharedStates";
 import Image from "next/image";
-import useFrontCategories from "../../../../../dataFetchs/frontCategoriesContext";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import ReactPaginate from "react-paginate";
 import GreenButton from "@/app/components/buttons/greenButton";
 import Input1 from "@/app/components/Inputs/Input1";
+import { fetchCategories } from "@/api/category.api";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Page() {
   const pagemounted = useRef(false);
 
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
-  const { FrontCategoriesData } = useFrontCategories();
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const [allProductsData, setAllProductsData] = useState<ProductType[]>([]);
   const [allProductsLoader, setAllProductsLoader] = useState<boolean>(true);
@@ -61,28 +67,28 @@ export default function Page() {
 
     const IdProdSaxeobaName = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )?.IdProdSaxeoba;
 
     const IdProdTypeGroup = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )?.productTypeGroup.find(
       (item4: any) =>
-        item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+        item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
     )?.IdProdTypeGroup;
 
     const IdProdType = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )
       ?.productTypeGroup.find(
         (item4: any) =>
-          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
       )
       ?.productTypes.find(
         (item5: any) =>
-          item5.ProdTypeName == categoriesFilterValues.ProdTypeName
+          item5.ProdTypeName == categoriesFilterValues.ProdTypeName,
       )?.IdProdType;
 
     axiosAdmin
@@ -99,7 +105,7 @@ export default function Page() {
           categoriesFilterValues.ProdTypeName && IdProdType
             ? `IdProdType=${IdProdType}`
             : ""
-        }`
+        }`,
       )
       .then((res) => {
         setAllProductsData(res.data.data);
@@ -121,28 +127,28 @@ export default function Page() {
 
     const IdProdSaxeobaName = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )?.IdProdSaxeoba;
 
     const IdProdTypeGroup = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )?.productTypeGroup.find(
       (item4: any) =>
-        item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+        item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
     )?.IdProdTypeGroup;
 
     const IdProdType = FrontCategoriesData.find(
       (item3: any) =>
-        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+        item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
     )
       ?.productTypeGroup.find(
         (item4: any) =>
-          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
       )
       ?.productTypes.find(
         (item5: any) =>
-          item5.ProdTypeName == categoriesFilterValues.ProdTypeName
+          item5.ProdTypeName == categoriesFilterValues.ProdTypeName,
       )?.IdProdType;
 
     axiosAdmin
@@ -175,28 +181,28 @@ export default function Page() {
 
       const IdProdSaxeobaName = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
       )?.IdProdSaxeoba;
 
       const IdProdTypeGroup = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
       )?.productTypeGroup.find(
         (item4: any) =>
-          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+          item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
       )?.IdProdTypeGroup;
 
       const IdProdType = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == categoriesFilterValues.ProdSaxeobaName,
       )
         ?.productTypeGroup.find(
           (item4: any) =>
-            item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName
+            item4.ProdTypeGroupName == categoriesFilterValues.ProdTypeGroupName,
         )
         ?.productTypes.find(
           (item5: any) =>
-            item5.ProdTypeName == categoriesFilterValues.ProdTypeName
+            item5.ProdTypeName == categoriesFilterValues.ProdTypeName,
         )?.IdProdType;
 
       axiosAdmin
@@ -321,7 +327,7 @@ export default function Page() {
                   FrontCategoriesData.find(
                     (item1: any) =>
                       categoriesFilterValues.ProdSaxeobaName ==
-                      item1.ProdSaxeobaName
+                      item1.ProdSaxeobaName,
                   )?.productTypeGroup
                 }
                 name="ProdTypeGroupName"
@@ -347,11 +353,11 @@ export default function Page() {
                   FrontCategoriesData.find(
                     (item1: any) =>
                       categoriesFilterValues.ProdSaxeobaName ===
-                      item1.ProdSaxeobaName
+                      item1.ProdSaxeobaName,
                   )?.productTypeGroup.find(
                     (item2: any) =>
                       categoriesFilterValues.ProdTypeGroupName ===
-                      item2.ProdTypeGroupName
+                      item2.ProdTypeGroupName,
                   )?.productTypes
                 }
                 name="ProdTypeName"

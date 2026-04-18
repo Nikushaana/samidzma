@@ -1,5 +1,6 @@
 import React from "react";
 import CategoryComponent from "../components/categoryContent/categoryComponent";
+import CategoryComponentTest from "../components/categoryContent/categoryComponentTest";
 
 export const metadata = {
   title: "კატეგორიები | სამი ძმა",
@@ -9,7 +10,8 @@ export const metadata = {
 export default function page() {
   return (
     <div>
-      <CategoryComponent/>
+      {/* <CategoryComponent/> */}
+      <CategoryComponentTest/>
     </div>
   );
 }

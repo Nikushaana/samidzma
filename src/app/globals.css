@@ -51,6 +51,174 @@ button {
 
 /* swiper */
 
+/* blog */
+
+.blog-content {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* ---------------- HEADINGS ---------------- */
+
+/* normal headings */
+.blog-content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 30px 0 15px;
+}
+
+.blog-content h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 25px 0 12px;
+}
+
+.blog-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.blog-content h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 18px 0 8px;
+}
+
+.blog-content h5 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 15px 0 6px;
+}
+
+.blog-content h6 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 12px 0 5px;
+}
+
+/* 🔥 headings inside list (YOUR CASE) */
+.blog-content li h1,
+.blog-content li h2,
+.blog-content li h3,
+.blog-content li h4,
+.blog-content li h5,
+.blog-content li h6 {
+  display: inline;
+  margin: 0;
+}
+
+/* ---------------- PARAGRAPH ---------------- */
+
+.blog-content p {
+  margin: 12px 0;
+}
+
+/* remove empty paragraphs */
+.blog-content p:empty {
+  display: none;
+}
+
+/* ---------------- LISTS ---------------- */
+
+.blog-content ul {
+  list-style-type: disc;
+  padding-left: 22px;
+  margin: 20px 0 10px;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+  padding-left: 22px;
+  margin: 20px 0 10px;
+}
+
+.blog-content li {
+  margin: 8px 0;
+}
+
+.blog-content li::marker {
+  font-size: 14px;
+}
+
+/* ---------------- TEXT FORMATTING ---------------- */
+
+.blog-content strong {
+  font-weight: 600;
+}
+
+.blog-content em {
+  font-style: italic;
+}
+
+/* ---------------- LINE BREAKS ---------------- */
+
+.blog-content br {
+  display: block;
+  margin: 6px 0;
+  content: "";
+}
+
+/* ---------------- SPACING FIX ---------------- */
+
+/* paragraph right after heading */
+.blog-content h1 + p,
+.blog-content h2 + p,
+.blog-content h3 + p {
+  margin-top: 5px;
+}
+
+/* list + paragraph spacing */
+.blog-content ul + p,
+.blog-content ol + p {
+  margin-top: 10px;
+}
+
+/* ---------------- IMAGES ---------------- */
+
+.blog-content .img-wrapper {
+  display: flex;
+  width: 100%;
+  margin: 20px 0;
+}
+
+/* inner container (safe fallback if you keep it) */
+.blog-content .img-inner {
+  display: flex;
+  width: 100%;
+}
+
+/* image itself */
+.blog-content .img-wrapper img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ALIGNMENT STATES */
+.blog-content .img-wrapper[data-align="left"] {
+  justify-content: flex-start;
+}
+
+.blog-content .img-wrapper[data-align="center"] {
+  justify-content: center;
+}
+
+.blog-content .img-wrapper[data-align="right"] {
+  justify-content: flex-end;
+}
+
+/* optional: center image inside inner wrapper */
+.blog-content .img-wrapper[data-align="center"] .img-inner {
+  justify-content: center;
+}
+
+.blog-content .img-wrapper[data-align="right"] .img-inner {
+  justify-content: flex-end;
+}
+
+/* blog */
+
 .showScrollVert::-webkit-scrollbar {
   width: 5px;
 }

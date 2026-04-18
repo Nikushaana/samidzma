@@ -9,37 +9,30 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 export default function FirstCategoriesCard({ item }: any) {
   const router = useRouter();
   const pathname = usePathname();
-  const { setFilterValues, slugify } = useContext(ContextForSharingStates);
+  const { slugify } = useContext(ContextForSharingStates);
 
   return (
     <div
       key={item?.IdProdSaxeoba}
       onClick={() => {
-        setFilterValues((prev: any) => ({
-          ...prev,
-          key: "",
-        }));
+        const isCategory = pathname.split("/")[1] === "category";
+        const isSet = pathname.split("/")[1] === "category-for-set";
 
-        setTimeout(() => {
-          router.push(
-            `/${
-              pathname.split("/")[1] === "category"
-                ? "category"
-                : pathname.split("/")[1] === "category-for-set" &&
-                  "category-for-set/ნაკრებები_10020"
-            }/${
-              slugify(
-                pathname.split("/")[1] === "category"
-                  ? item?.ProdSaxeobaName
-                  : item?.ProdTypeGroupName
-              ) +
-              "_" +
-              (pathname.split("/")[1] === "category"
-                ? item?.IdProdSaxeoba
-                : item?.IdProdTypeGroup)
-            }?key=`
-          );
-        }, 0);
+        const basePath = isCategory
+          ? "category"
+          : isSet
+            ? "category-for-set/ნაკრებები_10020"
+            : "";
+
+        const name = isCategory
+          ? item?.ProdSaxeobaName
+          : item?.ProdTypeGroupName;
+
+        const id = isCategory ? item?.IdProdSaxeoba : item?.IdProdTypeGroup;
+
+        const slug = `${slugify(name)}_${id}`;
+
+        router.push(`/${basePath}/${slug}`);
       }}
       className={`flex flex-col w-full cursor-pointer shrink-0 bg-[#f7f7f7] rounded-[8px] shadow overflow-hidden mb-[5px]`}
     >

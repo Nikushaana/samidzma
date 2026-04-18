@@ -106,6 +106,7 @@ const SharingStatesContext = ({ children }: any) => {
   const [renderProdReview, setRenderProdReview] = useState<any>();
   const [allAdminUserOrderRender, setAllAdminUserOrderRender] = useState<any>();
   const [allAdminUsersRender, setAllAdminUsersRender] = useState<any>();
+  const [allBlogGalleryRender, setAllBlogGalleryRender] = useState<any>();
 
   const slugify = (text: string) => {
     return text
@@ -220,7 +221,7 @@ const SharingStatesContext = ({ children }: any) => {
       name: "ჩვენი ფილიალები",
     },
   ]);
-  
+
   const [footerInfoPages, setFooterInfoPages] = useState([
     {
       id: 1,
@@ -321,6 +322,8 @@ const SharingStatesContext = ({ children }: any) => {
         setAllAdminUserOrderRender,
         allAdminUsersRender,
         setAllAdminUsersRender,
+        allBlogGalleryRender,
+        setAllBlogGalleryRender,
 
         slugify,
         pathnameItems,
@@ -339,7 +342,7 @@ const SharingStatesContext = ({ children }: any) => {
         seen,
         menuRoutes,
         siteInfoPages,
-        footerInfoPages
+        footerInfoPages,
       }}
     >
       {children}

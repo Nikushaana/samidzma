@@ -70,11 +70,21 @@ export default function SideBar() {
         },
         {
           id: 2,
+          route: "ბლოგის გალერეა",
+          link: "blog-gallery",
+        },
+        {
+          id: 3,
+          route: "ბლოგის გალერეის დამატება",
+          link: "add-blog-gallery",
+        },
+        {
+          id: 3,
           route: "ბლოგის კატეგორიები",
           link: "blog-category",
         },
         {
-          id: 3,
+          id: 4,
           route: "ბლოგის კატეგორიის დამატება",
           link: "add-blog-category",
         },

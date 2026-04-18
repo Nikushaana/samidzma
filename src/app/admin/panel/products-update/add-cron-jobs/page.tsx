@@ -4,21 +4,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { BsXLg } from "react-icons/bs";
 import { FaTrashCan } from "react-icons/fa6";
 import DotsLoader from "@/app/components/loaders/DotsLoader";
-import { useRouter } from "next/navigation";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
 import GreenButton from "@/app/components/buttons/greenButton";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
-import useFrontCategories from "../../../../../../dataFetchs/frontCategoriesContext";
 import InputTime from "@/app/components/Inputs/InputTime";
 import InputCalendar from "@/app/components/Inputs/InputCalendar";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCategories } from "@/api/category.api";
 
 export default function Page() {
-  const router = useRouter();
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
-  const { FrontCategoriesData } = useFrontCategories();
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const [addCronJobValues, setAddCronJobValues] = useState({
     ProdSaxeobaName: "",
@@ -58,27 +62,27 @@ export default function Page() {
       setAddCronJobLoader(true);
       const IdProdSaxeobaName = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName,
       )?.IdProdSaxeoba;
 
       const IdProdTypeGroup = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName,
       )?.productTypeGroup.find(
         (item4: any) =>
-          item4.ProdTypeGroupName == addCronJobValues.ProdTypeGroupName
+          item4.ProdTypeGroupName == addCronJobValues.ProdTypeGroupName,
       )?.IdProdTypeGroup;
 
       const IdProdType = FrontCategoriesData.find(
         (item3: any) =>
-          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName
+          item3.ProdSaxeobaName == addCronJobValues.ProdSaxeobaName,
       )
         ?.productTypeGroup.find(
           (item4: any) =>
-            item4.ProdTypeGroupName == addCronJobValues.ProdTypeGroupName
+            item4.ProdTypeGroupName == addCronJobValues.ProdTypeGroupName,
         )
         ?.productTypes.find(
-          (item5: any) => item5.ProdTypeName == addCronJobValues.ProdTypeName
+          (item5: any) => item5.ProdTypeName == addCronJobValues.ProdTypeName,
         )?.IdProdType;
 
       axiosAdmin
@@ -201,7 +205,7 @@ export default function Page() {
               data={
                 FrontCategoriesData.find(
                   (item1: any) =>
-                    addCronJobValues.ProdSaxeobaName == item1.ProdSaxeobaName
+                    addCronJobValues.ProdSaxeobaName == item1.ProdSaxeobaName,
                 )?.productTypeGroup
               }
               name="ProdTypeGroupName"
@@ -222,11 +226,11 @@ export default function Page() {
               data={
                 FrontCategoriesData.find(
                   (item1: any) =>
-                    addCronJobValues.ProdSaxeobaName === item1.ProdSaxeobaName
+                    addCronJobValues.ProdSaxeobaName === item1.ProdSaxeobaName,
                 )?.productTypeGroup.find(
                   (item2: any) =>
                     addCronJobValues.ProdTypeGroupName ===
-                    item2.ProdTypeGroupName
+                    item2.ProdTypeGroupName,
                 )?.productTypes
               }
               name="ProdTypeName"
@@ -291,7 +295,7 @@ export default function Page() {
                     {
                       FrontCategoriesData.find(
                         (item3: any) =>
-                          item3.IdProdSaxeoba == item.IdProdSaxeoba
+                          item3.IdProdSaxeoba == item.IdProdSaxeoba,
                       )?.ProdSaxeobaName
                     }
                   </p>
@@ -299,10 +303,10 @@ export default function Page() {
                     {
                       FrontCategoriesData.find(
                         (item3: any) =>
-                          item3.IdProdSaxeoba == item.IdProdSaxeoba
+                          item3.IdProdSaxeoba == item.IdProdSaxeoba,
                       )?.productTypeGroup.find(
                         (item4: any) =>
-                          item4.IdProdTypeGroup == item.IdProdTypeGroup
+                          item4.IdProdTypeGroup == item.IdProdTypeGroup,
                       )?.ProdTypeGroupName
                     }
                   </p>
@@ -310,14 +314,14 @@ export default function Page() {
                     {
                       FrontCategoriesData.find(
                         (item3: any) =>
-                          item3.IdProdSaxeoba == item.IdProdSaxeoba
+                          item3.IdProdSaxeoba == item.IdProdSaxeoba,
                       )
                         ?.productTypeGroup.find(
                           (item4: any) =>
-                            item4.IdProdTypeGroup == item.IdProdTypeGroup
+                            item4.IdProdTypeGroup == item.IdProdTypeGroup,
                         )
                         ?.productTypes.find(
-                          (item5: any) => item5.IdProdType == item.IdProdType
+                          (item5: any) => item5.IdProdType == item.IdProdType,
                         )?.ProdTypeName
                     }
                   </p>
@@ -353,10 +357,10 @@ export default function Page() {
                     {item.status == "0"
                       ? "ჯერ არ შესრულებულა"
                       : item.status == "1"
-                      ? "აქტიური"
-                      : item.status == "2"
-                      ? "შეცდომა მოხდა!"
-                      : item.status == "3" && "შესრულდა"}
+                        ? "აქტიური"
+                        : item.status == "2"
+                          ? "შეცდომა მოხდა!"
+                          : item.status == "3" && "შესრულდა"}
                   </p>
                   {cronProductDeleteLoader === item.id ? (
                     <div className="w-[50px] h-[50px] flex items-center justify-center">

@@ -17,7 +17,7 @@ import { WishListAxiosContext } from "../../../../dataFetchs/wishListContext";
 import useIsInCart from "../../../../dataFetchs/isInCartHook";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
 import { useQuery } from "@tanstack/react-query";
-import { DeiveryInfoContext } from "../../../../dataFetchs/deliveryInfoContext";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
 
 export default function TestInnerProductMainInfo({
   variation,
@@ -36,7 +36,12 @@ export default function TestInnerProductMainInfo({
     orderPlacementValues,
     setRenderCart,
   } = useContext(CartAxiosContext);
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const [cartProdQuant, setCartProdQuant] = useState<number>(1);
 

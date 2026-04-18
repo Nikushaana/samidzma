@@ -8,14 +8,20 @@ import ReactPaginate from "react-paginate";
 import GreenButton from "@/app/components/buttons/greenButton";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
-import useFrontCategories from "../../../../../../dataFetchs/frontCategoriesContext";
 import Input1 from "@/app/components/Inputs/Input1";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCategories } from "@/api/category.api";
 
 export default function Page() {
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
     ContextForSharingStates
   );
-  const { FrontCategoriesData } = useFrontCategories();
+  
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   const [updateProdMinQuantityValues, setUpdateProdMinQuantityValues] =
     useState({

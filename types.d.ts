@@ -237,3 +237,9 @@ interface SamidzmaBranch {
   updatedAt: string
 }
 
+interface PathnameItem {
+  id: number;
+  pathCategName: string;
+  pathCode: string;
+  pathCategDescr: string;
+}

@@ -1,30 +1,34 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { axiosUser } from "../../../../dataFetchs/AxiosToken";
+import React from "react";
 import CategoryComponent from "@/app/components/categoryContent/categoryComponent";
+import CategoryComponentTest from "@/app/components/categoryContent/categoryComponentTest";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSecondLevelCategories } from "@/api/secondLevelCategory.api";
 
-export default function FirstCategDetailsClient({ params }: { params: { firstCategId: string } }) {
+export default function FirstCategDetailsClient({
+  params,
+}: {
+  params: { firstCategId: string };
+}) {
   // second level categories data
-  const [secondLevelCategoriesData, setSecondLevelCategoriesData] = useState([]);
-  const [secondLevelCategoriesLoader, setSecondLevelCategoriesLoader] = useState(true);
+  const id = params.firstCategId.split("_").pop() as string;
 
-  useEffect(() => {
-    const id = params.firstCategId.split("_").pop()!; // get the real ID
-
-    setSecondLevelCategoriesData([]);
-
-    setSecondLevelCategoriesLoader(true);
-    axiosUser
-      .get(`front/secondLevelCategories?IdProdSaxeoba=${id}`)
-      .then((res) => {
-        setSecondLevelCategoriesData(res.data.data);
-        setSecondLevelCategoriesLoader(false);
-      })
-      .finally(() => {});
-  }, [params.firstCategId]);
+  const {
+    data: secondLevelCategoriesData = [],
+    isLoading: secondLevelCategoriesLoader,
+  } = useQuery({
+    queryKey: ["secondLevelCategories", id],
+    queryFn: () => fetchSecondLevelCategories(id),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
+  });
 
   return (
-    <CategoryComponent passedCategories={secondLevelCategoriesData} passedCategoriesLoader={secondLevelCategoriesLoader}/>
+    // <CategoryComponent passedCategories={secondLevelCategoriesData} passedCategoriesLoader={secondLevelCategoriesLoader}/>
+    <CategoryComponentTest
+      passedCategories={secondLevelCategoriesData}
+      passedCategoriesLoader={secondLevelCategoriesLoader}
+    />
   );
 }

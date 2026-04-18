@@ -15,7 +15,6 @@ import BurgerMenu from "./components/burgerMenu/BurgerMenu";
 import ProductReviewPopUp from "./components/popUps/productReviewPopUp";
 import BackgroundDesigns from "./components/decorationColumns/BackgroundDesigns";
 import ProductCardsPopUp from "./components/popUps/ProductCardsPopUp";
-import DeiveryInfoAxiosContext from "../../dataFetchs/deliveryInfoContext";
 import CreateCartPopUp from "./components/popUps/CreateCartPopUp";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import ReactQueryProvider from "./providers";
@@ -63,9 +62,10 @@ export default function RootLayout({
               <UserAxiosContext>
                 <WishListContext>
                   <CartContext>
-                    <DeiveryInfoAxiosContext>
-                      <div className="bg-[#f7f7f7] max-lg:bg-[#eaedee] overflow-hidden relative">
-                        <BackgroundDesigns />
+                      <div className="bg-[#f7f7f7] max-lg:bg-[#eaedee] relative">
+                        <div className="absolute inset-0 overflow-hidden z-0">
+                          <BackgroundDesigns />
+                        </div>
                         <Header />
                         {children}
                         <Footer />
@@ -78,7 +78,6 @@ export default function RootLayout({
                         <AlertCust />
                         <ScrollToTopButton />
                       </div>
-                    </DeiveryInfoAxiosContext>
                   </CartContext>
                 </WishListContext>
               </UserAxiosContext>

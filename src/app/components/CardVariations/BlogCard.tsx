@@ -1,13 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function BlogCard({ item, colspan }: any) {
+  const router = useRouter();
+
   return (
     <div
       onClick={() => {
-        // router.push("/blog/1");
+        router.push(`/blog/${item.id}`);
       }}
       className={`rounded-[8px] bg-white grid p-[20px] cursor-pointer h-full ${
         colspan === "all" || colspan === "half"

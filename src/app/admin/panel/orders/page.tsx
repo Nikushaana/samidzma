@@ -15,8 +15,9 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import useSamidzmaBranches from "../../../../../dataFetchs/samidzmaBranchesContext";
-import { DeiveryInfoContext } from "../../../../../dataFetchs/deliveryInfoContext";
 import usePaymethods from "../../../../../dataFetchs/payMethodsContext";
+import { fetchDeliveryInfo } from "@/api/deliveryInfo.api";
+import { useQuery } from "@tanstack/react-query";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -31,7 +32,13 @@ export default function Page() {
   } = useContext(ContextForSharingStates);
   const router = useRouter();
   const { allSamidzmaBranchesData } = useSamidzmaBranches();
-  const { deiveryInfoData } = useContext(DeiveryInfoContext);
+  
+  const { data: deiveryInfoData = [] } = useQuery({
+    queryKey: ["deiveryInfo"],
+    queryFn: fetchDeliveryInfo,
+    staleTime: 1000 * 60 * 5,
+  });
+
   const { payMethodData } = usePaymethods();
 
   const [allAdminUserOrderData, setAllAdminUserOrderData] = useState<any>([]);
