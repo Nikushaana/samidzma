@@ -49,7 +49,7 @@ export default function Footer() {
 
   return (
     <div
-      className={`z-[2] ${pathname.split("/")[1] === "admin" ? "hidden" : ""}`}
+      className={`z-[2] relative ${pathname.split("/")[1] === "admin" ? "hidden" : ""}`}
     >
       <div className="px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] bg-myBlack flex flex-col gap-y-[15px] items-center pt-[20px] pb-[60px]">
         <div className="w-[252px] h-[120px] max-sm:h-[90px] relative">
@@ -77,7 +77,7 @@ export default function Footer() {
               type="text"
               name=""
               placeholder="შეიყვანე მეილი"
-              className="text-[14px]"
+              className="text-[14px] outline-none"
               id=""
             />
           </div>

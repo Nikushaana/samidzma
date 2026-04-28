@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = category.meta_title || category.ProdTypeName;
   const description = category.meta_description || "";
   const image = category.image
-    ? category?.image
+    ? `${process.env.NEXT_PUBLIC_API_URL}/${category?.image}`
     : "/public/images/mainLogo.png";
 
   return {

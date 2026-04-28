@@ -24,14 +24,13 @@ export default function GreenButton({
        loader
          ? "bg-[#D3D3D3] pointer-events-none"
          : dissabled
-         ? "bg-[#D3D3D3] pointer-events-none text-gray-500"
-         : "bg-myGreen active:bg-[#5DA31C] text-white cursor-pointer"
+           ? "bg-[#D3D3D3] pointer-events-none text-gray-500"
+           : "bg-myGreen active:bg-[#5DA31C] text-white cursor-pointer"
      }`}
     >
       <h1
         className={`select-none ${
-          name === "დეტალურად" &&
-          "max-tiny:text-[15px] max-[370px]:text-[13px]"
+          name === "დეტალურად" && "max-tiny:text-[15px] max-[370px]:text-[13px]"
         }`}
       >
         {name}
@@ -45,14 +44,13 @@ export default function GreenButton({
        loader
          ? "bg-[#D3D3D3] pointer-events-none"
          : dissabled
-         ? "bg-[#D3D3D3] pointer-events-none text-gray-500"
-         : `${name === "უარყოფა" ? "bg-myBlack active:bg-[#2b2d2d] " : "bg-myGreen active:bg-[#5DA31C] "} text-white cursor-pointer`
+           ? "bg-[#D3D3D3] pointer-events-none text-gray-500"
+           : `${name === "უარყოფა" ? "bg-myBlack active:bg-[#2b2d2d] " : "bg-myGreen active:bg-[#5DA31C] "} text-white cursor-pointer`
      }`}
     >
       <h1
         className={`select-none ${
-          name === "დეტალურად" &&
-          "max-tiny:text-[15px] max-[370px]:text-[13px]"
+          name === "დეტალურად" && "max-tiny:text-[15px] max-[370px]:text-[13px]"
         }`}
       >
         {name}

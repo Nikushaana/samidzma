@@ -21,7 +21,7 @@ export default function Page() {
   });
 
   const handleInputKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>
+    event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -63,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <div className="h-[100vh] flex items-center justify-center">
+    <div className="h-[100vh] flex items-center justify-center relative">
       <div className="rounded-[12px] bg-white max-w-[684px] w-full flex flex-col items-center gap-y-[16px] px-[30px] py-[40px]">
         <Link href={"/"} className="w-[130px] h-[94px] relative">
           <Image
@@ -76,7 +76,6 @@ export default function Page() {
             }}
           />
         </Link>
-
         <Input1
           placeholder="ელ-ფოსტა"
           name="email"
