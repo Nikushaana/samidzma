@@ -65,11 +65,11 @@ export default function TestProductCardsPopUp() {
     staleTime: 5 * 60 * 1000,
   });
 
-  useEffect(() => {
-    if (oneProduct?.variation?.length > 0 && !variationProdIdFromUrl) {
-      setVariationProdId(oneProduct.variation[0].ProdCode);
-    }
-  }, [oneProduct, variationProdIdFromUrl]);
+  // useEffect(() => {
+  //   if (oneProduct?.variation?.length > 0 && !variationProdIdFromUrl) {
+  //     setVariationProdId(oneProduct.variation[0].ProdCode);
+  //   }
+  // }, [oneProduct, variationProdIdFromUrl]);
 
   const [cartProdQuant, setCartProdQuant] = useState<number>(1);
 
