@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { SlArrowDown } from "react-icons/sl";
 import WhatUSearch from "../components/Inputs/WhatUSearch";
 import { axiosUser } from "../../../dataFetchs/AxiosToken";
@@ -36,7 +36,9 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[300px] flex flex-col gap-y-[50px] relative">
-        <WhatUSearch />
+        <Suspense fallback={<div className="h-[50px]" />}>
+          <WhatUSearch />
+        </Suspense>
 
         <h1 className="text-[28px]">ხშირად დასმული კითხვები</h1>
 
@@ -55,7 +57,7 @@ export default function Page() {
                   <div
                     onClick={() => {
                       setActiveQuest((pre) =>
-                        pre === item.id ? null : item.id
+                        pre === item.id ? null : item.id,
                       );
                     }}
                     className={`flex items-center justify-between h-[75px] px-[30px] duration-200 cursor-pointer ${

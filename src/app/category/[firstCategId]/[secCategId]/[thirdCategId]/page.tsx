@@ -1,5 +1,4 @@
 import React from "react";
-import CategoryComponent from "@/app/components/categoryContent/categoryComponent";
 import { Metadata } from "next";
 import CategoryComponentTest from "@/app/components/categoryContent/categoryComponentTest";
 
@@ -53,7 +52,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default function Page({ params }: { params: { thirdCategId: string } }) {
   return (
-    // <CategoryComponent />
     <CategoryComponentTest />
   );
 }

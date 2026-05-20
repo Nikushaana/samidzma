@@ -9,9 +9,6 @@ export function middleware(req: NextRequest) {
     'Slackbot', 'Viber', 'Discordbot', 'SkypeUriPreview'
   ];
 
-  if (botKeywords.some(keyword => userAgent.toLowerCase().includes(keyword.toLowerCase()))) {
-    return new NextResponse('Forbidden: Bots are not allowed', { status: 403 });
-  }
 
   return NextResponse.next();
 }

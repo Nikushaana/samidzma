@@ -14,22 +14,32 @@ import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import Image from "next/image";
 import * as Yup from "yup";
 import TextEditor2 from "@/app/components/Inputs/TextEditor2";
+import useBlogEmployee from "../../../../../../../dataFetchs/blogEmployeeGetFetch";
+import BlogCategorySelector from "@/app/components/Inputs/blogCategorySelector";
+import InputCalendar from "@/app/components/Inputs/InputCalendar";
+import { format, parseISO } from "date-fns";
+import NormalCalendar from "@/app/components/Inputs/NormalCalendar";
 
 export default function Page({ params }: { params: { blogId: string } }) {
   const router = useRouter();
   const { allBlogCategData } = useBlogCategory();
+  const { allBlogEmployeeData } = useBlogEmployee();
 
   const {
     setAlertShow,
     setAlertStatus,
     setAlertText,
-    status,
+    blogStatus,
     setAllBlogRender,
   } = useContext(ContextForSharingStates);
   const [loaderEditBlog, setLoaderEditBlog] = useState<boolean>(true);
 
   const [oneBlogValues, setOneBlogValues] = useState({
-    blogs_category_id: "",
+    employee_id: "",
+    blog_blog_category: [],
+    link: "",
+    publication_date: "",
+    reading_minute: "",
     name: "",
     name_eng: "",
     name_rus: "",
@@ -45,11 +55,16 @@ export default function Page({ params }: { params: { blogId: string } }) {
     meta_name: "",
     meta_description: "",
     main_img: "",
+    blogs_main_imgs_alt: "",
     status: 0,
     sort: 0,
   });
   const [editBlogValues, setEditBlogValues] = useState({
-    blogs_category_id: "",
+    employee_id: "",
+    blogs_category_ids: [],
+    link: "",
+    publication_date: "",
+    reading_minute: "",
     name: "",
     name_eng: "",
     name_rus: "",
@@ -65,6 +80,7 @@ export default function Page({ params }: { params: { blogId: string } }) {
     meta_name: "",
     meta_description: "",
     main_img: "",
+    blogs_main_imgs_alt: "",
     status: "",
     sort: "",
   });
@@ -115,18 +131,25 @@ export default function Page({ params }: { params: { blogId: string } }) {
     const form = e.target;
     const formData = new FormData(form);
 
-    formData.append(
-      "blogs_category_id",
-      allBlogCategData?.find(
-        (item: any) => item.name == editBlogValues.blogs_category_id,
-      )?.id,
-    );
-
     formData.append("description2", editBlogValues.description2);
+
+    formData.append("publication_date", editBlogValues.publication_date);
+
+    formData.append(
+      "blogs_category_ids",
+      JSON.stringify(editBlogValues.blogs_category_ids),
+    );
 
     formData.append(
       "status",
-      status.find((item: any) => item.name === editBlogValues.status)?.id,
+      blogStatus.find((item: any) => item.name === editBlogValues.status)?.id,
+    );
+
+    formData.append(
+      "employee_id",
+      allBlogEmployeeData.find(
+        (item: any) => item.name === editBlogValues.employee_id,
+      )?.id,
     );
 
     axiosAdmin
@@ -174,19 +197,23 @@ export default function Page({ params }: { params: { blogId: string } }) {
         multiple={false}
         setAllValues={setEditBlogValues}
       />
+      <Input1
+        title="მთავარი სურათის alt"
+        name="blogs_main_imgs_alt"
+        type="text"
+        firstValue={oneBlogValues.blogs_main_imgs_alt}
+        setAllValues={setEditBlogValues}
+        error={false}
+      />
+      <BlogCategorySelector
+        title="ბლოგის კატეგორიები"
+        data={allBlogCategData}
+        name="blogs_category_ids"
+        firstValue={oneBlogValues.blog_blog_category}
+        setAllValues={setEditBlogValues}
+        error={false}
+      />
       <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-[20px] w-full">
-        <DropDown1value
-          title="ბლოგის კატეგორია"
-          data={allBlogCategData}
-          name="blogs_category_id"
-          firstValue={
-            allBlogCategData.find(
-              (item: any) => item.id === oneBlogValues.blogs_category_id,
-            )?.name
-          }
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
         <Input1
           title="მეტა სახელი"
           name="meta_name"
@@ -200,6 +227,41 @@ export default function Page({ params }: { params: { blogId: string } }) {
           name="meta_description"
           type="text"
           firstValue={oneBlogValues.meta_description}
+          setAllValues={setEditBlogValues}
+          error={false}
+        />
+        <Input1
+          title="ლინკი"
+          name="link"
+          type="text"
+          firstValue={oneBlogValues.link}
+          setAllValues={setEditBlogValues}
+          error={false}
+        />
+        <Input1
+          title="წაკითხვის დრო"
+          name="reading_minute"
+          type="text"
+          firstValue={oneBlogValues.reading_minute}
+          setAllValues={setEditBlogValues}
+          error={false}
+        />
+        <NormalCalendar
+          title="გამიქვეყნების თარიღი"
+          placeholder="აირჩიე.."
+          name="publication_date"
+          firstValue={oneBlogValues.publication_date}
+          setAllValues={setEditBlogValues}
+        />
+        <DropDown1value
+          title="ავტორი"
+          data={allBlogEmployeeData}
+          name="employee_id"
+          firstValue={
+            allBlogEmployeeData.find(
+              (item: any) => item.id === oneBlogValues.employee_id,
+            )?.name
+          }
           setAllValues={setEditBlogValues}
           error={false}
         />
@@ -228,69 +290,17 @@ export default function Page({ params }: { params: { blogId: string } }) {
           setAllValues={setEditBlogValues}
           error={false}
         />
-        {/* <TextEditor
-          title="ბლოგი"
-          name="description2"
-          firstValue={oneBlogValues.description2}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური EN"
-          name="name_eng"
-          type="text"
-          firstValue={oneBlogValues.name_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <TextArea1
-          title="მოკლე აღწერა"
-          name="description_eng"
-          firstValue={oneBlogValues.description_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <TextEditor
-          title="ბლოგი EN"
-          name="description2_eng"
-          firstValue={oneBlogValues.description2_eng}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური Рус"
-          name="name_rus"
-          type="text"
-          firstValue={oneBlogValues.name_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <TextArea1
-          title="მოკლე აღწერა"
-          name="description_rus"
-          firstValue={oneBlogValues.description_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-        />
-        <TextEditor
-          title="ბლოგი Рус"
-          name="description2_rus"
-          firstValue={oneBlogValues.description2_rus}
-          setAllValues={setEditBlogValues}
-          error={false}
-        /> */}
       </div>
       <hr className="h-[1px] w-full" />
       <div className="w-full">
         <div className="w-[200px] pb-[50px]">
           <DropDown1value
             title="სტატუსი"
-            data={status}
+            data={blogStatus}
             name="status"
             firstValue={
-              status.find((item: any) => item.id === oneBlogValues.status)?.name
+              blogStatus.find((item: any) => item.id === oneBlogValues.status)
+                ?.name
             }
             setAllValues={setEditBlogValues}
             error={false}

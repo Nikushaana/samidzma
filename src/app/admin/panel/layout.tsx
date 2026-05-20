@@ -46,7 +46,7 @@ export default function Layout({ children }: Children) {
                 }`
               : "w-[calc(100%-80px)]"
           } flex items-center justify-between px-[30px] max-sm:px-[10px] fixed top-[10px] 
-        duration-200 z-[2] ${
+        duration-200 z-10 ${
           scrollY > 10
             ? "shadow w-[calc(100%-20px)] mx-[10px] rounded-[10px] bg-[white] "
             : "shadow-none w-[calc(100%-20px)] mx-[5px] rounded-[0px] bg-[#f7f9fb] "

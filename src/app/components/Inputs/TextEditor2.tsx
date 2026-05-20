@@ -26,9 +26,7 @@ export default function TextEditor2({
       .then((res) => {
         setImages(res.data.data || []);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [isMediaOpen]);
 
   const insertImage = (url: string) => {
@@ -60,7 +58,7 @@ export default function TextEditor2({
           }));
         }}
         init={{
-          height: 400,
+          height: 600,
           menubar: false,
           branding: false,
 
@@ -93,7 +91,18 @@ export default function TextEditor2({
 
             .code-widget {
               margin: 10px 0;
+              position: relative;
             }
+
+.code-widget::after {
+  content: "Edit";
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+  pointer-events: none;
+}
 
             .img-wrapper {
   position: relative;
@@ -197,13 +206,10 @@ export default function TextEditor2({
                     widget.classList.remove("empty");
 
                     widget.innerHTML = `
-                      <div style="position:relative">
-                        ${data.code}
-                        <span style="position:absolute;top:5px;right:10px;font-size:12px;opacity:0.6;">
-                          Edit
-                        </span>
-                      </div>
-                    `;
+  <div class="code-widget-inner">
+    ${data.code}
+  </div>
+`;
                   } else {
                     widget.classList.add("empty");
                     widget.innerHTML = "👉 Click to add code";

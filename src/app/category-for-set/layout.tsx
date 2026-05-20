@@ -1,7 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Suspense fallback={<div />}>{children}</Suspense>
+    </div>
+  );
 }

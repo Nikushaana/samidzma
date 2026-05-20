@@ -3,6 +3,7 @@
 import Image from "next/image";
 import WhatUSearch from "./components/Inputs/WhatUSearch";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 export default function NotFound() {
   const pathname = usePathname();
@@ -13,7 +14,11 @@ export default function NotFound() {
         "min-h-[100vh] items-center justify-center"
       }`}
     >
-      {pathname.split("/")[1] !== "admin" && <WhatUSearch />}
+      {pathname.split("/")[1] !== "admin" && (
+        <Suspense fallback={<div className="h-[50px]" />}>
+          <WhatUSearch />
+        </Suspense>
+      )}
 
       <div className="flex flex-col items-center w-full">
         <div className="relative h-[443px] w-[603px] max-lg:h-auto max-lg:w-[80%] max-sm:w-full max-lg:aspect-[4/2]">

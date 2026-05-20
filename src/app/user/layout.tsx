@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { FaRegCommentAlt, FaRegHeart } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { handelLogOutUser, user } = useContext(UserContext);
   const { setOrderPlacementValues, CartCounter } = useContext(CartAxiosContext);
   const { setAlertShow, setAlertStatus, setAlertText } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
   const { WishListCounter } = useContext(WishListAxiosContext);
 
@@ -138,7 +138,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[100px] relative">
         <div className="flex flex-col gap-y-[30px] max-lg:gap-y-[25px]">
-          <WhatUSearch />
+          <Suspense fallback={<div className="h-[50px]" />}>
+            <WhatUSearch />
+          </Suspense>
 
           <div
             className={`hidden max-md:flex flex-col bg-white rounded-[33px] ${
@@ -155,14 +157,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="text-[25px] ">
                   {
                     userRoutes.find(
-                      (route: any) => route.url === pathname.split("/")[2]
+                      (route: any) => route.url === pathname.split("/")[2],
                     )?.icon
                   }
                 </div>
                 <p className={`text-[18px] duration-200 `}>
                   {
                     userRoutes.find(
-                      (route: any) => route.url === pathname.split("/")[2]
+                      (route: any) => route.url === pathname.split("/")[2],
                     )?.routeName
                   }
                 </p>
@@ -336,7 +338,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         setAlertShow(true);
                         setAlertStatus(false);
                         setAlertText(
-                          "ინფორმაციის სანახავად გაიარე ავტორიზაცია!"
+                          "ინფორმაციის სანახავად გაიარე ავტორიზაცია!",
                         );
                       }
                     }}

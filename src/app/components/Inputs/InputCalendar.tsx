@@ -23,7 +23,7 @@ export default function InputCalendar({
   const calendarRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [mySelectedDate, setMySelectedDate] = useState<any>(
-    multipleDate ? [null, null] : null
+    multipleDate ? [null, null] : null,
   );
 
   useEffect(() => {
@@ -90,8 +90,8 @@ export default function InputCalendar({
             error
               ? "border-myPink"
               : isFocused
-              ? "border-[#E2E2E2]"
-              : "bg-[#EEEEEE] border-[#E2E2E2]"
+                ? "border-[#E2E2E2]"
+                : "bg-[#EEEEEE] border-[#E2E2E2]"
           }`}
         >
           <p
@@ -108,10 +108,10 @@ export default function InputCalendar({
               ? multipleDate
                 ? `${format(mySelectedDate[0], "dd-MM-yyyy").replaceAll(
                     "-",
-                    "."
+                    ".",
                   )} - დან ${format(mySelectedDate[1], "dd-MM-yyyy").replaceAll(
                     "-",
-                    "."
+                    ".",
                   )} - მდე`
                 : format(mySelectedDate, "dd-MM-yyyy").replaceAll("-", ".")
               : placeholder}
@@ -128,8 +128,8 @@ export default function InputCalendar({
                         parse(firstValue[1], "dd-MM-yyyy", new Date()),
                       ]
                     : multipleDate
-                    ? [null, null]
-                    : null
+                      ? [null, null]
+                      : null,
                 );
                 if (multipleDate) {
                   setAllValues((prev: any) => ({
@@ -172,8 +172,8 @@ export default function InputCalendar({
                 minDate == "today"
                   ? new Date(new Date().setDate(new Date().getDate()))
                   : minDate == "allDays"
-                  ? undefined
-                  : new Date(new Date().setDate(new Date().getDate() + 1))
+                    ? undefined
+                    : new Date(new Date().setDate(new Date().getDate() + 1))
               }
               tileClassName={({ date, view }) => {
                 const today = new Date();
@@ -184,7 +184,7 @@ export default function InputCalendar({
                 if (
                   view === "month" &&
                   holidays?.find(
-                    (item: any) => item.date == format(date, "dd-MM-yyyy")
+                    (item: any) => item.date == format(date, "dd-MM-yyyy"),
                   )
                 ) {
                   return "holidayNone";

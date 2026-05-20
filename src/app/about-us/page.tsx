@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 import WhatUSearch from "../components/Inputs/WhatUSearch";
 import { getServerSideSiteInfo } from "../../../dataFetchs/getServerSide/getData";
 
@@ -43,7 +43,9 @@ export default async function Page() {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
-        <WhatUSearch />
+        <Suspense fallback={<div className="h-[50px]" />}>
+          <WhatUSearch />
+        </Suspense>
 
         {whoWeAreSiteInfoData.description && (
           <div

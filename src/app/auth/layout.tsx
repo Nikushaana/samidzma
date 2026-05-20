@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import WhatUSearch from "../components/Inputs/WhatUSearch";
 
@@ -11,7 +11,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
-        <WhatUSearch />
+        <Suspense fallback={<div className="h-[50px]" />}>
+          <WhatUSearch />
+        </Suspense>
 
         <div className="">
           <h1 className="text-[28px]">
@@ -19,14 +21,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {pathname.split("/")[2] === "signin" && "ავტორიზაცია"}
             {pathname.split("/")[2] === "forgot-password" &&
               "დაგავიწყდა პაროლი?"}
-            {pathname.split("/")[2] === "restore-password" &&
-              "განაახლე პაროლი"}
+            {pathname.split("/")[2] === "restore-password" && "განაახლე პაროლი"}
           </h1>
           <p className="text-[14px]">
-            {pathname.split("/")[2] === "signup" && "დარეგისტრირდი, რათა მიიღო ექსკლუზიური შეთავაზებები, თვალი ადევნო შენს შეკვეთებს და დააგროვო ლოიალობის ქულები."}
-            {pathname.split("/")[2] === "signin" && "გაიარე ავტორიზაცია, რათა შეხვიდე შენს ანგარიშზე. ადევნე თვალი შენს შეკვეთებს და ისიამოვნე ჩვენი ექსკლუზიური შეთავაზებებით."}
-            {pathname.split("/")[2] === "forgot-password" && "ჩაწერე შენი მეილი და თვალი ადევნე მას, რადგან პაროლის აღსადგენ ლინკს მეილზე გამოგიგზავნით."}
-            {pathname.split("/")[2] === "restore-password" && "ჩაწერე ახალი პაროლი, შემდეგ კი გაიარე ავტორიზაცია."}
+            {pathname.split("/")[2] === "signup" &&
+              "დარეგისტრირდი, რათა მიიღო ექსკლუზიური შეთავაზებები, თვალი ადევნო შენს შეკვეთებს და დააგროვო ლოიალობის ქულები."}
+            {pathname.split("/")[2] === "signin" &&
+              "გაიარე ავტორიზაცია, რათა შეხვიდე შენს ანგარიშზე. ადევნე თვალი შენს შეკვეთებს და ისიამოვნე ჩვენი ექსკლუზიური შეთავაზებებით."}
+            {pathname.split("/")[2] === "forgot-password" &&
+              "ჩაწერე შენი მეილი და თვალი ადევნე მას, რადგან პაროლის აღსადგენ ლინკს მეილზე გამოგიგზავნით."}
+            {pathname.split("/")[2] === "restore-password" &&
+              "ჩაწერე ახალი პაროლი, შემდეგ კი გაიარე ავტორიზაცია."}
           </p>
         </div>
 

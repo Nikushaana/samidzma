@@ -217,6 +217,33 @@ button {
   justify-content: flex-end;
 }
 
+/* ---------------- LINKS ---------------- */
+
+.blog-content a {
+  color: #80c342;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  word-break: break-word;
+}
+
+.blog-content a:hover {
+  color: #5fa12d;
+  text-decoration: none;
+}
+
+.blog-content a:visited {
+  color: #5fa12d;
+}
+
+.blog-content .img-wrapper a {
+  text-decoration: none;
+}
+
+.blog-content .img-wrapper a::after {
+  display: none;
+}
+
 /* blog */
 
 .showScrollVert::-webkit-scrollbar {

@@ -79,14 +79,24 @@ export default function SideBar() {
           link: "add-blog-gallery",
         },
         {
-          id: 3,
+          id: 4,
           route: "ბლოგის კატეგორიები",
           link: "blog-category",
         },
         {
-          id: 4,
+          id: 5,
           route: "ბლოგის კატეგორიის დამატება",
           link: "add-blog-category",
+        },
+        {
+          id: 6,
+          route: "ბლოგის ავტორები",
+          link: "blog-employee",
+        },
+        {
+          id: 7,
+          route: "ბლოგის ავტორის დამატება",
+          link: "add-blog-employee",
         },
       ],
       icon: <BsNewspaper />,

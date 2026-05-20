@@ -2,29 +2,21 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useContext } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { Suspense, useContext } from "react";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import { GoPerson } from "react-icons/go";
 import { WishListAxiosContext } from "../../../../dataFetchs/wishListContext";
 import { CartAxiosContext } from "../../../../dataFetchs/cartContext";
-import { fetchCategories } from "@/api/category.api";
+import HeaderNavItem from "./HeaderNavItem";
 import { useQuery } from "@tanstack/react-query";
-import { buildCategoryRoute } from "@/utils/routes/buildCategoryRoute";
+import { fetchCategories } from "@/api/category.api";
 
 export default function Header() {
   const { user } = useContext(UserContext);
 
-  const { setBurgerMenu, menuRoutes, slugify } = useContext(
-    ContextForSharingStates,
-  );
-
-  const { data: FrontCategoriesData = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories,
-    staleTime: 1000 * 60 * 5,
-  });
+  const { setBurgerMenu, menuRoutes } = useContext(ContextForSharingStates);
 
   const { WishListCounter, WishListLocalStorageData } =
     useContext(WishListAxiosContext);
@@ -33,8 +25,12 @@ export default function Header() {
 
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const saleParam = searchParams.get("sale");
+
+  const { data: FrontCategoriesData = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 5,
+  });
 
   return (
     <div className="flex flex-col items-center">
@@ -64,39 +60,10 @@ export default function Header() {
         <div className="flex items-center max-lg:gap-[32px] max-sm:gap-[20px] relative">
           <div className="h-[56px] p-[6px] max-lg:px-[40px] max-sm:px-[25px]  flex items-center gap-[40px] max-2xl:gap-[20px] rounded-full bg-myBlack text-white">
             <ul className="flex items-center gap-[5px] h-full max-lg:hidden">
-              {menuRoutes.map((item: any, index: number) => (
-                <li
-                  key={item.id}
-                  onClick={() => {
-                    if (
-                      item.link == "category" ||
-                      item.link == "category-for-set"
-                    ) {
-                      router.push(
-                        buildCategoryRoute(item.link, FrontCategoriesData, slugify),
-                      );
-                      return;
-                    }
-
-                    if (item.link == "sale") {
-                      router.push(`/category?sale=1`);
-                      return;
-                    }
-
-                    router.push(`/${item.link}`);
-                  }}
-                  className={`h-full rounded-full text-[14px] cursor-pointer flex items-center px-[25px] max-2xl:pr-[15px] ${
-                    (!pathname.split("/")[2] && saleParam === "1")
-                      ? item.link === "sale"
-                        ? "bg-myGreen"
-                        : ""
-                      : pathname.split("/")[1] === item.link
-                        ? "bg-myGreen"
-                        : ""
-                  }`}
-                >
-                  {item.name}
-                </li>
+              {menuRoutes.map((item: any) => (
+                <Suspense fallback={<li className="h-full rounded-full text-[14px] cursor-pointer flex items-center px-[25px] max-2xl:pr-[15px]">{item.name}</li>} key={item.id}>
+                  <HeaderNavItem item={item} FrontCategoriesData={FrontCategoriesData}/>
+                </Suspense>
               ))}
             </ul>
             <div className="flex items-center gap-[20px] max-sm:gap-[30px]">

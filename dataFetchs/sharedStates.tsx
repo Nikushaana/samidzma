@@ -95,6 +95,7 @@ const SharingStatesContext = ({ children }: any) => {
   const [allFAQRender, setAllFAQRender] = useState<any>();
 
   const [allBlogRender, setAllBlogRender] = useState<any>();
+  const [allBlogAuthorRender, setAllBlogAuthorRender] = useState<any>();
   const [allBannerRender, setAllBannerRender] = useState<any>();
 
   const [allMessagesRender, setAllMessagesRender] = useState<any>();
@@ -128,6 +129,21 @@ const SharingStatesContext = ({ children }: any) => {
     {
       id: 1,
       name: "აქტიური",
+    },
+  ]);
+  
+  const [blogStatus, setBlogStatus] = useState([
+    {
+      id: 0,
+      name: "დაბლოკილი",
+    },
+    {
+      id: 1,
+      name: "აქტიური",
+    },
+    {
+      id: 2,
+      name: "დრაფტი",
     },
   ]);
 
@@ -304,6 +320,8 @@ const SharingStatesContext = ({ children }: any) => {
         setAllFAQRender,
         allBlogRender,
         setAllBlogRender,
+        allBlogAuthorRender,
+        setAllBlogAuthorRender,
         allMessagesRender,
         setAllMessagesRender,
         allProdGiftsRender,
@@ -337,6 +355,7 @@ const SharingStatesContext = ({ children }: any) => {
         setAlertText,
 
         status,
+        blogStatus,
         branchStatus,
         order_status,
         seen,

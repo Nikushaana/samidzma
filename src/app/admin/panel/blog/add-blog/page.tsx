@@ -6,30 +6,37 @@ import TextArea1 from "@/app/components/Inputs/TextArea1";
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import DropDown1value from "@/app/components/DropDowns/DropDown1value";
-import TextEditor from "@/app/components/Inputs/TextEditor";
 import ImgUploader from "@/app/components/Uploaders/ImgUploader";
 import useBlogCategory from "../../../../../../dataFetchs/blogCategoryGetFetch";
 import { ContextForSharingStates } from "../../../../../../dataFetchs/sharedStates";
 import { axiosAdmin } from "../../../../../../dataFetchs/AxiosToken";
 import * as Yup from "yup";
 import TextEditor2 from "@/app/components/Inputs/TextEditor2";
+import BlogCategorySelector from "@/app/components/Inputs/blogCategorySelector";
+import useBlogEmployee from "../../../../../../dataFetchs/blogEmployeeGetFetch";
+import NormalCalendar from "@/app/components/Inputs/NormalCalendar";
 
 export default function Page() {
   const router = useRouter();
   const { allBlogCategData } = useBlogCategory();
+  const { allBlogEmployeeData } = useBlogEmployee();
 
   const {
     setAlertShow,
     setAlertStatus,
     setAlertText,
-    status,
+    blogStatus,
     setAllBlogRender,
   } = useContext(ContextForSharingStates);
 
   const [loaderAddBlog, setLoaderAddBlog] = useState<boolean>(false);
 
   const [addBlogValues, setAddBlogValues] = useState({
-    blogs_category_id: "",
+    employee_id: "",
+    blogs_category_ids: [],
+    link: "",
+    publication_date: "",
+    reading_minute: "",
     name: "",
     name_eng: "",
     name_rus: "",
@@ -45,6 +52,7 @@ export default function Page() {
     meta_name: "",
     meta_description: "",
     blogs_main_imgs: "",
+    blogs_main_imgs_alt: "",
     status: "",
     sort: "",
   });
@@ -53,6 +61,7 @@ export default function Page() {
 
   const validationSchema = Yup.object({
     name: Yup.string().required("სათაური სავალდებულოა"),
+    employee_id: Yup.string().required("ავტორი სავალდებულოა"),
   });
 
   const handleAddBlogValidation = (e: any) => {
@@ -72,7 +81,7 @@ export default function Page() {
 
         setAlertShow(true);
         setAlertStatus(false);
-        setAlertText(newErrors.name);
+        setAlertText(newErrors.name || newErrors.employee_id);
       });
   };
 
@@ -83,21 +92,25 @@ export default function Page() {
     const form = e.target;
     const formData = new FormData(form);
 
-    allBlogCategData?.find(
-      (item: any) => item.name == addBlogValues.blogs_category_id,
-    )?.id &&
-      formData.append(
-        "blogs_category_id",
-        allBlogCategData?.find(
-          (item: any) => item.name == addBlogValues.blogs_category_id,
-        )?.id,
-      );
-
     formData.append("description2", addBlogValues.description2);
+
+    formData.append("publication_date", addBlogValues.publication_date);
+
+    formData.append(
+      "blogs_category_ids",
+      JSON.stringify(addBlogValues.blogs_category_ids),
+    );
 
     formData.append(
       "status",
-      status.find((item: any) => item.name === addBlogValues.status)?.id,
+      blogStatus.find((item: any) => item.name === addBlogValues.status)?.id,
+    );
+
+    formData.append(
+      "employee_id",
+      allBlogEmployeeData.find(
+        (item: any) => item.name === addBlogValues.employee_id,
+      )?.id,
     );
 
     axiosAdmin
@@ -118,6 +131,9 @@ export default function Page() {
       .finally(() => {});
   };
 
+  console.log(addBlogValues.publication_date);
+  
+  
   return (
     <form
       onSubmit={handleAddBlogValidation}
@@ -132,14 +148,21 @@ export default function Page() {
         multiple={false}
         setAllValues={setAddBlogValues}
       />
+      <Input1
+        title="მთავარი სურათის alt"
+        name="blogs_main_imgs_alt"
+        type="text"
+        setAllValues={setAddBlogValues}
+        error={false}
+      />
+      <BlogCategorySelector
+        title="ბლოგის კატეგორიები"
+        data={allBlogCategData}
+        name="blogs_category_ids"
+        setAllValues={setAddBlogValues}
+        error={false}
+      />
       <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-[20px] w-full">
-        <DropDown1value
-          title="ბლოგის კატეგორია"
-          data={allBlogCategData}
-          name="blogs_category_id"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
         <Input1
           title="მეტა სახელი"
           name="meta_name"
@@ -151,6 +174,33 @@ export default function Page() {
           title="მეტა აღწერა"
           name="meta_description"
           type="text"
+          setAllValues={setAddBlogValues}
+          error={false}
+        />
+        <Input1
+          title="ლინკი"
+          name="link"
+          type="text"
+          setAllValues={setAddBlogValues}
+          error={false}
+        />
+        <Input1
+          title="წაკითხვის დრო"
+          name="reading_minute"
+          type="text"
+          setAllValues={setAddBlogValues}
+          error={false}
+        />
+        <NormalCalendar
+          title="გამიქვეყნების თარიღი"
+          placeholder="აირჩიე.."
+          name="publication_date"
+          setAllValues={setAddBlogValues}
+        />
+        <DropDown1value
+          title="ავტორი"
+          data={allBlogEmployeeData}
+          name="employee_id"
           setAllValues={setAddBlogValues}
           error={false}
         />
@@ -176,59 +226,13 @@ export default function Page() {
           setAllValues={setAddBlogValues}
           error={false}
         />
-        {/* <TextEditor
-          title="ბლოგი"
-          name="description2"
-          setAllValues={setAddBlogValues}
-          error={false}
-        /> */}
-        {/* <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური EN"
-          name="name_eng"
-          type="text"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
-        <TextArea1
-          title="მოკლე აღწერა EN"
-          name="description_eng"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
-        <TextEditor
-          title="ბლოგი EN"
-          name="description2_eng"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
-        <hr className="h-[1px] w-full" />
-        <Input1
-          title="სათაური Рус"
-          name="name_rus"
-          type="text"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
-        <TextArea1
-          title="მოკლე აღწერა Рус"
-          name="description_rus"
-          setAllValues={setAddBlogValues}
-          error={false}
-        />
-        <TextEditor
-          title="ბლოგი Рус"
-          name="description2_rus"
-          setAllValues={setAddBlogValues}
-          error={false}
-        /> */}
       </div>
       <hr className="h-[1px] w-full" />
       <div className="w-full">
         <div className="w-[200px] pb-[50px]">
           <DropDown1value
             title="სტატუსი"
-            data={status}
+            data={blogStatus}
             name="status"
             firstValue="აქტიური"
             setAllValues={setAddBlogValues}

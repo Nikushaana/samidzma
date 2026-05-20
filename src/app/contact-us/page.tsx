@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { Suspense, useContext, useState } from "react";
 import Input1 from "../components/Inputs/Input1";
 import TextArea1 from "../components/Inputs/TextArea1";
 import WhatUSearch from "../components/Inputs/WhatUSearch";
@@ -63,7 +63,9 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
       <div className="max-w-[1920px] w-full px-[264px] max-2xl:px-[160px] max-lg:px-[90px] max-sm:px-[25px] pb-[100px] flex flex-col gap-y-[50px] relative">
-        <WhatUSearch />
+        <Suspense fallback={<div className="h-[50px]" />}>
+          <WhatUSearch />
+        </Suspense>
 
         <div className="flex flex-col gap-y-[20px]">
           <h1 className="text-[28px]">ჩვენი ფილიალები</h1>
@@ -137,7 +139,7 @@ export default function Page() {
             </div>
           </div>
           <div className="w-full h-full max-lg:aspect-[20/21] rounded-[12px] overflow-hidden">
-            <BranchesMap/>
+            <BranchesMap />
           </div>
         </div>
       </div>

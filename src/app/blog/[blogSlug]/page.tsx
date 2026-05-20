@@ -1,10 +1,12 @@
+import { notFound } from "next/navigation";
+import { getServerSideBlogs } from "../../../../dataFetchs/getServerSide/getData";
 import ClientBlogPage from "./ClientBlogPage";
 import type { Metadata } from "next";
 
-async function getBlog(blogId: string) {
+async function getBlog(blogSlug: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/front/info/blog/${blogId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/front/info/blogByLink/${blogSlug}`,
       {
         cache: "no-store",
       },
@@ -23,9 +25,9 @@ async function getBlog(blogId: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: { blogId: string };
+  params: { blogSlug: string };
 }): Promise<Metadata> {
-  const data = await getBlog(params.blogId);
+  const data = await getBlog(params.blogSlug);
 
   if (!data) {
     return {
@@ -66,8 +68,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: { params: { blogId: string } }) {
-  const oneBlogData = await getBlog(params.blogId);
+export default async function Page({
+  params,
+}: {
+  params: { blogSlug: string };
+}) {
+  const oneBlogData = await getBlog(params.blogSlug);
+  const blogData = await getServerSideBlogs();
 
-  return <ClientBlogPage oneBlogData={oneBlogData} />;
+  if (!oneBlogData) {
+    notFound();
+  }
+
+  return <ClientBlogPage oneBlogData={oneBlogData} blogData={blogData} />;
 }

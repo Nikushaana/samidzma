@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import CategoryComponent from "@/app/components/categoryContent/categoryComponent";
 import CategoryComponentTest from "@/app/components/categoryContent/categoryComponentTest";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSecondLevelCategories } from "@/api/secondLevelCategory.api";
@@ -25,7 +24,6 @@ export default function FirstCategDetailsClient({
   });
 
   return (
-    // <CategoryComponent passedCategories={secondLevelCategoriesData} passedCategoriesLoader={secondLevelCategoriesLoader}/>
     <CategoryComponentTest
       passedCategories={secondLevelCategoriesData}
       passedCategoriesLoader={secondLevelCategoriesLoader}

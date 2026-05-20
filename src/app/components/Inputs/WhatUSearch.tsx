@@ -51,12 +51,13 @@ export default function WhatUSearch({ isProductNakrebi }: any) {
     <div
       className={`${
         pathname !== "/" &&
+        !pathname.startsWith("/blog") &&
         "rounded-[12px] max-lg:rounded-0 bg-[#EAEDEE] p-[30px] max-2xl:p-[10px] max-lg:p-0 relative"
       }`}
     >
-      {pathname !== "/" && !pathname.startsWith("/category-for-set") && (
-        <BlogsBackgroundDesigns />
-      )}
+      {pathname !== "/" &&
+        !pathname.startsWith("/blog") &&
+        !pathname.startsWith("/category-for-set") && <BlogsBackgroundDesigns />}
 
       <div className="rounded-full bg-white overflow-hidden flex justify-between shrink-0 z-[1] relative">
         <div className="flex items-center px-[20px] w-full">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import TopBannerSlider from "./TopBannerSlider";
 import WhatUSearch from "../Inputs/WhatUSearch";
 import EverySlider from "../sliders/EverySlider";
@@ -13,7 +13,9 @@ export default async function TopBanner() {
 
   return (
     <div className="rounded-[12px] max-lg:rounded-0 bg-[#EAEDEE] p-[30px] max-lg:p-0 flex flex-col gap-y-[20px]">
-      <WhatUSearch />
+      <Suspense fallback={<div className="h-[50px]" />}>
+        <WhatUSearch />
+      </Suspense>
       <TopBannerSlider BannersData={BannersData.data} />
       <EverySlider
         data={FrontCategoriesData.data}

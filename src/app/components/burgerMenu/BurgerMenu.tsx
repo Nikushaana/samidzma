@@ -2,20 +2,21 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MdArrowForwardIos } from "react-icons/md";
 import { UserContext } from "../../../../dataFetchs/UserAxios";
 import { GoPerson } from "react-icons/go";
 import { fetchCategories } from "@/api/category.api";
 import { useQuery } from "@tanstack/react-query";
-import { buildCategoryRoute } from "@/utils/routes/buildCategoryRoute";
+import BurgerMenuNavItem from "./BurgerMenuNavItem";
 
 export default function BurgerMenu() {
-  const { burgerMenu, setBurgerMenu, menuRoutes, filterValues, slugify } =
-    useContext(ContextForSharingStates);
+  const { burgerMenu, setBurgerMenu, menuRoutes } = useContext(
+    ContextForSharingStates,
+  );
 
   const { data: FrontCategoriesData = [] } = useQuery({
     queryKey: ["categories"],
@@ -26,9 +27,6 @@ export default function BurgerMenu() {
   const { user } = useContext(UserContext);
 
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const saleParam = searchParams.get("sale");
 
   return (
     <div
@@ -138,48 +136,22 @@ export default function BurgerMenu() {
 
       <div className="flex flex-col gap-y-[40px] max-sm:gap-y-[30px]">
         {menuRoutes.map((item: any, index: number) => (
-          <div
+          <Suspense
+            fallback={
+              <div className="flex items-center gap-[10px] cursor-pointer text-white">
+                <MdArrowForwardIos />
+                <p className="text-[22px] max-sm:text-[20px] select-none">
+                  {item.name}
+                </p>
+              </div>
+            }
             key={item.id}
-            onClick={() => {
-              if (item.link == "category" || item.link == "category-for-set") {
-                router.push(
-                  buildCategoryRoute(item.link, FrontCategoriesData, slugify),
-                );
-                return;
-              }
-
-              if (item.link == "sale") {
-                router.push(`/category?sale=1`);
-                return;
-              }
-
-              router.push(`/${item.link}`);
-            }}
-            className={`flex items-center gap-[10px] cursor-pointer ${
-              saleParam === "1"
-                ? item.link === "sale"
-                  ? "text-white"
-                  : "gap-[30px] text-[#C6FB94]"
-                : pathname.split("/")[1] === item.link
-                  ? "text-white"
-                  : "gap-[30px] text-[#C6FB94]"
-            }`}
           >
-            <MdArrowForwardIos
-              className={`duration-200 ${
-                saleParam === "1"
-                  ? item.link === "sale"
-                    ? "ml-[50px]"
-                    : ""
-                  : pathname.split("/")[1] === item.link
-                    ? "ml-[50px]"
-                    : ""
-              }`}
+            <BurgerMenuNavItem
+              item={item}
+              FrontCategoriesData={FrontCategoriesData}
             />
-            <p className="text-[22px] max-sm:text-[20px] select-none">
-              {item.name}
-            </p>
-          </div>
+          </Suspense>
         ))}
       </div>
     </div>

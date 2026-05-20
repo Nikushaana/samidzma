@@ -1178,18 +1178,20 @@ export default function CategoryComponentTest({
           </div>
         </div>
         {/* blog component */}
-        <div className="rounded-[12px] bg-[#EAEDEE] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0 relative">
-          <BlogsBackgroundDesigns />
-          <EverySlider
-            data={blogData}
-            loader={blogLoader}
-            title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
-            card="BlogCard"
-            slidesPerView={4}
-            spaceBetween={20}
-            showButtons={true}
-          />
-        </div>
+        {blogData.length > 0 && (
+          <div className="rounded-[12px] bg-[#EAEDEE] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0 relative">
+            <BlogsBackgroundDesigns />
+            <EverySlider
+              data={blogData}
+              loader={blogLoader}
+              title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
+              card="BlogCard"
+              slidesPerView={4}
+              spaceBetween={20}
+              showButtons={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

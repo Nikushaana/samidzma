@@ -64,7 +64,7 @@ export default function CategoryForSetComponent({
     sqesi,
     raodenobaShefutvashi,
   } = useFilter();
-  
+
   const { data: FrontCategoriesData = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
@@ -239,7 +239,7 @@ export default function CategoryForSetComponent({
     const getStatus = (attrKey: string) => {
       const firstLevel = FrontCategoriesData.find(
         (item: any) =>
-          item.IdProdSaxeoba == pathnameItems[0]?.pathCode?.split("_").pop()
+          item.IdProdSaxeoba == pathnameItems[0]?.pathCode?.split("_").pop(),
       );
 
       if (!firstLevel) return 0;
@@ -249,18 +249,20 @@ export default function CategoryForSetComponent({
       } else if (pathnameItems.length === 2) {
         const secondLevel = firstLevel.productTypeGroup.find(
           (item: any) =>
-            item.IdProdTypeGroup == pathnameItems[1]?.pathCode?.split("_").pop()
+            item.IdProdTypeGroup ==
+            pathnameItems[1]?.pathCode?.split("_").pop(),
         );
 
         return secondLevel?.[attrKey] || 0;
       } else if (pathnameItems.length === 3) {
         const secondLevel = firstLevel.productTypeGroup.find(
           (item: any) =>
-            item.IdProdTypeGroup == pathnameItems[1]?.pathCode?.split("_").pop()
+            item.IdProdTypeGroup ==
+            pathnameItems[1]?.pathCode?.split("_").pop(),
         );
         const thirdLevel = secondLevel?.productTypes.find(
           (item: any) =>
-            item.IdProdType == pathnameItems[2]?.pathCode?.split("_").pop()
+            item.IdProdType == pathnameItems[2]?.pathCode?.split("_").pop(),
         );
         return thirdLevel?.[attrKey] || 0;
       }
@@ -295,16 +297,16 @@ export default function CategoryForSetComponent({
 
   // second level categories data
   const id = pathnameItems[0]?.pathCode.split("_")[1];
-  
-    const {
-      data: secondLevelCategoriesData = [],
-      isLoading: secondLevelCategoriesLoader,
-    } = useQuery({
-      queryKey: ["secondLevelCategories", id],
-      queryFn: () => fetchSecondLevelCategories(id),
-      staleTime: 1000 * 60 * 5,
-      enabled: !!id,
-    });
+
+  const {
+    data: secondLevelCategoriesData = [],
+    isLoading: secondLevelCategoriesLoader,
+  } = useQuery({
+    queryKey: ["secondLevelCategories", id],
+    queryFn: () => fetchSecondLevelCategories(id),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
+  });
 
   // fetch correct categories in categories boxes and sidebar
   useEffect(() => {
@@ -314,7 +316,7 @@ export default function CategoryForSetComponent({
           .get(
             `ourfilter/getProdTypeGroupsKey?${
               filterValues.key ? `key=${filterValues.key}` : ""
-            }`
+            }`,
           )
           .then((res) => {
             setChildCategoriesData(res.data);
@@ -326,7 +328,7 @@ export default function CategoryForSetComponent({
           .get(
             `ourFilter/getProdTypesKey?key=${
               filterValues.key
-            }&IdProdGroupType=${pathname.split("/")[3]?.split("_").pop()}`
+            }&IdProdGroupType=${pathname.split("/")[3]?.split("_").pop()}`,
           )
           .then((res) => {
             setChildCategoriesData(res.data);
@@ -346,15 +348,16 @@ export default function CategoryForSetComponent({
       if (pathnameItems.length == 1) {
         moreCategories = FrontCategoriesData.find(
           (category: any) =>
-            category.IdProdSaxeoba == pathnameItems[0].pathCode.split("_")[1]
+            category.IdProdSaxeoba == pathnameItems[0].pathCode.split("_")[1],
         )?.add_category;
       } else if (pathnameItems.length == 2) {
         moreCategories = FrontCategoriesData.find(
           (category: any) =>
-            category.IdProdSaxeoba == pathnameItems[0].pathCode.split("_")[1]
+            category.IdProdSaxeoba == pathnameItems[0].pathCode.split("_")[1],
         )?.productTypeGroup.find(
           (category1: any) =>
-            category1.IdProdTypeGroup == pathnameItems[1].pathCode.split("_")[1]
+            category1.IdProdTypeGroup ==
+            pathnameItems[1].pathCode.split("_")[1],
         )?.add_category;
       }
     }
@@ -523,7 +526,7 @@ export default function CategoryForSetComponent({
       window.history.replaceState(
         null,
         "",
-        `${pathname}?${searchParams.toString()}`
+        `${pathname}?${searchParams.toString()}`,
       );
     }
   }, [filterValues, pathname, productsPagePreLoader, currentPage]);
@@ -601,7 +604,7 @@ export default function CategoryForSetComponent({
           filterValues.maxPrice ? `maxPrice=${filterValues.maxPrice}` : ""
         }&sale=${filterValues.sale}&aqcia=${filterValues.aqcia}
           `,
-        { signal }
+        { signal },
       )
       .then((res) => {
         setProductsPagePreLoader(false);
@@ -683,7 +686,7 @@ export default function CategoryForSetComponent({
                       >
                         <div className="loaderwave"></div>
                       </div>
-                    )
+                    ),
                   )
                 ) : // !key &&
                 FilterComponents.find((item: any) => item.status == 1) ? (
@@ -725,7 +728,7 @@ export default function CategoryForSetComponent({
                       <div
                         onClick={() => {
                           setDropedFilter((prev: any) =>
-                            prev === "price" ? "" : "price"
+                            prev === "price" ? "" : "price",
                           );
                         }}
                         className="flex items-center justify-between cursor-pointer"
@@ -824,7 +827,7 @@ export default function CategoryForSetComponent({
                         <div
                           onClick={() => {
                             setDropedFilter((prev: any) =>
-                              prev === filter.name ? "" : filter.name
+                              prev === filter.name ? "" : filter.name,
                             );
                           }}
                           className="flex items-center justify-between cursor-pointer"
@@ -857,11 +860,11 @@ export default function CategoryForSetComponent({
                                     ...prev,
                                     [filter.code]: prev[filter.code]?.find(
                                       (item1: any) =>
-                                        item1 == parseInt(item[filter.code])
+                                        item1 == parseInt(item[filter.code]),
                                     )
                                       ? prev[filter.code].filter(
                                           (item2: any) =>
-                                            item2 != item[filter.code]
+                                            item2 != item[filter.code],
                                         )
                                       : [
                                           ...(prev[filter.code] || []),
@@ -876,7 +879,7 @@ export default function CategoryForSetComponent({
                                   <CheckBox
                                     active={filterValues[filter.code]?.find(
                                       (filteredItem: any) =>
-                                        filteredItem == item[filter.code]
+                                        filteredItem == item[filter.code],
                                     )}
                                   />
                                 </div>
@@ -912,7 +915,7 @@ export default function CategoryForSetComponent({
                                         item.IdProdType
                                 }?${
                                   filterValues.key && `key=${filterValues.key}`
-                                }`
+                                }`,
                               );
                             } else {
                               router.push(
@@ -924,7 +927,7 @@ export default function CategoryForSetComponent({
                                   slugify(item.ProdTypeGroupName) +
                                   "_" +
                                   item.IdProdTypeGroup
-                                }?key=${filterValues.key}`
+                                }?key=${filterValues.key}`,
                               );
                             }
                           }}
@@ -947,38 +950,38 @@ export default function CategoryForSetComponent({
                                 item2.level === 2
                                   ? slugify(
                                       item2?.product_type_groupe?.saxeoba
-                                        ?.ProdSaxeobaName
+                                        ?.ProdSaxeobaName,
                                     ) +
                                     "_" +
                                     item2.product_type_groupe?.IdProdSaxeoba +
                                     "/" +
                                     slugify(
                                       item2?.product_type_groupe
-                                        ?.ProdTypeGroupName
+                                        ?.ProdTypeGroupName,
                                     ) +
                                     "_" +
                                     item2.product_type_groupe_id
                                   : item2.level === 3 &&
                                     slugify(
                                       item2?.product_type?.productTypeGroup
-                                        ?.saxeoba?.ProdSaxeobaName
+                                        ?.saxeoba?.ProdSaxeobaName,
                                     ) +
                                       "_" +
                                       item2?.product_type?.productTypeGroup
                                         ?.IdProdSaxeoba +
                                       "/" +
                                       slugify(
-                                        item2?.product_type?.ProdTypeGroupName
+                                        item2?.product_type?.ProdTypeGroupName,
                                       ) +
                                       "_" +
                                       item2?.product_type?.IdProdTypeGroup +
                                       "/" +
                                       slugify(
-                                        item2?.product_type?.ProdTypeName
+                                        item2?.product_type?.ProdTypeName,
                                       ) +
                                       "_" +
                                       item2?.product_type_id
-                              }`
+                              }`,
                             )
                           }
                           className="text-[15px] cursor-pointer"
@@ -1057,7 +1060,7 @@ export default function CategoryForSetComponent({
                                         item1.IdProdType
                                 }?${
                                   filterValues.key && `key=${filterValues.key}`
-                                }`
+                                }`,
                               );
                             } else {
                               router.push(
@@ -1069,7 +1072,7 @@ export default function CategoryForSetComponent({
                                   slugify(item1.ProdTypeGroupName) +
                                   "_" +
                                   item1.IdProdTypeGroup
-                                }?key=${filterValues.key}`
+                                }?key=${filterValues.key}`,
                               );
                             }
                           }}
@@ -1122,38 +1125,39 @@ export default function CategoryForSetComponent({
                                   item2.level === 2
                                     ? slugify(
                                         item2?.product_type_groupe?.saxeoba
-                                          ?.ProdSaxeobaName
+                                          ?.ProdSaxeobaName,
                                       ) +
                                       "_" +
                                       item2.product_type_groupe?.IdProdSaxeoba +
                                       "/" +
                                       slugify(
                                         item2?.product_type_groupe
-                                          ?.ProdTypeGroupName
+                                          ?.ProdTypeGroupName,
                                       ) +
                                       "_" +
                                       item2.product_type_groupe_id
                                     : item2.level === 3 &&
                                       slugify(
                                         item2?.product_type?.productTypeGroup
-                                          ?.saxeoba?.ProdSaxeobaName
+                                          ?.saxeoba?.ProdSaxeobaName,
                                       ) +
                                         "_" +
                                         item2?.product_type?.productTypeGroup
                                           ?.IdProdSaxeoba +
                                         "/" +
                                         slugify(
-                                          item2?.product_type?.ProdTypeGroupName
+                                          item2?.product_type
+                                            ?.ProdTypeGroupName,
                                         ) +
                                         "_" +
                                         item2?.product_type?.IdProdTypeGroup +
                                         "/" +
                                         slugify(
-                                          item2?.product_type?.ProdTypeName
+                                          item2?.product_type?.ProdTypeName,
                                         ) +
                                         "_" +
                                         item2?.product_type_id
-                                }`
+                                }`,
                               )
                             }
                             className={` flex flex-col w-full cursor-pointer items-center bg-white rounded-[4px] overflow-hidden border-white `}
@@ -1268,7 +1272,7 @@ export default function CategoryForSetComponent({
                           >
                             <div className="loaderwave"></div>
                           </div>
-                        )
+                        ),
                       )}
                     </div>
                   )}
@@ -1278,8 +1282,8 @@ export default function CategoryForSetComponent({
                         activeVar === 1
                           ? "grid-cols-3 max-xl:grid-cols-2 max-sm:grid-cols-1"
                           : activeVar === 2
-                          ? "grid-cols-4 max-xl:grid-cols-2 max-sm:grid-cols-1"
-                          : activeVar === 3 && "grid-cols-1"
+                            ? "grid-cols-4 max-xl:grid-cols-2 max-sm:grid-cols-1"
+                            : activeVar === 3 && "grid-cols-1"
                       }`}
                     >
                       {productsPageData.map((item: any, index: number) => (
@@ -1339,18 +1343,20 @@ export default function CategoryForSetComponent({
           </div>
         </div>
         {/* blog component */}
-        <div className="rounded-[12px] bg-[#EAEDEE] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0 relative">
-          <BlogsBackgroundDesigns />
-          <EverySlider
-            data={blogData}
-            loader={blogLoader}
-            title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
-            card="BlogCard"
-            slidesPerView={4}
-            spaceBetween={20}
-            showButtons={true}
-          />
-        </div>
+        {blogData.length > 0 && (
+          <div className="rounded-[12px] bg-[#EAEDEE] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0 relative">
+            <BlogsBackgroundDesigns />
+            <EverySlider
+              data={blogData}
+              loader={blogLoader}
+              title={<h1 className="text-[28px] max-sm:text-[22px]">ბლოგი</h1>}
+              card="BlogCard"
+              slidesPerView={4}
+              spaceBetween={20}
+              showButtons={true}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

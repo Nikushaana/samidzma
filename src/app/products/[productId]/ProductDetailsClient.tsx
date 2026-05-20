@@ -6,7 +6,6 @@ import { axiosUser } from "../../../../dataFetchs/AxiosToken";
 import { useRouter, useSearchParams } from "next/navigation";
 import InnerProductPathRouter from "@/app/components/InnerProductPage/InnerProductPathRouter";
 import InnerProductBottomSliders from "@/app/components/InnerProductPage/InnerProductBottomSliders";
-import InnerProductMainInfo from "@/app/components/InnerProductPage/InnerProductMainInfo";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 import TestInnerProductMainInfo from "@/app/components/InnerProductPage/testInnerProductMainInfo";
 
@@ -41,13 +40,13 @@ export default function ProductDetailsClient({
             `/products/${slugify(res.data?.product?.ProductName) + "_" + id}`,
           );
         } else if (!variation && res.data?.variation?.length > 0) {
-          window.history.replaceState(
-            null,
-            "/products",
-            `/products/${
-              slugify(res.data?.variation[0]?.ProductName) + "_" + id
-            }?variation=${res.data?.variation[0]?.ProdCode}`,
-          );
+          // window.history.replaceState(
+          //   null,
+          //   "/products",
+          //   `/products/${
+          //     slugify(res.data?.variation[0]?.ProductName) + "_" + id
+          //   }?variation=${res.data?.variation[0]?.ProdCode}`,
+          // );
         } else if (
           variation &&
           !res.data?.variation.find(
@@ -83,13 +82,6 @@ export default function ProductDetailsClient({
             oneProduct={oneProduct}
             setOneProductLoader={setOneProductLoader} 
           />
-          {/* <InnerProductMainInfo 
-            variation={variation}
-            oneProduct={oneProduct}
-            oneProductLoader={oneProductLoader}
-            setOneProductLoader={setOneProductLoader}
-            realProductId={realProductId}
-          /> */}
           <InnerProductBottomSliders
             oneProductLoader={oneProductLoader} 
             variation={variation}

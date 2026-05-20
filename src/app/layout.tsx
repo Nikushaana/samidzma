@@ -14,7 +14,6 @@ import PromoCodeInfoPopUp from "./components/popUps/admin/promoCodeInfoPopUp/Pro
 import BurgerMenu from "./components/burgerMenu/BurgerMenu";
 import ProductReviewPopUp from "./components/popUps/productReviewPopUp";
 import BackgroundDesigns from "./components/decorationColumns/BackgroundDesigns";
-import ProductCardsPopUp from "./components/popUps/ProductCardsPopUp";
 import CreateCartPopUp from "./components/popUps/CreateCartPopUp";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import ReactQueryProvider from "./providers";
@@ -62,22 +61,21 @@ export default function RootLayout({
               <UserAxiosContext>
                 <WishListContext>
                   <CartContext>
-                      <div className="bg-[#f7f7f7] max-lg:bg-[#eaedee] relative">
-                        <div className="absolute inset-0 overflow-hidden z-0">
-                          <BackgroundDesigns />
-                        </div>
-                        <Header />
-                        {children}
-                        <Footer />
-                        <BurgerMenu />
-                        <CreateCartPopUp />
-                        {/* <ProductCardsPopUp /> */}
-                        <TestProductCardsPopUp />
-                        <PromoCodeInfoPopUp />
-                        <ProductReviewPopUp />
-                        <AlertCust />
-                        <ScrollToTopButton />
+                    <div className="bg-[#f7f7f7] max-lg:bg-[#eaedee] relative">
+                      <div className="absolute inset-0 overflow-hidden z-0">
+                        <BackgroundDesigns />
                       </div>
+                      <Header />
+                      {children}
+                      <Footer />
+                      <BurgerMenu />
+                      <CreateCartPopUp />
+                      <TestProductCardsPopUp />
+                      <PromoCodeInfoPopUp />
+                      <ProductReviewPopUp />
+                      <AlertCust />
+                      <ScrollToTopButton />
+                    </div>
                   </CartContext>
                 </WishListContext>
               </UserAxiosContext>

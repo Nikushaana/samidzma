@@ -9,6 +9,17 @@ export const getServerSideBlogs = async () => {
   return res.json();
 };
 
+export const getServerSideBlogCategories = async () => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/front/info/blogCategory`,
+    {
+      cache: "no-cache",
+    },
+  );
+
+  return res.json();
+};
+
 export const getServerSideCategories = async () => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/front/categories`,

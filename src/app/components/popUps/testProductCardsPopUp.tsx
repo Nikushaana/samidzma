@@ -583,7 +583,7 @@ export default function TestProductCardsPopUp() {
                     <div className="flex items-center gap-[20px] max-lg:justify-center max-lg:order-first max-sm:hidden">
                       <div className="relative w-[60px] h-[22px]  rotate-[30deg]">
                         <Image
-                          src="/images/backarrow.png"
+                          src="/public/images/backarrow1.png"
                           alt={""}
                           sizes="500px"
                           fill

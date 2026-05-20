@@ -69,7 +69,7 @@ export default function EverySlider({
   return (
     <div className="flex flex-col gap-y-[20px]">
       {title && title}
-      <div className="h-full flex flex-col justify-between  relative">
+      <div className="h-full flex flex-col justify-between overflow-hidden relative">
         <div className={`w-full ${card === "FirstCategoriesCard" && "overflow-hidden"}`}>
           {loader ? (
             <div
@@ -113,7 +113,7 @@ export default function EverySlider({
                 card === "buySameCardThree" || card === "buySameCardFour"
                   ? "w-full"
                   : card === "FirstCategoriesCard" ? "w-[calc(100%+100px)]" : "w-full max-[500px]:w-[170vw]"
-              } h-full flex items-stretch BannerSlider`}
+              } h-full flex items-stretch BannerSlider `}
               autoplay={{
                 delay: 8000,
                 disableOnInteraction: false,
