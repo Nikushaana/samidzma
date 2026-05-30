@@ -30,7 +30,7 @@ export default function FirstCategoriesCard({ item }: any) {
 
         const id = isCategory ? item?.IdProdSaxeoba : item?.IdProdTypeGroup;
 
-        const slug = `${slugify(name)}_${id}`;
+        const slug = `${item.slug || slugify(name)}_${id}`;
 
         router.push(`/${basePath}/${slug}`);
       }}

@@ -37,7 +37,9 @@ export default function FooterCategoriesDropDown() {
 
                 router.push(
                   `/${basePath}/${
-                    slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba
+                    (item.slug || slugify(item.ProdSaxeobaName)) +
+                    "_" +
+                    item.IdProdSaxeoba
                   }`,
                 );
               }}
@@ -87,7 +89,7 @@ export default function FooterCategoriesDropDown() {
                           : "category";
 
                       router.push(
-                        `/${basePath}/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}`,
+                        `/${basePath}/${(item.slug || slugify(item.ProdSaxeobaName)) + "_" + item.IdProdSaxeoba}/${(item2.slug || slugify(item2.ProdTypeGroupName)) + "_" + item2.IdProdTypeGroup}`,
                       );
                     }}
                     className="text-[13px] max-sm:text-[11px] self-start cursor-pointer"
@@ -134,7 +136,7 @@ export default function FooterCategoriesDropDown() {
                             : "category";
 
                         router.push(
-                          `/${basePath}/${slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba}/${slugify(item2.ProdTypeGroupName) + "_" + item2.IdProdTypeGroup}/${slugify(item3.ProdTypeName) + "_" + item3.IdProdType}`,
+                          `/${basePath}/${(item.slug || slugify(item.ProdSaxeobaName)) + "_" + item.IdProdSaxeoba}/${(item2.slug || slugify(item2.ProdTypeGroupName)) + "_" + item2.IdProdTypeGroup}/${(item3.slug || slugify(item3.ProdTypeName)) + "_" + item3.IdProdType}`,
                         );
                       }}
                       className="text-[14px] max-sm:text-[11px] self-start text-gray-500 hover:text-gray-400 cursor-pointer"

@@ -3,7 +3,7 @@
 import WhatUSearch from "@/app/components/Inputs/WhatUSearch";
 import React, { useContext, useEffect, useState } from "react";
 import { axiosUser } from "../../../../dataFetchs/AxiosToken";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import InnerProductPathRouter from "@/app/components/InnerProductPage/InnerProductPathRouter";
 import InnerProductBottomSliders from "@/app/components/InnerProductPage/InnerProductBottomSliders";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
@@ -12,20 +12,19 @@ import TestInnerProductMainInfo from "@/app/components/InnerProductPage/testInne
 export default function ProductDetailsClient({
   params,
 }: {
-  params: { productId: string };
+  params: { productId: string; variationId: string };
 }) {
-  const myParams = useSearchParams();
   const router = useRouter();
   const { slugify } = useContext(ContextForSharingStates);
-
-  const variation = myParams.get("variation");
 
   const [oneProduct, setOneProduct] = useState<any>({});
   const [oneProductLoader, setOneProductLoader] = useState<boolean>(true);
   const [realProductId, setRealProductId] = useState<string>("");
 
+  const id = params.productId.split("_").pop()!; // get the real ID
+  const vid = params.variationId?.split("_").pop()!; // get the variation ID
+
   useEffect(() => {
-    const id = params.productId.split("_").pop()!; // get the real ID
     setRealProductId(id);
 
     setOneProductLoader(true);
@@ -33,13 +32,13 @@ export default function ProductDetailsClient({
       .get(`front/ourProduct/${id}`)
       .then((res) => {
         setOneProduct(res.data);
-        if (!variation && res.data?.product?.ProdSaxeoba == "ნაკრებები") {
+        if (!vid && res.data?.product?.ProdSaxeoba == "ნაკრებები") {
           window.history.replaceState(
             null,
             "/products",
-            `/products/${slugify(res.data?.product?.ProductName) + "_" + id}`,
+            `/products/${res.data?.product?.slug || slugify(res.data?.product?.ProductName) + "_" + id}`,
           );
-        } else if (!variation && res.data?.variation?.length > 0) {
+        } else if (!vid && res.data?.variation?.length > 0) {
           // window.history.replaceState(
           //   null,
           //   "/products",
@@ -48,9 +47,9 @@ export default function ProductDetailsClient({
           //   }?variation=${res.data?.variation[0]?.ProdCode}`,
           // );
         } else if (
-          variation &&
+          vid &&
           !res.data?.variation.find(
-            (prod: any) => prod.ProdCode == variation,
+            (prod: any) => prod.ProdCode == vid,
           ) &&
           res.data?.product?.ProdSaxeoba == "ნაკრებები"
         ) {
@@ -63,7 +62,7 @@ export default function ProductDetailsClient({
         }
       })
       .finally(() => setOneProductLoader(false));
-  }, [params.productId]);
+  }, [id, vid]);
 
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-748px)]">
@@ -71,20 +70,20 @@ export default function ProductDetailsClient({
         <div className="flex flex-col gap-y-[20px]">
           <WhatUSearch
             isProductNakrebi={oneProduct?.product?.ProdSaxeoba == "ნაკრებები"}
-          />  
+          />
           <InnerProductPathRouter
-            variation={variation}
+            variation={vid}
             oneProduct={oneProduct}
-          /> 
+          />
           <TestInnerProductMainInfo
-            variation={variation}
-            realProductId={realProductId} 
+            variation={vid}
+            realProductId={realProductId}
             oneProduct={oneProduct}
-            setOneProductLoader={setOneProductLoader} 
+            setOneProductLoader={setOneProductLoader}
           />
           <InnerProductBottomSliders
-            oneProductLoader={oneProductLoader} 
-            variation={variation}
+            oneProductLoader={oneProductLoader}
+            variation={vid}
             oneProduct={oneProduct}
             realProductId={realProductId}
           />

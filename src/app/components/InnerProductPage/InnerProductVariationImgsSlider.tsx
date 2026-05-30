@@ -13,6 +13,7 @@ import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import useScreenWidth from "../ScreenWidth";
 import Image from "next/image";
 import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function InnerProductVariationImgsSlider({
   mainLoader,
@@ -24,6 +25,8 @@ export default function InnerProductVariationImgsSlider({
   isProductNakrebi,
   setActiveNakrebebi,
 }: any) {
+  const pathname = usePathname();
+  const router = useRouter();
   const { slugify } = useContext(ContextForSharingStates);
   let SmallSwiperRef = useRef<SwiperClass>(null!);
 
@@ -50,7 +53,7 @@ export default function InnerProductVariationImgsSlider({
               >
                 <div className="h-[87px]"></div>
               </div>
-            )
+            ),
           )}
         </div>
       ) : (
@@ -85,15 +88,17 @@ export default function InnerProductVariationImgsSlider({
                     } else if (openRecomendedPopUp) {
                       setVariationProdId(item?.ProdCode);
                     } else {
-                      window.history.replaceState(
-                        null,
-                        "/products",
-                        `/products/${
-                          slugify(item.ProductName || item.ProdName) +
-                          "_" +
-                          mainId
-                        }?variation=${item?.ProdCode}`
-                      );
+                      const baseProductPath = pathname
+                        .split("/")
+                        .slice(0, 3)
+                        .join("/");
+                      const variationSlug =
+                        (item.slug ||
+                          slugify(item.ProductName || item.ProdName)) +
+                        "_" +
+                        item.ProdCode;
+
+                      router.push(`${baseProductPath}/${variationSlug}`);
                     }
                   }}
                   className={`rounded-[12px] h-full w-full bg-white overflow-hidden cursor-pointer border-[2px] ${
@@ -109,6 +114,7 @@ export default function InnerProductVariationImgsSlider({
                             : item?.main_image
                         }`}
                         alt={
+                          item?.slug ||
                           item?.ProductNameRUS ||
                           item?.ProductName ||
                           item?.ProdName ||

@@ -116,48 +116,17 @@ export default function TextEditor2({
   display: block;
 }
 
-.img-wrapper[data-align="left"] {
-  justify-content: flex-start;
+.img-wrapper {
+  margin: 10px 0;
 }
 
-.img-wrapper[data-align="center"] {
-  justify-content: center;
-}
-
-.img-wrapper[data-align="right"] {
-  justify-content: flex-end;
-}
-
-.img-toolbar {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  display: flex;
-  gap: 4px;
-  background: rgba(0,0,0,0.75);
-  padding: 4px;
-  border-radius: 6px;
-}
-
-.img-toolbar button {
-  font-size: 10px;
-  padding: 2px 6px;
-  border: none;
-  cursor: pointer;
-  background: #333;
-  color: white;
-  border-radius: 4px;
+.img-wrapper img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
           `,
           setup: (editor: any) => {
-            // ✅ helper (scoped to editor)
-            const removeAllToolbars = () => {
-              editor
-                .getBody()
-                .querySelectorAll(".img-toolbar")
-                .forEach((t: any) => t.remove());
-            };
-
             // ✅ CODE WIDGET BUTTON
             editor.ui.registry.addButton("codeWidget", {
               text: "Code Block",
@@ -225,63 +194,6 @@ export default function TextEditor2({
               onAction: () => {
                 setIsMediaOpen(true);
               },
-            });
-
-            editor.on("click", (e: any) => {
-              const imgWrapper = e.target.closest(".img-wrapper");
-
-              removeAllToolbars();
-
-              if (!imgWrapper) return;
-
-              // ❗ NEW: ensure real image exists
-              const realImg = imgWrapper.querySelector("img");
-              if (!realImg) return;
-
-              e.preventDefault();
-
-              const toolbar = document.createElement("div");
-              toolbar.className = "img-toolbar";
-
-              const makeBtn = (align: string) => {
-                const btn = document.createElement("button");
-                btn.innerText = align;
-
-                btn.onclick = (ev) => {
-                  ev.preventDefault();
-                  ev.stopPropagation();
-
-                  imgWrapper.setAttribute("data-align", align.toLowerCase());
-                  removeAllToolbars();
-                };
-
-                return btn;
-              };
-
-              toolbar.appendChild(makeBtn("Left"));
-              toolbar.appendChild(makeBtn("Center"));
-              toolbar.appendChild(makeBtn("Right"));
-
-              imgWrapper.appendChild(toolbar);
-            });
-
-            editor.on("NodeChange", () => {
-              setTimeout(() => {
-                const body = editor.getBody();
-
-                body
-                  .querySelectorAll(".img-wrapper")
-                  .forEach((wrapper: any) => {
-                    const img = wrapper.querySelector("img");
-
-                    // ❗ if wrapper has no image → remove toolbar
-                    if (!img) {
-                      wrapper
-                        .querySelectorAll(".img-toolbar")
-                        .forEach((t: any) => t.remove());
-                    }
-                  });
-              }, 0);
             });
           },
         }}

@@ -37,7 +37,7 @@ export default function InnerProductBottomSliders({
         ? oneProduct?.variation
             ?.find((item: any) => item.ProdCode === variation)
             ?.Description4.split("v=")[1]
-        : oneProduct?.product?.Description4.split("v=")[1]
+        : oneProduct?.product?.Description4.split("v=")[1],
     );
   }, [oneProduct?.product?.Description4, oneProduct?.variation, variation]);
   // yt video key
@@ -48,6 +48,8 @@ export default function InnerProductBottomSliders({
 
   useEffect(() => {
     const prodCode = variation || realProductId;
+    if (!prodCode) return;
+
     setLoaderProdReview(true);
     axiosUser
       .get(`front/productReview?product_id=${prodCode}&page=1&per_page=999`)
@@ -143,8 +145,8 @@ export default function InnerProductBottomSliders({
               index == 0
                 ? "max-md:col-span-2"
                 : index == 1
-                ? "max-md:col-span-3"
-                : index == 2 && "max-md:col-span-2"
+                  ? "max-md:col-span-3"
+                  : index == 2 && "max-md:col-span-2"
             }`}
           >
             <h1
@@ -174,7 +176,7 @@ export default function InnerProductBottomSliders({
                 <p className="w-full text-[14px]">
                   {variation
                     ? oneProduct?.variation?.find(
-                        (item: any) => item.ProdCode === variation
+                        (item: any) => item.ProdCode === variation,
                       )?.Description5
                     : oneProduct?.product?.Description5}
                 </p>
@@ -200,7 +202,7 @@ export default function InnerProductBottomSliders({
           </div>
         )}
 
-         {productDetiles === 2 && (
+        {productDetiles === 2 && (
           <ProductReview
             productID={variation || realProductId}
             loaderProdReview={loaderProdReview}
@@ -241,7 +243,7 @@ export default function InnerProductBottomSliders({
           </div>
         )}
 
-       {sameProdsData?.length > 0 && (
+        {sameProdsData?.length > 0 && (
           <div className="rounded-[12px] p-[30px] flex flex-col gap-y-[20px] max-lg:p-0">
             <EverySlider
               data={sameProdsData}

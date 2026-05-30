@@ -131,9 +131,6 @@ export default function Page() {
       .finally(() => {});
   };
 
-  console.log(addBlogValues.publication_date);
-  
-  
   return (
     <form
       onSubmit={handleAddBlogValidation}

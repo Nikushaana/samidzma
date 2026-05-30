@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
@@ -8,11 +8,13 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 export default function InnerProductPathRouter({ variation, oneProduct }: any) {
   const router = useRouter();
   const { slugify } = useContext(ContextForSharingStates);
+  console.log(oneProduct);
 
   const getProductData = (field: string) => {
     const variationData = oneProduct?.variation?.find(
-      (item: any) => item.ProdCode == variation
+      (item: any) => item.ProdCode == variation,
     );
+
     return variation ? variationData?.[field] : oneProduct?.product?.[field];
   };
 
@@ -29,12 +31,18 @@ export default function InnerProductPathRouter({ variation, oneProduct }: any) {
           field === getProductData("IdProdSaxeoba")
             ? "ProdSaxeoba"
             : field === getProductData("IdProdTypeGroup")
-            ? "ProdTypeGroup"
-            : field === getProductData("IdProdType")
-            ? "ProdType"
-            : ""
+              ? "ProdTypeGroup"
+              : field === getProductData("IdProdType")
+                ? "ProdType"
+                : "",
         );
-        return nameField ? `${slugify(nameField)}_${field}` : field;
+
+        const slug =
+    variation
+      ? oneProduct?.variation?.find((v: any) => v.ProdCode == variation)?.slug
+      : oneProduct?.product?.slug;
+
+        return nameField ? `${slug || slugify(nameField)}_${field}` : field;
       })
       .join("/") +
     "?key=";
@@ -70,8 +78,8 @@ export default function InnerProductPathRouter({ variation, oneProduct }: any) {
             router.push(
               getPath(
                 getProductData("IdProdSaxeoba"),
-                getProductData("IdProdTypeGroup")
-              )
+                getProductData("IdProdTypeGroup"),
+              ),
             )
           }
           className="text-[14px] cursor-pointer"
@@ -90,8 +98,8 @@ export default function InnerProductPathRouter({ variation, oneProduct }: any) {
                 getPath(
                   getProductData("IdProdSaxeoba"),
                   getProductData("IdProdTypeGroup"),
-                  getProductData("IdProdType")
-                )
+                  getProductData("IdProdType"),
+                ),
               )
             }
             className="text-[14px] cursor-pointer"

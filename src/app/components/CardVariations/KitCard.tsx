@@ -51,11 +51,11 @@ export default function KitCard({ item, slidesPerView }: any) {
     } else {
       if (WishListLocalStorageData.includes(item.ProdCode)) {
         const updatedFavorites = WishListLocalStorageData.filter(
-          (favs: any) => favs !== item.ProdCode
+          (favs: any) => favs !== item.ProdCode,
         );
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(updatedFavorites)
+          JSON.stringify(updatedFavorites),
         );
         setRenderWishList(new Date());
 
@@ -66,7 +66,7 @@ export default function KitCard({ item, slidesPerView }: any) {
         WishListLocalStorageData.push(item.ProdCode);
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(WishListLocalStorageData)
+          JSON.stringify(WishListLocalStorageData),
         );
         setRenderWishList(new Date());
 
@@ -93,10 +93,14 @@ export default function KitCard({ item, slidesPerView }: any) {
               `/products/${
                 item.ProdAdditionalCode
                   ? `${
-                      slugify(item.ProductName) + "_" + item.ProdAdditionalCode
+                      (item.slug || slugify(item.ProductName)) +
+                      "_" +
+                      item.ProdAdditionalCode
                     }?variation=${item.ProdCode}`
-                  : slugify(item.ProductName) + "_" + item.ProdCode
-              }`
+                  : (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.ProdCode
+              }`,
             );
           }}
           className={`relative cursor-pointer w-full max-h-[350px] ${
@@ -179,7 +183,7 @@ export default function KitCard({ item, slidesPerView }: any) {
                 setOpenProductCardPopUp(
                   item.ProdAdditionalCode
                     ? `${item.ProdAdditionalCode}?${item.ProdCode}`
-                    : item.ProdCode
+                    : item.ProdCode,
                 );
               }}
               className="relative bg-myGray text-black shrink-0 flex items-center justify-center text-[23px] w-[38px] h-[38px] rounded-full cursor-pointer"
@@ -200,12 +204,14 @@ export default function KitCard({ item, slidesPerView }: any) {
                 `/products/${
                   item.ProdAdditionalCode
                     ? `${
-                        slugify(item.ProductName) +
+                        (item.slug || slugify(item.ProductName)) +
                         "_" +
                         item.ProdAdditionalCode
                       }?variation=${item.ProdCode}`
-                    : slugify(item.ProductName) + "_" + item.ProdCode
-                }`
+                    : (item.slug || slugify(item.ProductName)) +
+                      "_" +
+                      item.ProdCode
+                }`,
               );
             }}
           />

@@ -35,7 +35,9 @@ export default function ProductCard({ item, narrow }: any) {
   // is in favorites?
 
   // get prod stock
-  const { prodAllStock } = useGetProdAllStock({ code: item.ProdAdditionalCode && item.ProdCode });
+  const { prodAllStock } = useGetProdAllStock({
+    code: item.ProdAdditionalCode && item.ProdCode,
+  });
   // get prod stock
 
   // add and remove in wishlist
@@ -59,11 +61,11 @@ export default function ProductCard({ item, narrow }: any) {
     } else {
       if (WishListLocalStorageData.includes(item.ProdCode)) {
         const updatedFavorites = WishListLocalStorageData.filter(
-          (favs: any) => favs !== item.ProdCode
+          (favs: any) => favs !== item.ProdCode,
         );
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(updatedFavorites)
+          JSON.stringify(updatedFavorites),
         );
         setRenderWishList(new Date());
 
@@ -74,7 +76,7 @@ export default function ProductCard({ item, narrow }: any) {
         WishListLocalStorageData.push(item.ProdCode);
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(WishListLocalStorageData)
+          JSON.stringify(WishListLocalStorageData),
         );
         setRenderWishList(new Date());
 
@@ -130,12 +132,14 @@ export default function ProductCard({ item, narrow }: any) {
                 `/products/${
                   item.ProdAdditionalCode
                     ? `${
-                        slugify(item.ProductName) +
+                        (item.slug || slugify(item.ProductName)) +
                         "_" +
                         item.ProdAdditionalCode
                       }?variation=${item.ProdCode}`
-                    : slugify(item.ProductName) + "_" + item.ProdCode
-                }`
+                    : (item.slug || slugify(item.ProductName)) +
+                      "_" +
+                      item.ProdCode
+                }`,
               );
             }}
             className="relative cursor-pointer w-full h-[224px] max-sm:h-auto max-sm:aspect-[4/3] max-tiny:w-[120%] flex items-center justify-center rounded-[4px] overflow-hidden"
@@ -174,7 +178,7 @@ export default function ProductCard({ item, narrow }: any) {
                 setOpenProductCardPopUp(
                   item.ProdAdditionalCode
                     ? `${item.ProdAdditionalCode}?${item.ProdCode}`
-                    : item.ProdCode
+                    : item.ProdCode,
                 );
               }}
               className="relative bg-myGray text-black shrink-0 flex items-center justify-center text-[23px] w-[38px] h-[38px] rounded-full cursor-pointer"
@@ -207,12 +211,14 @@ export default function ProductCard({ item, narrow }: any) {
                   `/products/${
                     item.ProdAdditionalCode
                       ? `${
-                          slugify(item.ProductName) +
+                          (item.slug || slugify(item.ProductName)) +
                           "_" +
                           item.ProdAdditionalCode
                         }?variation=${item.ProdCode}`
-                      : slugify(item.ProductName) + "_" + item.ProdCode
-                  }`
+                      : (item.slug || slugify(item.ProductName)) +
+                        "_" +
+                        item.ProdCode
+                  }`,
                 );
               }}
             />
@@ -262,7 +268,7 @@ export default function ProductCard({ item, narrow }: any) {
                 setOpenProductCardPopUp(
                   item.ProdAdditionalCode
                     ? `${item.ProdAdditionalCode}?${item.ProdCode}`
-                    : item.ProdCode
+                    : item.ProdCode,
                 );
               }}
               className="relative bg-myGray text-black shrink-0 flex items-center justify-center text-[23px] w-[38px] h-[38px] rounded-full cursor-pointer"
@@ -280,10 +286,14 @@ export default function ProductCard({ item, narrow }: any) {
               `/products/${
                 item.ProdAdditionalCode
                   ? `${
-                      slugify(item.ProductName) + "_" + item.ProdAdditionalCode
+                      (item.slug || slugify(item.ProductName)) +
+                      "_" +
+                      item.ProdAdditionalCode
                     }?variation=${item.ProdCode}`
-                  : slugify(item.ProductName) + "_" + item.ProdCode
-              }`
+                  : (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.ProdCode
+              }`,
             );
           }}
         />

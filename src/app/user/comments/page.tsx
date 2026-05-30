@@ -12,7 +12,7 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 
 export default function Page() {
   const { setAlertShow, setAlertStatus, setAlertText, slugify } = useContext(
-    ContextForSharingStates
+    ContextForSharingStates,
   );
   const router = useRouter();
 
@@ -89,8 +89,10 @@ export default function Page() {
               onClick={() => {
                 router.push(
                   `/products/${
-                    slugify(item.ProductName) + "_" + item.product_id
-                  }`
+                    (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.product_id
+                  }`,
                 );
               }}
               className="select-none truncate hover:underline cursor-pointer"

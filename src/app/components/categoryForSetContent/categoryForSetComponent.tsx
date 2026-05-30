@@ -906,11 +906,13 @@ export default function CategoryForSetComponent({
                               router.push(
                                 `${pathname}/${
                                   pathname.split("/").length === 3
-                                    ? slugify(item.ProdTypeGroupName) +
+                                    ? (item.slug ||
+                                        slugify(item.ProdTypeGroupName)) +
                                       "_" +
                                       item.IdProdTypeGroup
                                     : pathname.split("/").length === 4 &&
-                                      slugify(item.ProdTypeName) +
+                                      (item.slug ||
+                                        slugify(item.ProdTypeName)) +
                                         "_" +
                                         item.IdProdType
                                 }?${
@@ -920,11 +922,13 @@ export default function CategoryForSetComponent({
                             } else {
                               router.push(
                                 `/category-for-set/${
-                                  slugify(item.saxeoba.ProdSaxeobaName) +
+                                  (item.slug ||
+                                    slugify(item.saxeoba.ProdSaxeobaName)) +
                                   "_" +
                                   item.IdProdSaxeoba
                                 }/${
-                                  slugify(item.ProdTypeGroupName) +
+                                  (item.slug ||
+                                    slugify(item.ProdTypeGroupName)) +
                                   "_" +
                                   item.IdProdTypeGroup
                                 }?key=${filterValues.key}`,
@@ -948,37 +952,45 @@ export default function CategoryForSetComponent({
                             router.push(
                               `/category-for-set/${
                                 item2.level === 2
-                                  ? slugify(
-                                      item2?.product_type_groupe?.saxeoba
-                                        ?.ProdSaxeobaName,
-                                    ) +
+                                  ? (item2?.product_type_groupe?.saxeoba
+                                      ?.slug ||
+                                      slugify(
+                                        item2?.product_type_groupe?.saxeoba
+                                          ?.ProdSaxeobaName,
+                                      )) +
                                     "_" +
                                     item2.product_type_groupe?.IdProdSaxeoba +
                                     "/" +
-                                    slugify(
-                                      item2?.product_type_groupe
-                                        ?.ProdTypeGroupName,
-                                    ) +
+                                    (item2?.product_type_groupe?.slug ||
+                                      slugify(
+                                        item2?.product_type_groupe
+                                          ?.ProdTypeGroupName,
+                                      )) +
                                     "_" +
                                     item2.product_type_groupe_id
                                   : item2.level === 3 &&
-                                    slugify(
-                                      item2?.product_type?.productTypeGroup
-                                        ?.saxeoba?.ProdSaxeobaName,
-                                    ) +
+                                    (item2?.product_type?.productTypeGroup
+                                      ?.saxeoba?.slug ||
+                                      slugify(
+                                        item2?.product_type?.productTypeGroup
+                                          ?.saxeoba?.ProdSaxeobaName,
+                                      )) +
                                       "_" +
                                       item2?.product_type?.productTypeGroup
                                         ?.IdProdSaxeoba +
                                       "/" +
-                                      slugify(
-                                        item2?.product_type?.ProdTypeGroupName,
-                                      ) +
+                                      (item2?.product_type?.slug ||
+                                        slugify(
+                                          item2?.product_type
+                                            ?.ProdTypeGroupName,
+                                        )) +
                                       "_" +
                                       item2?.product_type?.IdProdTypeGroup +
                                       "/" +
-                                      slugify(
-                                        item2?.product_type?.ProdTypeName,
-                                      ) +
+                                      (item2?.product_type?.slug ||
+                                        slugify(
+                                          item2?.product_type?.ProdTypeName,
+                                        )) +
                                       "_" +
                                       item2?.product_type_id
                               }`,
@@ -1051,11 +1063,13 @@ export default function CategoryForSetComponent({
                               router.push(
                                 `${pathname}/${
                                   pathname.split("/").length === 3
-                                    ? slugify(item1.ProdTypeGroupName) +
+                                    ? (item1.slug ||
+                                        slugify(item1.ProdTypeGroupName)) +
                                       "_" +
                                       item1.IdProdTypeGroup
                                     : pathname.split("/").length === 4 &&
-                                      slugify(item1.ProdTypeName) +
+                                      (item1.slug ||
+                                        slugify(item1.ProdTypeName)) +
                                         "_" +
                                         item1.IdProdType
                                 }?${
@@ -1065,11 +1079,13 @@ export default function CategoryForSetComponent({
                             } else {
                               router.push(
                                 `/category-for-set/${
-                                  slugify(item1.saxeoba.ProdSaxeobaName) +
+                                  (item1.saxeoba.slug ||
+                                    slugify(item1.saxeoba.ProdSaxeobaName)) +
                                   "_" +
                                   item1.IdProdSaxeoba
                                 }/${
-                                  slugify(item1.ProdTypeGroupName) +
+                                  (item1.slug ||
+                                    slugify(item1.ProdTypeGroupName)) +
                                   "_" +
                                   item1.IdProdTypeGroup
                                 }?key=${filterValues.key}`,
@@ -1123,38 +1139,45 @@ export default function CategoryForSetComponent({
                               router.push(
                                 `/category-for-set/${
                                   item2.level === 2
-                                    ? slugify(
-                                        item2?.product_type_groupe?.saxeoba
-                                          ?.ProdSaxeobaName,
-                                      ) +
+                                    ? (item2?.product_type_groupe?.saxeoba
+                                        ?.slug ||
+                                        slugify(
+                                          item2?.product_type_groupe?.saxeoba
+                                            ?.ProdSaxeobaName,
+                                        )) +
                                       "_" +
                                       item2.product_type_groupe?.IdProdSaxeoba +
                                       "/" +
-                                      slugify(
-                                        item2?.product_type_groupe
-                                          ?.ProdTypeGroupName,
-                                      ) +
+                                      (item2?.product_type_groupe?.slug ||
+                                        slugify(
+                                          item2?.product_type_groupe
+                                            ?.ProdTypeGroupName,
+                                        )) +
                                       "_" +
                                       item2.product_type_groupe_id
                                     : item2.level === 3 &&
-                                      slugify(
-                                        item2?.product_type?.productTypeGroup
-                                          ?.saxeoba?.ProdSaxeobaName,
-                                      ) +
+                                      (item2?.product_type?.productTypeGroup
+                                        ?.saxeoba?.slug ||
+                                        slugify(
+                                          item2?.product_type?.productTypeGroup
+                                            ?.saxeoba?.ProdSaxeobaName,
+                                        )) +
                                         "_" +
                                         item2?.product_type?.productTypeGroup
                                           ?.IdProdSaxeoba +
                                         "/" +
-                                        slugify(
-                                          item2?.product_type
-                                            ?.ProdTypeGroupName,
-                                        ) +
+                                        (item2?.product_type?.slug ||
+                                          slugify(
+                                            item2?.product_type
+                                              ?.ProdTypeGroupName,
+                                          )) +
                                         "_" +
                                         item2?.product_type?.IdProdTypeGroup +
                                         "/" +
-                                        slugify(
-                                          item2?.product_type?.ProdTypeName,
-                                        ) +
+                                        (item2?.product_type?.slug ||
+                                          slugify(
+                                            item2?.product_type?.ProdTypeName,
+                                          )) +
                                         "_" +
                                         item2?.product_type_id
                                 }`,

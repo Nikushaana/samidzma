@@ -17,7 +17,7 @@ export default function UserOrderProdCard({ item }: any) {
       <div
         onClick={() => {
           router.push(
-            `/products/${slugify(item.ProductName) + "_" + item.product_id}`
+            `/products/${(item.slug || slugify(item.ProductName)) + "_" + item.product_id}`,
           );
         }}
         className="relative cursor-pointer w-full h-[224px] max-sm:h-auto max-sm:aspect-[4/3] flex items-center justify-center rounded-[4px] overflow-hidden"

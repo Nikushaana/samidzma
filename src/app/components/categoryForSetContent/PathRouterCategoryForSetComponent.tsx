@@ -27,20 +27,20 @@ export default function PathRouterCategoryForSetComponent() {
 
     if (FrontCategoriesData.length > 0) {
       const extractedNumbers = segments.map((segment) =>
-        Number(segment.split("_").pop())
+        Number(segment.split("_").pop()),
       );
 
       // Extract category data as before ...
       const firstCategory = FrontCategoriesData.find(
-        (item: any) => Number(item.IdProdSaxeoba) === extractedNumbers[0]
+        (item: any) => Number(item.IdProdSaxeoba) === extractedNumbers[0],
       );
 
       const secondCategory = firstCategory?.productTypeGroup?.find(
-        (item: any) => Number(item.IdProdTypeGroup) === extractedNumbers[1]
+        (item: any) => Number(item.IdProdTypeGroup) === extractedNumbers[1],
       );
 
       const thirdCategory = secondCategory?.productTypes?.find(
-        (item: any) => Number(item.IdProdType) === extractedNumbers[2]
+        (item: any) => Number(item.IdProdType) === extractedNumbers[2],
       );
 
       const updatedItems = extractedNumbers.map((number, index) => {
@@ -48,19 +48,19 @@ export default function PathRouterCategoryForSetComponent() {
           index === 0
             ? firstCategory
             : index === 1
-            ? secondCategory
-            : thirdCategory;
+              ? secondCategory
+              : thirdCategory;
 
         const name =
           index === 0
             ? categoryData?.ProdSaxeobaName
             : index === 1
-            ? categoryData?.ProdTypeGroupName
-            : categoryData?.ProdTypeName;
+              ? categoryData?.ProdTypeGroupName
+              : categoryData?.ProdTypeName;
 
         return {
           id: index + 1,
-          pathCode: slugify(name || "") + "_" + number,
+          pathCode: (categoryData.slug || slugify(name || "")) + "_" + number,
           pathCategName: name || "",
           pathCategDescr: categoryData?.description || "",
         };
@@ -97,7 +97,7 @@ export default function PathRouterCategoryForSetComponent() {
                   `/category-for-set/${pathnameItems
                     .slice(0, index + 1)
                     .map((i: any) => i.pathCode)
-                    .join("/")}?key=`
+                    .join("/")}?key=`,
                 );
               }, 0);
             }}

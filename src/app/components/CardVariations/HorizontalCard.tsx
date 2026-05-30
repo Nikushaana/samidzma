@@ -22,7 +22,7 @@ export default function HorizontalCard({ item, narrow }: any) {
     setAlertShow,
     setAlertStatus,
     setAlertText,
-    slugify 
+    slugify,
   } = useContext(ContextForSharingStates);
   const { user } = useContext(UserContext);
 
@@ -58,11 +58,11 @@ export default function HorizontalCard({ item, narrow }: any) {
     } else {
       if (WishListLocalStorageData.includes(item.ProdCode)) {
         const updatedFavorites = WishListLocalStorageData.filter(
-          (favs: any) => favs !== item.ProdCode
+          (favs: any) => favs !== item.ProdCode,
         );
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(updatedFavorites)
+          JSON.stringify(updatedFavorites),
         );
         setRenderWishList(new Date());
 
@@ -73,7 +73,7 @@ export default function HorizontalCard({ item, narrow }: any) {
         WishListLocalStorageData.push(item.ProdCode);
         localStorage.setItem(
           "SamiDzma-favorites",
-          JSON.stringify(WishListLocalStorageData)
+          JSON.stringify(WishListLocalStorageData),
         );
         setRenderWishList(new Date());
 
@@ -108,7 +108,7 @@ export default function HorizontalCard({ item, narrow }: any) {
             {prodAllStock ? "მარაგშია" : "ამოიწურა"}
           </p>
         )}
-        
+
         <div
           className={`rounded-full text-white bg-myBlack flex items-center justify-center  ${
             narrow
@@ -125,9 +125,11 @@ export default function HorizontalCard({ item, narrow }: any) {
             router.push(
               `/products/${
                 item.ProdAdditionalCode
-                  ? `${slugify(item.ProductName)+"_"+item.ProdAdditionalCode}?variation=${item.ProdCode}`
-                  : slugify(item.ProductName)+"_"+item.ProdCode
-              }`
+                  ? `${(item.slug || slugify(item.ProductName)) + "_" + item.ProdAdditionalCode}?variation=${item.ProdCode}`
+                  : (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.ProdCode
+              }`,
             );
           }}
           className="relative cursor-pointer aspect-[4/3] h-[207px] max-xl:h-full max-xl:w-full shrink-0 max-sm:h-full flex items-center justify-center rounded-[4px] overflow-hidden max-sm:hidden"
@@ -155,9 +157,11 @@ export default function HorizontalCard({ item, narrow }: any) {
               router.push(
                 `/products/${
                   item.ProdAdditionalCode
-                    ? `${slugify(item.ProductName)+"_"+item.ProdAdditionalCode}?variation=${item.ProdCode}`
-                    : slugify(item.ProductName)+"_"+item.ProdCode
-                }`
+                    ? `${(item.slug || slugify(item.ProductName)) + "_" + item.ProdAdditionalCode}?variation=${item.ProdCode}`
+                    : (item.slug || slugify(item.ProductName)) +
+                      "_" +
+                      item.ProdCode
+                }`,
               );
             }}
             className="relative cursor-pointer aspect-[4/3] h-[207px] shrink-0 items-center justify-center rounded-[4px] overflow-hidden hidden max-sm:flex"
@@ -200,7 +204,7 @@ export default function HorizontalCard({ item, narrow }: any) {
                 {prodAllStock ? "მარაგშია" : "ამოიწურა"}
               </p>
             )}
-            
+
             <div
               className={`rounded-full text-white bg-myBlack flex items-center justify-center  ${
                 narrow
@@ -215,13 +219,14 @@ export default function HorizontalCard({ item, narrow }: any) {
             <div className="flex flex-col gap-y-[12px] pb-[15px] max-xl:pb-0 w-full">
               <h1 className="text-[22px]">{item.ProductName}</h1>
               {item.Description5 && (
-                <p className="text-[14px] line-clamp-2">
-                  {item.Description5}
-                </p>
+                <p className="text-[14px] line-clamp-2">{item.Description5}</p>
               )}
               <div className={`flex items-end max-xl:hidden`}>
                 <h1 className="text-[20px]">
-                  {item.Fasi_dic !== item.Fasi18 ? item.Fasi_dic.toFixed(2) : item.Fasi18.toFixed(2)}₾
+                  {item.Fasi_dic !== item.Fasi18
+                    ? item.Fasi_dic.toFixed(2)
+                    : item.Fasi18.toFixed(2)}
+                  ₾
                 </h1>
                 {item.Fasi_dic !== item.Fasi18 && (
                   <p className="pl-[8px] text-gray-400 line-through">
@@ -267,7 +272,7 @@ export default function HorizontalCard({ item, narrow }: any) {
                       setOpenProductCardPopUp(
                         item.ProdAdditionalCode
                           ? `${item.ProdAdditionalCode}?${item.ProdCode}`
-                          : item.ProdCode
+                          : item.ProdCode,
                       );
                     }}
                     className="relative bg-myGray text-black shrink-0 flex items-center justify-center text-[23px] w-[38px] h-[38px] rounded-full cursor-pointer"
@@ -283,9 +288,11 @@ export default function HorizontalCard({ item, narrow }: any) {
                   router.push(
                     `/products/${
                       item.ProdAdditionalCode
-                        ? `${slugify(item.ProductName)+"_"+item.ProdAdditionalCode}?variation=${slugify(item.ProductName)+"_"+item.ProdCode}`
-                        : slugify(item.ProductName)+"_"+item.ProdCode
-                    }`
+                        ? `${(item.slug || slugify(item.ProductName)) + "_" + item.ProdAdditionalCode}?variation=${slugify(item.ProductName) + "_" + item.ProdCode}`
+                        : (item.slug || slugify(item.ProductName)) +
+                          "_" +
+                          item.ProdCode
+                    }`,
                   );
                 }}
               />

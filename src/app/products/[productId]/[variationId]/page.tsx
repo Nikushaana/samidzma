@@ -1,5 +1,5 @@
-import ProductDetailsClient from "./ProductDetailsClient";
 import { Metadata } from "next";
+import ProductDetailsClient from "../ProductDetailsClient";
 
 type Props = {
   params: { productId: string; variationId: string };
@@ -11,6 +11,7 @@ export const fetchCache = "force-no-store";
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const id = params.productId.split("_").pop();
+    const vid = params.variationId.split("_").pop();
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/front/ourProduct/${id}`,
@@ -23,19 +24,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const oneProduct = await res.json();
 
+    const vOneProduct =
+      vid &&
+      oneProduct?.product?.product_menus?.length == 0 &&
+      oneProduct?.variation?.find((item: any) => item.ProdCode == vid);
+
     const title =
-      oneProduct?.product?.MomProdCode ||
-      oneProduct?.product?.ProductName ||
-      "სამიძმა";
+      vOneProduct?.MomProdCode || vOneProduct?.ProductName || "სამიძმა";
     const description =
-      oneProduct?.product?.Description2 ||
-      oneProduct?.product?.Description5 ||
+      vOneProduct?.Description2 ||
+      vOneProduct?.Description5 ||
       title ||
       "სამიძმა";
-    const keywords = oneProduct?.product?.Description3 || title || "სამიძმა";
-    const imageAlt = oneProduct?.product?.ProductNameRUS || title || "სამიძმა";
+    const keywords = vOneProduct?.Description3 || title || "სამიძმა";
+    const imageAlt = vOneProduct?.ProductNameRUS || title || "სამიძმა";
     const image =
-      `${process.env.NEXT_PUBLIC_API_URL}/${oneProduct?.product?.main_image}` ||
+      `${process.env.NEXT_PUBLIC_API_URL}/${vOneProduct?.main_image}` ||
       "/public/images/mainLogo.png";
 
     return {

@@ -746,12 +746,12 @@ export default function CategoryComponentTest({
 
                             if (length >= 3) {
                               if (length === 3) {
-                                nextPath = `${pathname}/${slugify(item.ProdTypeGroupName)}_${item.IdProdTypeGroup}`;
+                                nextPath = `${pathname}/${item.slug || slugify(item.ProdTypeGroupName)}_${item.IdProdTypeGroup}`;
                               } else if (length === 4) {
-                                nextPath = `${pathname}/${slugify(item.ProdTypeName)}_${item.IdProdType}`;
+                                nextPath = `${pathname}/${item.slug || slugify(item.ProdTypeName)}_${item.IdProdType}`;
                               }
                             } else {
-                              nextPath = `/category/${slugify(item.saxeoba.ProdSaxeobaName)}_${item.IdProdSaxeoba}/${slugify(item.ProdTypeGroupName)}_${item.IdProdTypeGroup}`;
+                              nextPath = `/category/${item.slug || slugify(item.saxeoba.ProdSaxeobaName)}_${item.IdProdSaxeoba}/${item.slug || slugify(item.ProdTypeGroupName)}_${item.IdProdTypeGroup}`;
                             }
 
                             const params = new URLSearchParams(
@@ -793,9 +793,10 @@ export default function CategoryComponentTest({
                                 item2?.product_type_groupe?.ProdTypeGroupName;
                               const groupId = item2?.product_type_groupe_id;
 
-                              path = `/category/${slugify(saxeobaName)}_${saxeobaId}/${slugify(
-                                groupName,
-                              )}_${groupId}`;
+                              path = `/category/${
+                                item2?.product_type_groupe?.saxeoba?.slug ||
+                                slugify(saxeobaName)
+                              }_${saxeobaId}/${item2?.product_type_groupe?.slug || slugify(groupName)}_${groupId}`;
                             }
 
                             if (item2.level === 3) {
@@ -815,9 +816,12 @@ export default function CategoryComponentTest({
                                 item2?.product_type?.ProdTypeName;
                               const typeId = item2?.product_type_id;
 
-                              path = `/category/${slugify(saxeobaName)}_${saxeobaId}/${slugify(
+                              path = `/category/${
+                                item2?.product_type?.productTypeGroup?.saxeoba
+                                  ?.slug || slugify(saxeobaName)
+                              }_${saxeobaId}/${item2?.product_type?.slug || slugify(
                                 groupName,
-                              )}_${groupId}/${slugify(typeName)}_${typeId}`;
+                              )}_${groupId}/${item2?.product_type?.slug || slugify(typeName)}_${typeId}`;
                             }
 
                             router.replace(path);
@@ -888,14 +892,14 @@ export default function CategoryComponentTest({
 
                             if (length >= 3) {
                               if (length === 3) {
-                                nextPath = `${pathname}/${slugify(item1.ProdTypeGroupName)}_${item1.IdProdTypeGroup}`;
+                                nextPath = `${pathname}/${item1.slug || slugify(item1.ProdTypeGroupName)}_${item1.IdProdTypeGroup}`;
                               } else if (length === 4) {
-                                nextPath = `${pathname}/${slugify(item1.ProdTypeName)}_${item1.IdProdType}`;
+                                nextPath = `${pathname}/${item1.slug || slugify(item1.ProdTypeName)}_${item1.IdProdType}`;
                               }
                             } else {
-                              nextPath = `/category/${slugify(
+                              nextPath = `/category/${item1.saxeoba.slug || slugify(
                                 item1.saxeoba.ProdSaxeobaName,
-                              )}_${item1.IdProdSaxeoba}/${slugify(
+                              )}_${item1.IdProdSaxeoba}/${item1.slug || slugify(
                                 item1.ProdTypeGroupName,
                               )}_${item1.IdProdTypeGroup}`;
                             }
@@ -961,7 +965,8 @@ export default function CategoryComponentTest({
                                   item2?.product_type_groupe?.ProdTypeGroupName;
                                 const groupId = item2?.product_type_groupe_id;
 
-                                path = `/category/${slugify(saxeobaName)}_${saxeobaId}/${slugify(
+                                path = `/category/${item2?.product_type_groupe?.saxeoba
+                                    ?.slug || slugify(saxeobaName)}_${saxeobaId}/${item2?.product_type_groupe?.slug || slugify(
                                   groupName,
                                 )}_${groupId}`;
                               }
@@ -983,9 +988,10 @@ export default function CategoryComponentTest({
                                   item2?.product_type?.ProdTypeName;
                                 const typeId = item2?.product_type_id;
 
-                                path = `/category/${slugify(saxeobaName)}_${saxeobaId}/${slugify(
+                                path = `/category/${item2?.product_type?.productTypeGroup?.saxeoba
+                                    ?.slug || slugify(saxeobaName)}_${saxeobaId}/${item2?.product_type?.slug || slugify(
                                   groupName,
-                                )}_${groupId}/${slugify(typeName)}_${typeId}`;
+                                )}_${groupId}/${item2?.product_type?.slug || slugify(typeName)}_${typeId}`;
                               }
 
                               router.replace(path);

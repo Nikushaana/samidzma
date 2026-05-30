@@ -17,13 +17,13 @@ export const buildCategoryRoute = (
     if (type === "category") {
         if (!firstCategory) return "/category";
 
-        return `/category/${slugify(firstCategory.ProdSaxeobaName)}_${firstCategory.IdProdSaxeoba}`;
+        return `/category/${firstCategory.slug || slugify(firstCategory.ProdSaxeobaName)}_${firstCategory.IdProdSaxeoba}`;
     }
 
     if (type === "category-for-set") {
         if (!setCategory) return "/category-for-set";
 
-        return `/category-for-set/${slugify(setCategory.ProdSaxeobaName)}_${setCategory.IdProdSaxeoba}`;
+        return `/category-for-set/${setCategory.slug || slugify(setCategory.ProdSaxeobaName)}_${setCategory.IdProdSaxeoba}`;
     }
 
     return "/";

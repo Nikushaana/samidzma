@@ -39,8 +39,10 @@ export default function CategoriesCard({ item }: any) {
           onClick={() => {
             router.push(
               `/${item?.ProdSaxeobaName === "ნაკრებები" ? "category-for-set" : "category"}/${
-                slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba
-              }`
+                (item.slug || slugify(item.ProdSaxeobaName)) +
+                "_" +
+                item.IdProdSaxeoba
+              }`,
             );
           }}
           className="text-[20px]"
@@ -75,14 +77,14 @@ export default function CategoriesCard({ item }: any) {
                     onClick={() => {
                       router.push(
                         `/${item?.ProdSaxeobaName === "ნაკრებები" ? "category-for-set" : "category"}/${
-                          slugify(item.ProdSaxeobaName) +
+                          (item.slug || slugify(item.ProdSaxeobaName)) +
                           "_" +
                           item?.IdProdSaxeoba
                         }/${
-                          slugify(item3.ProdTypeGroupName) +
+                          (item3.slug || slugify(item3.ProdTypeGroupName)) +
                           "_" +
                           item3?.IdProdTypeGroup
-                        }`
+                        }`,
                       );
                     }}
                     className="w-full aspect-square cursor-pointer flex items-center justify-center relative rounded-[5px] overflow-hidden"
@@ -131,8 +133,10 @@ export default function CategoriesCard({ item }: any) {
         action={() => {
           router.push(
             `/${item?.ProdSaxeobaName === "ნაკრებები" ? "category-for-set" : "category"}/${
-              slugify(item.ProdSaxeobaName) + "_" + item.IdProdSaxeoba
-            }`
+              (item.slug || slugify(item.ProdSaxeobaName)) +
+              "_" +
+              item.IdProdSaxeoba
+            }`,
           );
         }}
         style="h-[56px] max-sm:h-[48px] text-[18px]"

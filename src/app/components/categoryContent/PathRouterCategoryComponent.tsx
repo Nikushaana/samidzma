@@ -50,23 +50,26 @@ export default function PathRouterCategoryComponent() {
       {
         id: 1,
         name: first?.ProdSaxeobaName,
+        slug: first?.slug,
         data: first,
       },
       {
         id: 2,
         name: second?.ProdTypeGroupName,
+        slug: second?.slug,
         data: second,
       },
       {
         id: 3,
         name: third?.ProdTypeName,
+        slug: third?.slug,
         data: third,
       },
     ]
       .filter((i, idx) => ids[idx])
       .map((item, index) => ({
         id: index + 1,
-        pathCode: `${item.name}_${ids[index]}`,
+        pathCode: `${item.slug}_${ids[index]}`,
         pathCategName: item.name || "",
         pathCategDescr: item.data?.description || "",
       }));

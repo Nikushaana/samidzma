@@ -18,10 +18,12 @@ export default function SmallProdCard({ item }: any) {
             `/products/${
               item.ProdAdditionalCode
                 ? `${
-                    slugify(item.ProductName) + "_" + item.ProdAdditionalCode
+                    (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.ProdAdditionalCode
                   }?variation=${item.ProdCode}`
-                : slugify(item.ProductName) + "_" + item.ProdCode
-            }`
+                : (item.slug || slugify(item.ProductName)) + "_" + item.ProdCode
+            }`,
           );
         }}
         className="relative cursor-pointer w-full max-h-[150px] flex items-center justify-center aspect-[4/3] rounded-[4px] overflow-hidden"
@@ -51,10 +53,12 @@ export default function SmallProdCard({ item }: any) {
             `/products/${
               item.ProdAdditionalCode
                 ? `${
-                    slugify(item.ProductName) + "_" + item.ProdAdditionalCode
+                    (item.slug || slugify(item.ProductName)) +
+                    "_" +
+                    item.ProdAdditionalCode
                   }?variation=${item.ProdCode}`
-                : slugify(item.ProductName) + "_" + item.ProdCode
-            }`
+                : (item.slug || slugify(item.ProductName)) + "_" + item.ProdCode
+            }`,
           );
         }}
       />
