@@ -8,7 +8,6 @@ import { ContextForSharingStates } from "../../../../dataFetchs/sharedStates";
 export default function InnerProductPathRouter({ variation, oneProduct }: any) {
   const router = useRouter();
   const { slugify } = useContext(ContextForSharingStates);
-  console.log(oneProduct);
 
   const getProductData = (field: string) => {
     const variationData = oneProduct?.variation?.find(
@@ -37,10 +36,32 @@ export default function InnerProductPathRouter({ variation, oneProduct }: any) {
                 : "",
         );
 
-        const slug =
-    variation
-      ? oneProduct?.variation?.find((v: any) => v.ProdCode == variation)?.slug
-      : oneProduct?.product?.slug;
+        const key =
+          field === getProductData("IdProdSaxeoba")
+            ? "saxeoba"
+            : field === getProductData("IdProdTypeGroup")
+              ? "productTypeGroup"
+              : field === getProductData("IdProdType")
+                ? "productType"
+                : null;
+
+        let slug = "";
+
+        if (variation) {
+          const variationItem = oneProduct?.variation?.find(
+            (v: any) => v.ProdCode == variation,
+          );
+
+          const entity = key ? variationItem?.[key] : null;
+
+          slug = entity?.slug;
+        } else {
+          const product = oneProduct?.product;
+
+          const entity = key ? product?.[key] : null;
+
+          slug = entity?.slug;
+        }
 
         return nameField ? `${slug || slugify(nameField)}_${field}` : field;
       })

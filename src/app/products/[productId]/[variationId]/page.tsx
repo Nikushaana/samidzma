@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       oneProduct?.variation?.find((item: any) => item.ProdCode == vid);
 
     const title =
-      vOneProduct?.MomProdCode || vOneProduct?.ProductName || "სამიძმა";
+      vOneProduct?.MomcProdCode || vOneProduct?.ProductName || "სამიძმა";
     const description =
       vOneProduct?.Description2 ||
       vOneProduct?.Description5 ||

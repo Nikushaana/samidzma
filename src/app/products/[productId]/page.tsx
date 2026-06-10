@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const oneProduct = await res.json();
 
     const title =
-      oneProduct?.product?.MomProdCode ||
+      oneProduct?.product?.MomcProdCode ||
       oneProduct?.product?.ProductName ||
       "სამიძმა";
     const description =
